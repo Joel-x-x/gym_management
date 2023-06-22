@@ -12,10 +12,12 @@ public class AdministradorController {
 	}
 	
 	public Integer guardar(Administrador administrador) {
+			
 		return administradorDAO.guardar(administrador); 
 	}
 
 	public boolean login(String usuario, String contra) {
+		
 		return administradorDAO.login(usuario, contra);
 	}
 	public Object[][] consulta(Administrador administrador) {

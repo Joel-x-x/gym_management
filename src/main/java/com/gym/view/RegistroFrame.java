@@ -166,7 +166,7 @@ textContra.setText("********");
 		panelLogin.add(textContra);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\USER\\Desktop\\proyecto poo\\gym git\\gym_management\\src\\main\\java\\com\\gym\\view\\imagenes\\interfaz_login.png"));
+		lblNewLabel_2.setIcon(new ImageIcon(".\\src\\main\\java\\com\\gym\\resources\\interfaz_login.png"));
 		lblNewLabel_2.setBounds(0, 0, 350, 350);
 		panelLogin.add(lblNewLabel_2);
 	}
