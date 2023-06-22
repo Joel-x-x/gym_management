@@ -62,6 +62,9 @@ change column fecha_creacion fecha_creacion datetime not null default current_ti
 insert into fisico(altura, peso, usuario_id, usuario_cuenta_id) values(1.81, 71, 1, 1);
 insert into fisico(altura, peso, usuario_id, usuario_cuenta_id) values(1.81, 72, 1, 1);
 
+insert into registro_fisico(fisico_id, fisico_usuario_id, fisico_usuario_cuenta_id) values(1,1,1);
+insert into registro_fisico(fisico_id, fisico_usuario_id, fisico_usuario_cuenta_id) values(2,1,1);
+
 -- El precio en el plan ejemplo 25 es la base, dependiendo de la clase que tome aumentara o no ejemplo clase calistenia precio + 5 total 30, ejemplo 2 pesas clase + 0 total 25
 insert into plan(nombre, precio, descripcion, duracion_id) values("Mes",25,"Plan de 30 días",2);
 insert into plan(nombre, precio, descripcion, duracion_id) values("Diario",2,"Plan por día",1);
