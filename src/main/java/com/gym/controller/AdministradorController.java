@@ -18,4 +18,7 @@ public class AdministradorController {
 	public boolean login(String usuario, String contra) {
 		return administradorDAO.login(usuario, contra);
 	}
+	public Object[][] consulta(Administrador administrador) {
+		return administradorDAO.consulta(administrador);
+	}
 }
