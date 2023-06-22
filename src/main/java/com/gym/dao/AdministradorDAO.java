@@ -24,9 +24,9 @@ public class AdministradorDAO {
 			
 			try(statement) {
 				statement.setString(1, administrador.getNombre());
-				statement.setString(2, administrador.getNombre());
-				statement.setString(3, administrador.getNombre());
-				statement.setString(4, administrador.getNombre());
+				statement.setString(2, administrador.getApellido());
+				statement.setString(3, administrador.getEmail());
+				statement.setString(4, administrador.getPassword());
 				statement.setString(5, administrador.getNombre());
 				statement.setString(6, administrador.getNombre());
 				
@@ -65,6 +65,45 @@ public class AdministradorDAO {
 			}
 				
 				
+			
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Object[][] consulta(Administrador administrador) {
+		
+try {
+			Object obj[][]=null;
+			String sentencia = "select from administrador";
+					
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				final ResultSet resultSet = statement.executeQuery();
+				int filas=0;
+				while(resultSet.next()) {
+					obj[filas][0]=resultSet.getObject(1);
+					obj[filas][1]=resultSet.getObject(2);
+					obj[filas][2]=resultSet.getObject(3);
+					obj[filas][3]=resultSet.getObject(4);
+					obj[filas][4]=resultSet.getObject(5);
+					obj[filas][5]=resultSet.getObject(6);
+					obj[filas][6]=resultSet.getObject(7);
+					obj[filas][7]=resultSet.getObject(8);
+					filas++;
+					
+				}
+			
+				
+				
+			}
+				
+				
+			return obj;	
 			
 			
 		} catch(SQLException e) {
