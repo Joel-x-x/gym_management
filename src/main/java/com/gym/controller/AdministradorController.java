@@ -11,16 +11,14 @@ public class AdministradorController {
 		administradorDAO = new AdministradorDAO(new ConnectionFactory().conectar());
 	}
 	
-	public Integer guardar(Administrador administrador) {
+	public boolean registrar(Administrador administrador) {
 			
-		return administradorDAO.guardar(administrador); 
+		return administradorDAO.registrar(administrador); 
 	}
 
-	public boolean login(String usuario, String contra) {
+	public boolean sesion(Administrador administrador) {
 		
-		return administradorDAO.login(usuario, contra);
+		return administradorDAO.sesion(administrador);
 	}
-	public Object[][] consulta(Administrador administrador) {
-		return administradorDAO.consulta(administrador);
-	}
+
 }

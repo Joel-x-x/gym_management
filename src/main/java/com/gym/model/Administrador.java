@@ -50,7 +50,7 @@ public class Administrador {
     public void setPassword(String password) {
         this.password = password;
     }
-    public boolean isSesion_iniciada() {
+    public boolean getSesion_iniciada() {
         return sesion_iniciada;
     }
     public void setSesion_iniciada(boolean sesion_iniciada) {
