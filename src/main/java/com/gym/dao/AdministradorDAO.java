@@ -66,7 +66,37 @@ public class AdministradorDAO {
 			return false;
 		}
 	}
+	public boolean login(Administrador administrador) {
 
+		
+		
+		try {
+			
+			String sentencia = "SELECT * FROM bdd_gym.administrador;";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, administrador.getNombre());
+				statement.setString(2, administrador.getEmail());
+				statement.setString(3, administrador.getPassword());
+				statement.setInt(4, administrador.getSesion_iniciada());
+				statement.setInt(5, administrador.isSuper_admin());
+				
+				int item = statement.executeUpdate();
+				
+				if(toBoolean(item)) {
+					eliminarClave(administrador.getClave());
+				}
+				
+				return toBoolean(item);
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
 	public boolean registrar(Administrador administrador) {
 
 		if(!validarClave(administrador.getClave())) {
