@@ -12,10 +12,11 @@ public class BarraPanel extends JPanel {
     private JButton membresiasButton;
     private JButton planesButton;
     private AdminFrame adminFrame;
+    int panelAncho = 1080, panelAlto = 640;
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
-        setPreferredSize(new Dimension(280, 720));
+        setPreferredSize(new Dimension(200, 640));
         setBackground(Color.LIGHT_GRAY);
 
         setLayout(new GridLayout(4, 1));
@@ -28,28 +29,29 @@ public class BarraPanel extends JPanel {
         inicioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new InicioPanel());
+            	
+                adminFrame.cambiarPanel(new InicioPanel(panelAncho, panelAlto));
             }
         });
 
         usuariosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new UsuariosPanel());
+                adminFrame.cambiarPanel(new UsuariosPanel(panelAncho, panelAlto));
             }
         });
 
         membresiasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new MembresiasPanel());
+                adminFrame.cambiarPanel(new MembresiasPanel(panelAncho, panelAlto));
             }
         });
 
         planesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new PlanesPanel());
+                adminFrame.cambiarPanel(new PlanesPanel(panelAncho, panelAlto));
             }
         });
 

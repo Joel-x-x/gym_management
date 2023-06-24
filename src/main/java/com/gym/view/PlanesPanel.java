@@ -4,9 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PlanesPanel extends JPanel {
+	
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7779240291090260615L;
 
-    public PlanesPanel() {
+	public PlanesPanel(int panelAncho, int panelAlto) {
+    	
+    	setPreferredSize(new Dimension(panelAncho, panelAlto));
         setBackground(Color.YELLOW);
-        setPreferredSize(new Dimension(1000, 720));
     }
 }

@@ -5,8 +5,15 @@ import java.awt.*;
 
 public class InicioPanel extends JPanel {
 
-    public InicioPanel() {
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public InicioPanel(int panelAncho, int panelAlto) {
+    	
+    	setPreferredSize(new Dimension(panelAncho, panelAlto));
         setBackground(Color.RED);
-        setPreferredSize(new Dimension(1000, 720));
     }
 }

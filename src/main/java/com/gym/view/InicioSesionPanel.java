@@ -33,25 +33,25 @@ public class InicioSesionPanel extends JPanel {
         iniciarSesionButton.setBounds(535, 229, 95, 23);
         iniciarSesionButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Administrador administrador = llenarAdministrador();
-        		if(administradorController.login(usuario, contra)) {
-					panelLogin.setVisible(false);
-					JOptionPane.showMessageDialog(null, "Todo bien!");
-				} else {
-					JOptionPane.showMessageDialog(null, "Intruso");
-					
-				
-					
-					
-					
-					
-				}
+//        		Administrador administrador = llenarAdministrador();
+//        		if(administradorController.login(usuario, contra)) {
+//					panelLogin.setVisible(false);
+//					JOptionPane.showMessageDialog(null, "Todo bien!");
+//				} else {
+//					JOptionPane.showMessageDialog(null, "Intruso");
+//					
+//				
+//					
+//					
+//					
+//					
+//				}
         		// Realizar las operaciones de inicio de sesión
-        		if(administradorController.registrar(administrador)) {
-        			JOptionPane.showMessageDialog(null, "Registrado con exito");
-        		} else {
-        			JOptionPane.showMessageDialog(null, "Error");
-        		}
+//        		if(administradorController.registrar(administrador)) {
+//        			JOptionPane.showMessageDialog(null, "Registrado con exito");
+//        		} else {
+//        			JOptionPane.showMessageDialog(null, "Error");
+//        		}
         		
         		// Abre la ventana del panel de administrador
         		AdminFrame adminFrame = new AdminFrame();
@@ -92,7 +92,7 @@ public class InicioSesionPanel extends JPanel {
         textContra = new JTextField();
         textContra.setColumns(10);
         textContra.setBounds(438, 173, 289, 35);
-        add(text Contra);
+        add(textContra);
         
         JLabel lblContrasea = new JLabel("Contraseña");
         lblContrasea.setBounds(438, 157, 63, 14);

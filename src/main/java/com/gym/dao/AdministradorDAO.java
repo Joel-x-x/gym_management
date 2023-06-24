@@ -59,20 +59,18 @@ public class AdministradorDAO {
 	}
 	
 	public boolean toBoolean(int numero) {
-		
 		if(numero != 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	public boolean login(Administrador administrador) {
+	
+	public boolean iniciarSesion(Administrador administrador) {
 
-		
-		
 		try {
 			
-			String sentencia = "SELECT * FROM bdd_gym.administrador;";
+			String sentencia = "SELECT * FROM administrador;";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			

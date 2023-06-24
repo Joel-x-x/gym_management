@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 public class AdminFrame extends JFrame implements ActionListener{
 
+	private BarraSuperiorPanel barraSuperiorPanel;
     private BarraPanel barraPanel;
     private JPanel panelPrincipal;
 
@@ -14,17 +15,24 @@ public class AdminFrame extends JFrame implements ActionListener{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
         setLocationRelativeTo(null);
+        
+        // BarraSuperiorPanel
+        barraSuperiorPanel = new BarraSuperiorPanel();
+        barraSuperiorPanel.setPreferredSize(new Dimension(1280, 80));
 
         // BarraPanel
         barraPanel = new BarraPanel(this);
-        barraPanel.setPreferredSize(new Dimension(280, 720));
+        barraPanel.setPreferredSize(new Dimension(200, 640));
 
         // Panel principal
         panelPrincipal = new JPanel();
         panelPrincipal.setBackground(Color.WHITE);
-        panelPrincipal.setPreferredSize(new Dimension(1000, 720));
-
+        panelPrincipal.setPreferredSize(new Dimension(1080, 640));
+        panelPrincipal.setLayout(new BorderLayout());
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        
         // Agregar BarraPanel y panelPrincipal al JFrame
+        add(barraSuperiorPanel, BorderLayout.NORTH);
         add(barraPanel, BorderLayout.WEST);
         add(panelPrincipal, BorderLayout.CENTER);
 
@@ -41,19 +49,20 @@ public class AdminFrame extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
+        int panelAncho = 1080, panelAlto = 640;
 
         switch (comando) {
             case "Inicio":
-                cambiarPanel(new InicioPanel());
+                cambiarPanel(new InicioPanel(panelAncho, panelAlto));
                 break;
             case "Usuarios":
-                cambiarPanel(new UsuariosPanel());
+                cambiarPanel(new UsuariosPanel(panelAncho, panelAlto));
                 break;
             case "Membresias":
-                cambiarPanel(new MembresiasPanel());
+                cambiarPanel(new MembresiasPanel(panelAncho, panelAlto));
                 break;
             case "Planes":
-                cambiarPanel(new PlanesPanel());
+                cambiarPanel(new PlanesPanel(panelAncho, panelAlto));
                 break;
         }
     }
