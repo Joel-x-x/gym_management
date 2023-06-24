@@ -24,36 +24,76 @@ public class AdministradorDAO {
 				
 				statement.setString(1, clave);
 				
-				return statement.execute();
+				statement.execute();
+				
+				final ResultSet resultSet = statement.getResultSet();
+				
+				try(resultSet) {
+					return resultSet.next();
+				}
 			}
 			
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	private boolean eliminarClave(String clave) {
+		try {
+			String sentencia = "update administrador set clave = null where clave = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setString(1, clave);
+				
+				int item = statement.executeUpdate();
+				
+				return toBoolean(item);
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public boolean toBoolean(int numero) {
+		
+		if(numero != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public boolean registrar(Administrador administrador) {
-		
+
 		if(!validarClave(administrador.getClave())) {
 			return false;
 		}
 		
 		try {
 			
-			String sentencia = "insert into administrador(nombre, apellido, email, password, sesion_iniciada, super_admin) "
-					+ "values(?,?,?,?,?,?);";
+			String sentencia = "insert into administrador(nombre, email, password, sesion_iniciada, super_admin) "
+					+ "values(?,?,?,?,?);";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setString(1, administrador.getNombre());
-				statement.setString(2, administrador.getApellido());
-				statement.setString(3, administrador.getEmail());
-				statement.setString(4, administrador.getPassword());
-				statement.setBoolean(5, administrador.getSesion_iniciada());
-				statement.setBoolean(6, administrador.isSuper_admin());
+				statement.setString(2, administrador.getEmail());
+				statement.setString(3, administrador.getPassword());
+				statement.setInt(4, administrador.getSesion_iniciada());
+				statement.setInt(5, administrador.isSuper_admin());
 				
-				return statement.execute();
+				int item = statement.executeUpdate();
+				
+				if(toBoolean(item)) {
+					eliminarClave(administrador.getClave());
+				}
+				
+				return toBoolean(item);
 			}
 				
 		} catch(SQLException e) {

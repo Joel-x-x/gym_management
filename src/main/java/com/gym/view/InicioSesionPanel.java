@@ -2,6 +2,8 @@ package com.gym.view;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
+
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,6 +14,9 @@ public class InicioSesionPanel extends JPanel {
     
     public InicioSesionPanel(RegistroFrame frame) {
         registroFrame = frame;
+        
+        setSize(1280, 720);
+        setBackground(Color.white);
         
         iniciarSesionButton = new JButton("Iniciar Sesion");
         iniciarSesionButton.addActionListener(new ActionListener() {
