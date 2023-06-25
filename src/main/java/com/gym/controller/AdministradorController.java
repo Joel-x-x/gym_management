@@ -18,7 +18,7 @@ public class AdministradorController {
 
 	public boolean sesion(Administrador administrador) {
 		
-		return administradorDAO.sesion(administrador);
+		return administradorDAO.iniciarSesion(administrador);
 	}
 
 }
