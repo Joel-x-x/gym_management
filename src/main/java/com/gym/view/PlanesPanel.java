@@ -16,6 +16,6 @@ public class PlanesPanel extends JPanel {
     	setPreferredSize(new Dimension(1280, 800));
         setBackground(Color.WHITE);
         
-        
     }
+	
 }

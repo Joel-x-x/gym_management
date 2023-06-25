@@ -28,7 +28,7 @@ public class RegistroPanel extends JPanel {
     
     public RegistroPanel(RegistroFrame frame) {
         registroFrame = frame;
-        AdministradorController administradorController = new AdministradorController();
+        administradorController = new AdministradorController();
         
         setSize(1280, 720);
         setBackground(Color.white);
