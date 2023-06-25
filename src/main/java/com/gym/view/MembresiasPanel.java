@@ -12,7 +12,7 @@ public class MembresiasPanel extends JPanel {
 	
     public MembresiasPanel(int panelAncho, int panelAlto) {
     	
-    	setPreferredSize(new Dimension(panelAncho, panelAlto));
+    	setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.GREEN);
     }
 }

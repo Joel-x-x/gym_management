@@ -35,7 +35,7 @@ public class RegistroFrame extends JFrame {
 		
 		setTitle("Gym Management");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1280, 720);
+		setSize(1280, 800);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		

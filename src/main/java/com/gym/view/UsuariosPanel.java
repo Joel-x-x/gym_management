@@ -13,7 +13,7 @@ public class UsuariosPanel extends JPanel {
 
 	public UsuariosPanel(int panelAncho, int panelAlto) {
     	
-		setPreferredSize(new Dimension(panelAncho, panelAlto));
+		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.BLUE);
     }
 }

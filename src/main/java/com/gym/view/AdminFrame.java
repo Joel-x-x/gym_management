@@ -10,26 +10,29 @@ public class AdminFrame extends JFrame implements ActionListener{
 	private BarraSuperiorPanel barraSuperiorPanel;
     private BarraPanel barraPanel;
     private JPanel panelPrincipal;
+    private int panelAncho = 1080, panelAlto = 750;
 
     public AdminFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1280, 720);
+        setSize(1280, 800);
         setLocationRelativeTo(null);
         
         // BarraSuperiorPanel
         barraSuperiorPanel = new BarraSuperiorPanel();
-        barraSuperiorPanel.setPreferredSize(new Dimension(1280, 80));
+        barraSuperiorPanel.setPreferredSize(new Dimension(1280, 50));
 
         // BarraPanel
         barraPanel = new BarraPanel(this);
-        barraPanel.setPreferredSize(new Dimension(200, 640));
+        barraPanel.setPreferredSize(new Dimension(200, 750));
 
         // Panel principal
         panelPrincipal = new JPanel();
         panelPrincipal.setBackground(Color.WHITE);
-        panelPrincipal.setPreferredSize(new Dimension(1080, 640));
+        panelPrincipal.setPreferredSize(new Dimension(1080, 750));
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        
+        cambiarPanel(new InicioPanel(panelAncho, panelAlto));
         
         // Agregar BarraPanel y panelPrincipal al JFrame
         add(barraSuperiorPanel, BorderLayout.NORTH);
@@ -49,7 +52,6 @@ public class AdminFrame extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
-        int panelAncho = 1080, panelAlto = 640;
 
         switch (comando) {
             case "Inicio":
