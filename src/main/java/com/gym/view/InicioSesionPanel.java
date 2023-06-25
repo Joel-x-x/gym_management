@@ -23,6 +23,7 @@ public class InicioSesionPanel extends JPanel {
     private JTextField textContra;
     private AdministradorController administradorController;
     
+    
     public InicioSesionPanel(RegistroFrame frame) {
         registroFrame = frame;
         AdministradorController administradorController = new AdministradorController();
@@ -33,31 +34,33 @@ public class InicioSesionPanel extends JPanel {
         iniciarSesionButton.setBounds(535, 229, 95, 23);
         iniciarSesionButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-//        		Administrador administrador = llenarAdministrador();
-//        		if(administradorController.login(usuario, contra)) {
-//					panelLogin.setVisible(false);
-//					JOptionPane.showMessageDialog(null, "Todo bien!");
-//				} else {
-//					JOptionPane.showMessageDialog(null, "Intruso");
-//					
-//				
-//					
-//					
-//					
-//					
-//				}
+        		Administrador administrador = llenarAdministrador();
+        		
+        		if(administradorController.sesion(administrador)) {
+					
+					JOptionPane.showMessageDialog(null, "Todo bien!");
+					// Abre la ventana del panel de administrador
+	        		AdminFrame adminFrame = new AdminFrame();
+	        		adminFrame.setVisible(true);
+	        		adminFrame.setVisible(true);
+	        		
+	        		registroFrame.dispose(); 
+	        		 // Cierra el frame de registro
+				} else {
+					JOptionPane.showMessageDialog(null, "Intruso");
+					
+				
+					
+					
+					
+					
+				}
         		// Realizar las operaciones de inicio de sesión
-//        		if(administradorController.registrar(administrador)) {
-//        			JOptionPane.showMessageDialog(null, "Registrado con exito");
-//        		} else {
-//        			JOptionPane.showMessageDialog(null, "Error");
-//        		}
+        		
         		
         		// Abre la ventana del panel de administrador
-        		AdminFrame adminFrame = new AdminFrame();
-        		adminFrame.setVisible(true);
         		
-        		registroFrame.dispose(); // Cierra el frame de registro
+        		// Cierra el frame de registro
         	}
         });
         
@@ -97,5 +100,14 @@ public class InicioSesionPanel extends JPanel {
         JLabel lblContrasea = new JLabel("Contraseña");
         lblContrasea.setBounds(438, 157, 63, 14);
         add(lblContrasea);
+    }
+    public Administrador llenarAdministrador() {
+    	return new Administrador(
+    			"",
+    			textUsuario.getText(),
+    			textContra.getText(),
+    			0,
+    			0,
+    			"");
     }
 }
