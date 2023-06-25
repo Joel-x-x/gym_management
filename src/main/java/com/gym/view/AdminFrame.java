@@ -11,6 +11,10 @@ public class AdminFrame extends JFrame implements ActionListener{
     private BarraPanel barraPanel;
     private JPanel panelPrincipal;
     private int panelAncho = 1080, panelAlto = 750;
+    
+    public static void main(String[] args) {
+		new AdminFrame();
+	}
 
     public AdminFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -93,6 +93,20 @@ insert into registro(usuario_id) values(1);
 -- este es el update
 update registro set fecha_salida = current_timestamp where id = 2;
 
+delete from duracion where cantidad = 1;
+
+delete from plan where id = 1; 
+
+select * from membresia;
+
+alter table plan
+add column duracion enum('diario','mensual','anual'); 
+
+
+
+
+
+
 
 
 

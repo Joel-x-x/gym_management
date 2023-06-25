@@ -13,7 +13,9 @@ public class PlanesPanel extends JPanel {
 
 	public PlanesPanel(int panelAncho, int panelAlto) {
     	
-    	setPreferredSize(new Dimension(panelAncho, panelAlto));
-        setBackground(Color.YELLOW);
+    	setPreferredSize(new Dimension(1280, 800));
+        setBackground(Color.WHITE);
+        
+        
     }
 }

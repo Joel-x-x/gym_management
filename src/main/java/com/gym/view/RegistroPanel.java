@@ -25,6 +25,7 @@ public class RegistroPanel extends JPanel {
     private JTextField textClave;
     private JTextField textNombre;
     
+    
     public RegistroPanel(RegistroFrame frame) {
         registroFrame = frame;
         AdministradorController administradorController = new AdministradorController();
