@@ -27,6 +27,7 @@ public class InicioSesionPanel extends JPanel {
     public InicioSesionPanel(RegistroFrame frame) {
         registroFrame = frame;
         AdministradorController administradorController = new AdministradorController();
+        
         setSize(1280, 720);
         setBackground(Color.white);
         
@@ -84,6 +85,7 @@ public class InicioSesionPanel extends JPanel {
         add(lblIniciarSesion);
         
         textUsuario = new JTextField();
+        textUsuario.setText("wacho@gmai.com");
         textUsuario.setColumns(10);
         textUsuario.setBounds(438, 111, 289, 35);
         add(textUsuario);
@@ -93,6 +95,7 @@ public class InicioSesionPanel extends JPanel {
         add(lblCorreo);
         
         textContra = new JTextField();
+        textContra.setText("1234");
         textContra.setColumns(10);
         textContra.setBounds(438, 173, 289, 35);
         add(textContra);

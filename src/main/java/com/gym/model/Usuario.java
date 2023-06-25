@@ -26,7 +26,12 @@ public class Usuario{
         this.fecha_creacion = fecha_creacion;
     }
 
-    public int getId() {
+    public Usuario(  String ced) {
+		
+		this.cedula=ced;
+	}
+
+	public int getId() {
         return id;
     }
 
