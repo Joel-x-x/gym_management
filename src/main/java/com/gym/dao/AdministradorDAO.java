@@ -70,24 +70,23 @@ public class AdministradorDAO {
 
 		try {
 			
-			String sentencia = "SELECT * FROM administrador;";
+			String sentencia = "SELECT * FROM administrador where email = ? and password = ? ";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
-				statement.setString(1, administrador.getNombre());
-				statement.setString(2, administrador.getEmail());
-				statement.setString(3, administrador.getPassword());
-				statement.setInt(4, administrador.getSesion_iniciada());
-				statement.setInt(5, administrador.isSuper_admin());
 				
-				int item = statement.executeUpdate();
+				statement.setString(1, administrador.getEmail());
+				statement.setString(2, administrador.getPassword());
 				
-				if(toBoolean(item)) {
-					eliminarClave(administrador.getClave());
+				statement.execute();
+				
+				
+				final ResultSet resultSet = statement.getResultSet();
+				
+				try(resultSet) {
+					return resultSet.next();
 				}
-				
-				return toBoolean(item);
 			}
 				
 		} catch(SQLException e) {
