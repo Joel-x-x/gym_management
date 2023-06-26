@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.PlanController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Plan;
+import com.gym.model.Registro;
 import com.gym.model.Usuario;
 
 import java.awt.*;
@@ -55,6 +56,9 @@ public class PlanesPanel extends JPanel {
     private JTable table_entrenador;
     private JTable table_clases;
     public static DefaultTableModel modelo1;
+    int codigo=0;
+    String seleccion = "";
+    Float precio_plan=(float) 0;
     public void llenar_tabla() {
 		String cabeceras[] = {"id","nombre","precio","descripción","duración"};
 		
@@ -63,7 +67,7 @@ public class PlanesPanel extends JPanel {
     
 
     public Plan llenarPlan() {
-    	String seleccion = "";
+    	seleccion = "";
 		if(rdbtn_anual_planes.isSelected()) {
 			seleccion = rdbtn_anual_planes.getText();
 		}else if(rdbtn_mensual_planes.isSelected()) {
@@ -174,6 +178,18 @@ public class PlanesPanel extends JPanel {
         add(btn_agregar_planes);
         
         btn_modificar_planes = new JButton("Modificar");
+        btn_modificar_planes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tabal_plan();
+        		Plan plan_llenado= llenarRegistro_id();
+        		if(planController.consult(plan_llenado)) {
+        			JOptionPane.showMessageDialog(null, "Modificacion exitosa");
+        		}else {
+        			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
+        		}
+        		llenarTabla_plan();
+        	}
+        });
         btn_modificar_planes.setBounds(157, 177, 89, 23);
         btn_modificar_planes.setBackground(new Color(46, 56, 64));
         btn_modificar_planes.setForeground(new Color(163, 175, 175));
@@ -344,9 +360,31 @@ public class PlanesPanel extends JPanel {
         tabla_planes.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		int codigo =(int )tabla_planes.getValueAt(tabla_planes.getSelectedRow(), 0);
-        		
+        		 codigo =(int )tabla_planes.getValueAt(tabla_planes.getSelectedRow(), 0);
+        		Plan plan = llenarRegistro_id();
+        		System.out.println(codigo);
+				String[]dato = new String[3]; 
+				dato=planController.consultar_(plan);
+				
+				if(dato!=null) {
+					
+					
+					
+					txt_nombre_planes.setText(dato[0]);
+					
+					txt_precio_planes.setText(dato[1]);
+					txt_descripcion_planes.setText( dato[2]);
+					if(rdbtn_anual_planes.getText().toLowerCase().equals(dato[3])) {
+						rdbtn_anual_planes.setSelected(true);
+					}else if(rdbtn_mensual_planes.getText().toLowerCase().equals(dato[3])) {
+						rdbtn_mensual_planes.setSelected(true);
+					}else if (rdbtn_diario_planes.getText().toLowerCase().equals(dato[3])) {
+						rdbtn_diario_planes.setSelected(true);
+					}
+					
+				}
         	}
+        	
         });
         scrollPane_planes.setViewportView(tabla_planes);
         
@@ -392,4 +430,35 @@ public  void llenarTabla_plan() {
 	tabla_planes.setModel(modelo);
 		System.out.println(planController.consulta(plan)[0][0]);
 	}
+private Plan llenarRegistro_id() {
+	
+	return new Plan(
+			codigo,
+			txt_nombre_planes.getText(),
+			precio_plan,
+			txt_descripcion_planes.getText(),
+			seleccion
+			
+			
+			);
+}
+public void tabal_plan() {
+	
+	if(rdbtn_anual_planes.isSelected()) {
+		seleccion = rdbtn_anual_planes.getText();
+	}else if(rdbtn_mensual_planes.isSelected()) {
+		seleccion = rdbtn_mensual_planes.getText();
+	}else if (rdbtn_diario_planes.isSelected()) {
+		seleccion = rdbtn_diario_planes.getText();
+	}
+	precio_plan = Float.parseFloat(txt_precio_planes.getText());
+}
+public void  limpiar_planes() {
+	txt_nombre_planes.setText("");
+	txt_precio_planes.setText("");
+	txt_descripcion_planes.setText("");
+	rdbtn_anual_planes.setSelected(false);
+	rdbtn_mensual_planes.setSelected(false);
+	rdbtn_diario_planes.setSelected(false);
+}
 }
