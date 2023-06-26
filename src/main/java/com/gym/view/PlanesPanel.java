@@ -59,6 +59,10 @@ public class PlanesPanel extends JPanel {
     int codigo=0;
     String seleccion = "";
     Float precio_plan=(float) 0;
+    private JButton btn_nuevo_planes;
+    private JButton btn_nuevo_planes_1;
+    private JButton btn_nuevo_planes_2;
+    private JButton btn_nuevo_planes_3;
     public void llenar_tabla() {
 		String cabeceras[] = {"id","nombre","precio","descripción","duración"};
 		
@@ -75,6 +79,7 @@ public class PlanesPanel extends JPanel {
 		}else if (rdbtn_diario_planes.isSelected()) {
 			seleccion = rdbtn_diario_planes.getText();
 		}
+		
 		Float precio_plan = Float.parseFloat(txt_precio_planes.getText());
 		
 		return new Plan(txt_nombre_planes.getText(),
@@ -106,6 +111,7 @@ public class PlanesPanel extends JPanel {
         add(lblNewLabel_1);
         
         txt_nombre_planes = new JTextField();
+        txt_nombre_planes.setEnabled(false);
         txt_nombre_planes.setBounds(21, 54, 225, 20);
         add(txt_nombre_planes);
         txt_nombre_planes.setColumns(10);
@@ -116,6 +122,7 @@ public class PlanesPanel extends JPanel {
         add(lblNewLabel_2);
         
         txt_descripcion_planes = new JTextField();
+        txt_descripcion_planes.setEnabled(false);
         txt_descripcion_planes.setBounds(21, 98, 225, 68);
         add(txt_descripcion_planes);
         txt_descripcion_planes.setColumns(10);
@@ -140,27 +147,32 @@ public class PlanesPanel extends JPanel {
         txt_buscar_planes.setColumns(10);
         
         txt_precio_planes = new JTextField();
+        txt_precio_planes.setEnabled(false);
         txt_precio_planes.setBounds(289, 54, 109, 20);
         add(txt_precio_planes);
         txt_precio_planes.setColumns(10);
         
         rdbtn_anual_planes = new JRadioButton("Anual");
+        rdbtn_anual_planes.setEnabled(false);
         rdbtn_anual_planes.setBackground(new Color(255, 255, 255));
         rdbtn_anual_planes.setBounds(289, 98, 109, 23);
         
         add(rdbtn_anual_planes);
         
         rdbtn_diario_planes = new JRadioButton("Diario");
+        rdbtn_diario_planes.setEnabled(false);
         rdbtn_diario_planes.setBackground(new Color(255, 255, 255));
         rdbtn_diario_planes.setBounds(289, 118, 109, 23);
         add(rdbtn_diario_planes);
         
         rdbtn_mensual_planes = new JRadioButton("Mensual");
+        rdbtn_mensual_planes.setEnabled(false);
         rdbtn_mensual_planes.setBackground(new Color(255, 255, 255));
         rdbtn_mensual_planes.setBounds(394, 98, 109, 23);
         add(rdbtn_mensual_planes);
         
         btn_agregar_planes = new JButton("Agregar");
+        btn_agregar_planes.setEnabled(false);
         btn_agregar_planes.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Plan plan_llenado = llenarPlan();
@@ -171,16 +183,18 @@ public class PlanesPanel extends JPanel {
         			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
         		}
         		llenarPlan_();
-        		
+        		limpiar_planes();
+        		llenarTabla_plan();
         	}
         });
-        btn_agregar_planes.setBounds(21, 177, 89, 23);
+        btn_agregar_planes.setBounds(102, 177, 89, 23);
         btn_agregar_planes.setBackground(new Color(46, 56, 64));
         btn_agregar_planes.setForeground(new Color(163, 175, 175));
         btn_agregar_planes.setBorder(null);
         add(btn_agregar_planes);
         
         btn_modificar_planes = new JButton("Modificar");
+        btn_modificar_planes.setEnabled(false);
         btn_modificar_planes.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		tabal_plan();
@@ -190,17 +204,35 @@ public class PlanesPanel extends JPanel {
         		}else {
         			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
         		}
+        		
+        		limpiar_planes();
         		llenarTabla_plan();
         	}
         });
-        btn_modificar_planes.setBounds(157, 177, 89, 23);
+        btn_modificar_planes.setBounds(201, 177, 89, 23);
         btn_modificar_planes.setBackground(new Color(46, 56, 64));
         btn_modificar_planes.setForeground(new Color(163, 175, 175));
         btn_modificar_planes.setBorder(null);
         add(btn_modificar_planes);
         
         btn_eliminar_planes = new JButton("Eliminar");
-        btn_eliminar_planes.setBounds(289, 177, 89, 23);
+        btn_eliminar_planes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tabal_plan();
+        		Plan plan_llenado= llenarRegistro_id();
+        		if(planController.eliminar(plan_llenado)) {
+        			JOptionPane.showMessageDialog(null, "Eliminacion exitosa");
+        		}else {
+        			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
+        		}
+        		
+        		
+        		limpiar_planes();
+        		llenarTabla_plan();
+        	}
+        });
+        btn_eliminar_planes.setEnabled(false);
+        btn_eliminar_planes.setBounds(300, 177, 89, 23);
         btn_eliminar_planes.setBackground(new Color(46, 56, 64));
         btn_eliminar_planes.setForeground(new Color(163, 175, 175));
         btn_eliminar_planes.setBorder(null);
@@ -272,14 +304,14 @@ public class PlanesPanel extends JPanel {
         add(rdbtn_sexo_mujer_entrenador);
         
         btn_agregar_entrenador = new JButton("Agregar");
-        btn_agregar_entrenador.setBounds(21, 374, 89, 23);
+        btn_agregar_entrenador.setBounds(87, 374, 89, 23);
         btn_agregar_entrenador.setBackground(new Color(46, 56, 64));
         btn_agregar_entrenador.setForeground(new Color(163, 175, 175));
         btn_agregar_entrenador.setBorder(null);
         add(btn_agregar_entrenador);
         
         btn_modificar_entrenador = new JButton("Modificar");
-        btn_modificar_entrenador.setBounds(157, 374, 89, 23);
+        btn_modificar_entrenador.setBounds(190, 374, 89, 23);
         btn_modificar_entrenador.setBackground(new Color(46, 56, 64));
         btn_modificar_entrenador.setForeground(new Color(163, 175, 175));
         btn_modificar_entrenador.setBorder(null);
@@ -380,14 +412,24 @@ public class PlanesPanel extends JPanel {
 					txt_precio_planes.setText(dato[1]);
 					txt_descripcion_planes.setText( dato[2]);
 					if(rdbtn_anual_planes.getText().toLowerCase().equals(dato[3])) {
+						System.out.println("este: "+rdbtn_anual_planes.getText().toLowerCase()+" con ste "+dato[3]);
 						rdbtn_anual_planes.setSelected(true);
 					}else if(rdbtn_mensual_planes.getText().toLowerCase().equals(dato[3])) {
+						System.out.println("este: "+rdbtn_mensual_planes.getText().toLowerCase()+" con ste "+dato[3]);
 						rdbtn_mensual_planes.setSelected(true);
 					}else if (rdbtn_diario_planes.getText().toLowerCase().equals(dato[3])) {
+						System.out.println("este: "+rdbtn_diario_planes.getText().toLowerCase()+" con ste "+dato[3]);
 						rdbtn_diario_planes.setSelected(true);
 					}
+					System.out.println("este: "+rdbtn_anual_planes.getText().toLowerCase()+" con ste "+dato[3]);
+					System.out.println("este: "+rdbtn_mensual_planes.getText().toLowerCase()+" con ste "+dato[3]);
+					System.out.println("este: "+rdbtn_diario_planes.getText().toLowerCase()+" con ste "+dato[3]);
 					
 				}
+				dbotones_planes();
+				btn_modificar_planes.setEnabled(true);
+				btn_eliminar_planes.setEnabled(true);
+				atextos_planes();
         	}
         	
         });
@@ -418,6 +460,48 @@ public class PlanesPanel extends JPanel {
         btn_eliminar_planes_1.setBackground(new Color(46, 56, 64));
         btn_eliminar_planes_1.setBounds(482, 53, 89, 23);
         add(btn_eliminar_planes_1);
+        
+        btn_nuevo_planes = new JButton("Nuevo");
+        btn_nuevo_planes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		//abotones_planes();
+        		atextos_planes();
+        		btn_agregar_planes.setEnabled(true);
+        	}
+        });
+        btn_nuevo_planes.setForeground(new Color(163, 175, 175));
+        btn_nuevo_planes.setBorder(null);
+        btn_nuevo_planes.setBackground(new Color(46, 56, 64));
+        btn_nuevo_planes.setBounds(0, 177, 89, 23);
+        add(btn_nuevo_planes);
+        
+        btn_nuevo_planes_1 = new JButton("Cancelar");
+        btn_nuevo_planes_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dbotones_planes();
+        		btn_nuevo_planes.setEnabled(true);
+        		limpiar_planes();
+        	}
+        });
+        btn_nuevo_planes_1.setForeground(new Color(163, 175, 175));
+        btn_nuevo_planes_1.setBorder(null);
+        btn_nuevo_planes_1.setBackground(new Color(46, 56, 64));
+        btn_nuevo_planes_1.setBounds(399, 177, 89, 23);
+        add(btn_nuevo_planes_1);
+        
+        btn_nuevo_planes_2 = new JButton("Nuevo");
+        btn_nuevo_planes_2.setForeground(new Color(163, 175, 175));
+        btn_nuevo_planes_2.setBorder(null);
+        btn_nuevo_planes_2.setBackground(new Color(46, 56, 64));
+        btn_nuevo_planes_2.setBounds(-12, 374, 89, 23);
+        add(btn_nuevo_planes_2);
+        
+        btn_nuevo_planes_3 = new JButton("Cancelar");
+        btn_nuevo_planes_3.setForeground(new Color(163, 175, 175));
+        btn_nuevo_planes_3.setBorder(null);
+        btn_nuevo_planes_3.setBackground(new Color(46, 56, 64));
+        btn_nuevo_planes_3.setBounds(394, 374, 89, 23);
+        add(btn_nuevo_planes_3);
         
     }
 private Plan llenarPlan_() {
@@ -465,4 +549,36 @@ public void  limpiar_planes() {
 	rdbtn_mensual_planes.setSelected(false);
 	rdbtn_diario_planes.setSelected(false);
 }
+public void  abotones_planes(){
+	btn_modificar_planes.setEnabled(true);
+	btn_agregar_planes.setEnabled(true);
+	btn_eliminar_planes.setEnabled(true);
+	btn_nuevo_planes.setEnabled(true);
+	
+	
+}
+public void  dbotones_planes(){
+	btn_modificar_planes.setEnabled(false);
+	btn_agregar_planes.setEnabled(false);
+	btn_eliminar_planes.setEnabled(false);
+	btn_nuevo_planes.setEnabled(false);
+	
+}
+public void  atextos_planes(){
+	rdbtn_mensual_planes.setEnabled(true);
+	rdbtn_diario_planes.setEnabled(true);
+	rdbtn_anual_planes.setEnabled(true);
+	txt_nombre_planes.setEnabled(true);
+	txt_descripcion_planes.setEnabled(true);
+	txt_precio_planes.setEnabled(true);
+}
+public void  dtextos_planes(){
+	rdbtn_mensual_planes.setEnabled(false);
+	rdbtn_diario_planes.setEnabled(false);
+	rdbtn_anual_planes.setEnabled(false);
+	txt_nombre_planes.setEnabled(false);
+	txt_descripcion_planes.setEnabled(false);
+	txt_precio_planes.setEnabled(false);
+}
+
 }
