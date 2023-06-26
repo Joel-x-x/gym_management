@@ -1,0 +1,133 @@
+2023-06-25 19:32:25,957 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2023-06-25 19:33:19,901 [Worker-6: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.gym:gym_management:0.0.1-SNAPSHOT @ C:\Users\USER\Desktop\Proyecto POO\gym_management\pom.xml.
+2023-06-25 19:33:21,624 [Worker-6: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:33:21,786 [Worker-6: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 19:33:21,948 [Worker-6: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:33:21,963 [Worker-6: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 19:33:28,126 [Worker-9: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:33:28,187 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 19:33:28,212 [Worker-9: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:33:28,216 [Worker-9: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 19:34:48,420 [Worker-3: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:34:48,423 [Worker-3: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2023-06-25 19:34:48,428 [Worker-3: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:34:48,431 [Worker-3: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 19:56:20,862 [Worker-19: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:56:20,871 [Worker-19: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 19:56:20,877 [Worker-19: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 19:56:20,885 [Worker-19: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 20:45:20,147 [Worker-20: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 20:45:20,230 [Worker-20: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 20:45:20,239 [Worker-20: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 20:45:20,258 [Worker-20: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 21:12:04,571 [Worker-21: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:12:04,581 [Worker-21: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 21:12:04,588 [Worker-21: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:12:04,591 [Worker-21: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 21:31:41,406 [Worker-31: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:31:41,410 [Worker-31: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 21:31:41,418 [Worker-31: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:31:41,424 [Worker-31: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 21:32:37,440 [Worker-30: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:32:37,460 [Worker-30: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 21:32:37,466 [Worker-30: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:32:37,511 [Worker-30: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 21:34:20,421 [Worker-33: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:34:20,432 [Worker-33: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 21:34:20,438 [Worker-33: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:34:20,446 [Worker-33: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 21:41:02,038 [Worker-31: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:41:02,114 [Worker-31: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 21:41:02,121 [Worker-31: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 21:41:02,125 [Worker-31: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:10:04,955 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:10:04,968 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:10:04,975 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:10:04,979 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:13:28,687 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:13:28,691 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:13:28,697 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:13:28,699 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:14:35,199 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:14:35,205 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:14:35,213 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:14:35,233 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:15:09,496 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:15:09,499 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:15:09,505 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:15:09,508 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:16:09,698 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:16:09,718 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:16:09,724 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:16:09,751 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:16:48,496 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:16:48,532 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:16:48,540 [Worker-44: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:16:48,551 [Worker-44: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:17:50,687 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:17:50,691 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:17:50,698 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:17:50,702 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:19:13,551 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:19:13,575 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:19:13,584 [Worker-40: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:19:13,588 [Worker-40: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:26:04,762 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:26:04,897 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:26:04,904 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:26:04,954 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:27:27,377 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:27:27,385 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:27:27,392 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:27:27,395 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:28:25,567 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:28:25,570 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:28:25,576 [Worker-42: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:28:25,578 [Worker-42: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:29:17,398 [Worker-50: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:29:17,402 [Worker-50: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:29:17,409 [Worker-50: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:29:17,416 [Worker-50: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:33:24,869 [Worker-52: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:33:25,081 [Worker-52: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:33:25,088 [Worker-52: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:33:25,174 [Worker-52: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:34:23,122 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:34:23,148 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:34:23,165 [Worker-46: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:34:23,230 [Worker-46: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:40:36,771 [Worker-56: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:40:36,778 [Worker-56: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:40:36,785 [Worker-56: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:40:36,854 [Worker-56: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:41:47,709 [Worker-56: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:41:47,714 [Worker-56: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:41:47,726 [Worker-56: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:41:47,742 [Worker-56: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 22:44:16,360 [Worker-52: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:44:16,439 [Worker-52: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 22:44:16,445 [Worker-52: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 22:44:16,456 [Worker-52: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:23:19,235 [Worker-66: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:23:19,246 [Worker-66: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:23:19,251 [Worker-66: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:23:19,260 [Worker-66: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:30:08,389 [Worker-68: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:30:08,401 [Worker-68: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:30:08,408 [Worker-68: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:30:08,411 [Worker-68: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:31:57,135 [Worker-69: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:31:57,150 [Worker-69: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:31:57,156 [Worker-69: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:31:57,162 [Worker-69: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:32:51,344 [Worker-68: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:32:51,368 [Worker-68: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:32:51,375 [Worker-68: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:32:51,378 [Worker-68: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:34:42,578 [Worker-64: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:34:42,583 [Worker-64: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:34:42,590 [Worker-64: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:34:42,593 [Worker-64: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\USER\Desktop\Proyecto POO\gym_management\src\test\resources
+2023-06-25 23:56:31,598 [Worker-74: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2023-06-25 23:56:31,619 [Worker-74: Launching RegistroFrame] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2023-06-25 23:56:31,624 [Worker-74: Launching RegistroFrame] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
