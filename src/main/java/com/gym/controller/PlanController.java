@@ -16,5 +16,11 @@ public class PlanController {
 		return planesDAO.consultar(plan);
 
 	}
+	public String[] consultar_(Plan plan) {
+		return planesDAO.consultar_(plan);
+	}
+	public boolean consult(Plan plan) {
+		return planesDAO.modificar(plan);
+	}
 
 }
