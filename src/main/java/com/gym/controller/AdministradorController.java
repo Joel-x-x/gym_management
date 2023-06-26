@@ -20,5 +20,9 @@ public class AdministradorController {
 		
 		return administradorDAO.iniciarSesion(administrador);
 	}
+	
+	public int consultarId(String email) {
+		return administradorDAO.consultarId(email);
+	}
 
 }

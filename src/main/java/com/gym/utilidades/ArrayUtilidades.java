@@ -2,13 +2,14 @@ package com.gym.utilidades;
 
 import java.util.List;
 
+import com.gym.model.Fisico;
 import com.gym.model.Usuario;
 
 public class ArrayUtilidades {
 
 	public Object[][] toMatrizUsuario(List<Usuario> lista) {
 		int contador = 0;
-		Object[][] matrizUsuarios =  new Object[lista.size()][6];
+		Object[][] matrizUsuarios =  new Object[lista.size()][10];
     	
     	for(Usuario usuario : lista) {
     		matrizUsuarios[contador][0] = usuario.getId();
@@ -25,6 +26,21 @@ public class ArrayUtilidades {
     		contador++;
     	}
     	return matrizUsuarios;
+	}
+	
+	public Object[][] toMatrizFisico(List<Fisico> lista) {
+		int contador = 0;
+		Object[][] matrizFisico =  new Object[lista.size()][4];
+    	
+    	for(Fisico fisico : lista) {
+    		matrizFisico[contador][0] = fisico.getId();
+    		matrizFisico[contador][1] = fisico.getAltura();
+    		matrizFisico[contador][2] = fisico.getPeso();
+    		matrizFisico[contador][3] = fisico.getFecha();
+
+    		contador++;
+    	}
+    	return matrizFisico;
 	}
 	
 }

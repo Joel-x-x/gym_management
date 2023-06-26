@@ -113,10 +113,10 @@ public class UsuarioDAO {
 				statement.setInt(1, administrador_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
-				
 				try(resultSet) {
 					
 					while(resultSet.next()) {
+						System.out.println(resultSet.getString("nombre"));
 						resultado.add(new Usuario(
 								resultSet.getInt("id"),
 								resultSet.getString("nombre"),

@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gym.model.Administrador;
+import com.gym.model.Fisico;
 
 public class AdministradorDAO {
 	Connection con;
@@ -131,5 +134,29 @@ public class AdministradorDAO {
 	
 	public boolean sesion(Administrador administrador) {
 		return true;
+	}
+
+	public int consultarId(String email) {
+		try {
+			String sentencia = "select id from administrador where email = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, email);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					return resultSet.getInt("id");
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

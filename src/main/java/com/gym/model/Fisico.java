@@ -7,7 +7,7 @@ public class Fisico {
     private String fecha;
     private int usuario_id;
     
-    public Fisico(int id, float altura, double peso, String fecha, int usuario_id) {
+    public Fisico(int id, double altura, double peso, String fecha, int usuario_id) {
         this.id = id;
         this.altura = altura;
         this.peso = peso;
@@ -15,7 +15,7 @@ public class Fisico {
         this.usuario_id = usuario_id;
     }
     
-    public Fisico( float altura, double peso, String fecha, int usuario_id) {
+    public Fisico( double altura, double peso, String fecha, int usuario_id) {
         this.altura = altura;
         this.peso = peso;
         this.fecha = fecha;
