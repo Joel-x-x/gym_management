@@ -103,21 +103,27 @@ public Object[][] consultar(Plan plan) {
 		
 }
 public String[] consultar_(Plan plan) {
-	String obj[]= new String[5];
+	String obj[]= new String[4];
 	String sentencia="";
+	
 	try {
 			sentencia = "SELECT * FROM plan where id =  "+plan.getId();
 	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
 	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
 	    	
-		
-	        resultSet.next();
-	            obj[0] = resultSet.getObject(1).toString();
-	            obj[1] = resultSet.getObject(2).toString();
-	            obj[2] = resultSet.getObject(3).toString();
-	            
-	            System.out.println("JHJKUH " + obj[0]);
-	            System.out.println(obj[1]);
+		if(resultSet.next()) {
+			obj[0] = resultSet.getObject(2).toString();
+            obj[1] = resultSet.getObject(3).toString();
+            obj[2] = resultSet.getObject(4).toString();
+            
+            
+            System.out.println("JHJKUH " + obj[0]);
+            System.out.println(obj[1]);
+            
+		}else {
+			System.out.println("no se ecndfg");
+		}
+	        
 	            
 	        
 	    }
@@ -130,4 +136,5 @@ public String[] consultar_(Plan plan) {
 		
 		
 }
+
 }
