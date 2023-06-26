@@ -22,5 +22,8 @@ public class PlanController {
 	public boolean consult(Plan plan) {
 		return planesDAO.modificar(plan);
 	}
+	public boolean eliminar(Plan plan) {
+		return planesDAO.eliminar(plan);
+	}
 
 }
