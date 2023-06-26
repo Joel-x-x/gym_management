@@ -5,15 +5,22 @@ public class Plan {
     String nombre;
     Float precio;
     String descripcion;
-    int tiempo_id;
-    public Plan(int id, String nombre, Float precio, String descripcion, int tiempo_id) {
+    String duracion;
+    public Plan(int id, String nombre, Float precio, String descripcion, String duracion) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
-        this.tiempo_id = tiempo_id;
+        this.duracion = duracion;
     }
-    public int getId() {
+    public Plan(String nombre, Float precio, String descripcion, String duracion) {
+		// TODO Auto-generated constructor stub
+    	this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.duracion = duracion;
+	}
+	public int getId() {
         return id;
     }
     public void setId(int id) {
@@ -37,12 +44,13 @@ public class Plan {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public int getTiempo_id() {
-        return tiempo_id;
-    }
-    public void setTiempo_id(int tiempo_id) {
-        this.tiempo_id = tiempo_id;
-    }
+	public String getDuracion() {
+		return duracion;
+	}
+	public void setDuracion(String duracion) {
+		this.duracion = duracion;
+	}
+    
     
     
 }

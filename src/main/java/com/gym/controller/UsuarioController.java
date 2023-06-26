@@ -14,4 +14,9 @@ public class UsuarioController {
 	public int guardar(Usuario usuario) {
 		return usuarioDAO.guardar(usuario);
 	}
+	
+	public Object[][]  consulta(Usuario usuario) {
+		return usuarioDAO.consultar(usuario);
+	}
+	
 }
