@@ -12,6 +12,14 @@ public class Registro {
         this.fecha_salida = fecha_salida;
         this.usuario = usuario;
     }
+public Registro(  int cod) {
+		
+		this.usuario=cod;
+	}
+public Registro( String codigo) {
+	
+	this.id=Integer.parseInt(codigo);
+}
 
     public int getId() {
         return id;

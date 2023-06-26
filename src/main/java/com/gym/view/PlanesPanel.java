@@ -4,11 +4,15 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.PlanController;
+import com.gym.controller.UsuarioController;
 import com.gym.model.Plan;
+import com.gym.model.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PlanesPanel extends JPanel {
 	
@@ -40,14 +44,17 @@ public class PlanesPanel extends JPanel {
     private JButton btn_modificar_entrenador;
     private JButton btn_eliminar_entrenador;
     private JTable tabla_planes;
-    private JTable tabla_entrenador;
-    private JTable tabla_clase;
     private JButton btn_agregar_clase;
     private JButton btn_modificar_clase;
     private JButton btn_eliminar_clase;
     private DefaultTableModel modelo;
     private PlanController planController;
-    
+    private JScrollPane scrollPane_planes;
+    private JScrollPane scrollPane_entrenador;
+    private JScrollPane scrollPane_clases;
+    private JTable table_entrenador;
+    private JTable table_clases;
+    public static DefaultTableModel modelo1;
     public void llenar_tabla() {
 		String cabeceras[] = {"id","nombre","precio","descripción","duración"};
 		
@@ -156,6 +163,7 @@ public class PlanesPanel extends JPanel {
         		}else {
         			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
         		}
+        		llenarPlan_();
         		
         	}
         });
@@ -328,30 +336,60 @@ public class PlanesPanel extends JPanel {
         btn_eliminar_clase.setBorder(null);
         add(btn_eliminar_clase);
         
-        JDesktopPane desktopPane_planes = new JDesktopPane();
-        desktopPane_planes.setBounds(579, 11, 691, 210);
-        add(desktopPane_planes);
-        
+        scrollPane_planes = new JScrollPane();
+        scrollPane_planes.setBounds(590, 0, 465, 186);
+        add(scrollPane_planes);
+        //hhjgvh
         tabla_planes = new JTable();
-        tabla_planes.setBounds(0, 0, 691, 210);
-        desktopPane_planes.add(tabla_planes);
+        tabla_planes.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		int codigo =(int )tabla_planes.getValueAt(tabla_planes.getSelectedRow(), 0);
+        		
+        	}
+        });
+        scrollPane_planes.setViewportView(tabla_planes);
         
-        JDesktopPane desktopPane_entrenador = new JDesktopPane();
-        desktopPane_entrenador.setBounds(579, 232, 691, 210);
-        add(desktopPane_entrenador);
+        scrollPane_entrenador = new JScrollPane();
+        scrollPane_entrenador.setBounds(590, 211, 465, 186);
+        add(scrollPane_entrenador);
         
-        tabla_entrenador = new JTable();
-        tabla_entrenador.setBounds(0, 0, 691, 210);
-        desktopPane_entrenador.add(tabla_entrenador);
+        table_entrenador = new JTable();
+        scrollPane_entrenador.setViewportView(table_entrenador);
         
-        JDesktopPane desktopPane_clase = new JDesktopPane();
-        desktopPane_clase.setBounds(579, 449, 691, 210);
-        add(desktopPane_clase);
+        scrollPane_clases = new JScrollPane();
+        scrollPane_clases.setBounds(590, 439, 465, 186);
+        add(scrollPane_clases);
         
-        tabla_clase = new JTable();
-        tabla_clase.setBounds(0, 0, 691, 210);
-        desktopPane_clase.add(tabla_clase);
+        table_clases = new JTable();
+        scrollPane_clases.setViewportView(table_clases);
+        
+        JButton btn_eliminar_planes_1 = new JButton("Buscar");
+        btn_eliminar_planes_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		llenarTabla_plan();
+        	}
+        });
+        btn_eliminar_planes_1.setForeground(new Color(163, 175, 175));
+        btn_eliminar_planes_1.setBorder(null);
+        btn_eliminar_planes_1.setBackground(new Color(46, 56, 64));
+        btn_eliminar_planes_1.setBounds(482, 53, 89, 23);
+        add(btn_eliminar_planes_1);
         
     }
+private Plan llenarPlan_() {
+		
+		
+		return new Plan(txt_buscar_planes.getText());
+		
+	}
+public  void llenarTabla_plan() {
+	 PlanController planController= new PlanController();
+	Plan plan = llenarPlan_();
+	String[] cabeceras = {"Codigo","Nombre","Precio","Descripcion","Duracion"};
 	
+	modelo = new DefaultTableModel(planController.consulta(plan),cabeceras);
+	tabla_planes.setModel(modelo);
+		System.out.println(planController.consulta(plan)[0][0]);
+	}
 }

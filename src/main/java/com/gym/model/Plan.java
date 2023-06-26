@@ -20,6 +20,9 @@ public class Plan {
         this.descripcion = descripcion;
         this.duracion = duracion;
 	}
+    public Plan(String nombre_ingreso) {
+    	this.nombre=nombre_ingreso;
+    }
 	public int getId() {
         return id;
     }

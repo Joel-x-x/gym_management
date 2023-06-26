@@ -12,5 +12,9 @@ public class PlanController {
 	public boolean registrar(Plan plan) {
 		return planesDAO.agregar(plan);
 	}
+	public Object[][] consulta(Plan plan) {
+		return planesDAO.consultar(plan);
+
+	}
 
 }
