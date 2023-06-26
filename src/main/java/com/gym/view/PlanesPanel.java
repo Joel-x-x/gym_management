@@ -390,6 +390,5 @@ public  void llenarTabla_plan() {
 	
 	modelo = new DefaultTableModel(planController.consulta(plan),cabeceras);
 	tabla_planes.setModel(modelo);
-		System.out.println(planController.consulta(plan)[0][0]);
 	}
 }

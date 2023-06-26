@@ -67,10 +67,10 @@ public Object[][] consultar(Plan plan) {
 
 	try {
 		if(plan.getNombre().equals("")) {
-			sentencia = "SELECT * FROM plan  ";
+			sentencia = "SELECT * FROM plan ";
 			
 		}else {
-			sentencia = "SELECT * FROM plan where nombre =  "+plan.getNombre();
+			sentencia = "SELECT * FROM plan where nombre = "+plan.getNombre();
 			}
 	    
 	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
