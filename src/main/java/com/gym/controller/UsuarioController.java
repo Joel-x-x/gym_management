@@ -25,5 +25,17 @@ public class UsuarioController {
 		
 		return new ArrayUtilidades().toMatrizUsuario(listaUsuarios);
 	}
+
+	public boolean modificar(Usuario usuario) {
+		return usuarioDAO.modificar(usuario);
+	}
+
+	public Usuario consulta(int idSeleccionado, int administrador_id) {
+		return usuarioDAO.consultar(idSeleccionado, administrador_id);
+	}
+
+	public boolean eliminar(int idSeleccionado) {
+		return usuarioDAO.eliminar(idSeleccionado);
+	}
 	
 }

@@ -85,7 +85,7 @@ public class UsuarioDAO {
 	public boolean eliminar(int id) {
 		
 		try {
-			String sentencia = "delete usuario where id = ?";
+			String sentencia = "delete from usuario where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -116,7 +116,6 @@ public class UsuarioDAO {
 				try(resultSet) {
 					
 					while(resultSet.next()) {
-						System.out.println(resultSet.getString("nombre"));
 						resultado.add(new Usuario(
 								resultSet.getInt("id"),
 								resultSet.getString("nombre"),
@@ -140,6 +139,43 @@ public class UsuarioDAO {
 		
 	}
 
+	public Usuario consultar(int id, int administrador_id) {
+		
+		try {
+			String sentencia = "select * from usuario where id = ? and administrador_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				statement.setInt(2, administrador_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+						return new Usuario(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getString("fecha_nacimiento"),
+								resultSet.getString("sexo"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula"),
+								resultSet.getString("direccion"),
+								resultSet.getString("telefono"),
+								resultSet.getString("fecha_creacion"));
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
 	public List<Usuario> consultarUsuario(Usuario usuario) {
 		
 		try {

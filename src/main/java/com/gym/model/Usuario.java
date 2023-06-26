@@ -26,17 +26,8 @@ public class Usuario{
         this.fecha_creacion = fecha_creacion;
         this.administrador_id = administrador_id;
     }
-
-    public Usuario(  String cedula) {
-		this.cedula = cedula;
-	}
     
-    public Usuario(int administrador_id, String cedula) {
-		this.administrador_id = administrador_id;
-		this.cedula = cedula;
-	}
-
-    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion) {
+    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -46,8 +37,43 @@ public class Usuario{
         this.cedula = cedula;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.fecha_creacion = fecha_creacion;
+        this.administrador_id = administrador_id;
     }
+    
+    public Usuario(String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.sexo = sexo;
+        this.email = email;
+        this.cedula = cedula;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.administrador_id = administrador_id;
+    }
+
+    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion) {
+    	this.id = id;
+    	this.nombre = nombre;
+    	this.apellido = apellido;
+    	this.fecha_nacimiento = fecha_nacimiento;
+    	this.sexo = sexo;
+    	this.email = email;
+    	this.cedula = cedula;
+    	this.direccion = direccion;
+    	this.telefono = telefono;
+    	this.fecha_creacion = fecha_creacion;
+    }
+    
+    public Usuario(  String cedula) {
+		this.cedula = cedula;
+	}
+    
+    public Usuario(int administrador_id, String cedula) {
+		this.administrador_id = administrador_id;
+		this.cedula = cedula;
+	}
+
 
 	public int getId() {
         return id;

@@ -5,13 +5,20 @@ import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
+import com.gym.model.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UsuariosPanel extends JPanel {
 	private int administrador_id;
+	private DefaultTableModel modelo;
+	private UsuarioController usuarioController;
+	private int idSeleccionado;
 	
 	private static final long serialVersionUID = 6939534476162663420L;
 	private JTextField textNombre;
@@ -26,22 +33,136 @@ public class UsuariosPanel extends JPanel {
 	private JTable tableUsuarios;
 	private JTable tableFisico;
 	private JScrollPane scrollPane;
-	private JRadioButton radioHombre;
-	private JRadioButton radioFactory;
+	private JRadioButton radioMasculino;
+	private JRadioButton radioFemenino;
 	private JButton btnAgregarUsuario;
 	private JButton btnModificarUsuario;
 	private JButton btnEliminarUsuario;
 	private JButton btnAgregarFisico;
 	private JButton btnModificarFisico;
 	private JButton btnEliminarFisico;
-	private DefaultTableModel modelo;
-	private UsuarioController usuarioController;
+	private ButtonGroup buttonGroup;
+	private JTextField textEmail;
+	
+
 	
 	private void listar(int id) {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
 		modelo = new DefaultTableModel(usuarioController.listar(administrador_id), cabeceras);
 		tableUsuarios.setModel(modelo);
+	}
+	
+	private void guardar() {
+		Usuario usuario = llenarUsuario();
+		
+		if(usuarioController.guardar(usuario)) {
+			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
+			listar(administrador_id);
+			limpiarFormularioUsuario();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo Guardar");
+		}
+		
+	}
+	
+	protected void modificar() {
+		Usuario usuario = llenarUsuario();
+		
+		if(usuarioController.modificar(usuario)) {
+			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
+			limpiarFormularioUsuario();
+			listar(administrador_id);
+		} else {
+			JOptionPane.showMessageDialog(null, "Error al intentar modificar");
+		}
+	}
+	
+
+	protected void eliminar() {
+		int respuesta = JOptionPane.showConfirmDialog(null, "Estar seguro de eliminar");
+		if(respuesta == 0) {
+			
+			if(usuarioController.eliminar(idSeleccionado)) {
+				JOptionPane.showMessageDialog(null, "Registro eliminado!");
+				listar(administrador_id);
+			} else {
+				JOptionPane.showMessageDialog(null, "No se puedo eliminar el registro");
+			}
+		}
+		
+	}
+	
+	private Usuario llenarUsuario() {
+		return new Usuario( idSeleccionado,
+							textNombre.getText(), textApellido.getText(),
+							textNacimiento.getText(), getRadioButton(), 
+							textEmail.getText(), textCedula.getText(), 
+							textDireccion.getText(), textTelefono.getText(),
+							administrador_id);
+	}
+	
+	// Obtener el botón seleccionado
+	private String getRadioButton() {
+		if(radioMasculino.isSelected()) {
+			return radioMasculino.getText();
+		} else if(radioFemenino.isSelected()) {
+			return radioFemenino.getText();
+		} else {
+			return "";
+		}
+	}
+	
+	private void limpiarFormularioUsuario() {
+		textNombre.setText("");
+		textApellido.setText("");
+		textNacimiento.setText("");
+		buttonGroup.clearSelection();
+		textEmail.setText("");
+		textCedula.setText("");
+		textDireccion.setText("");
+		textTelefono.setText("");
+	}
+	
+	public void llenarFormulario() {
+		
+		Usuario usuario = usuarioController.consulta(idSeleccionado, administrador_id);
+		textNombre.setText(usuario.getNombre());
+		textApellido.setText(usuario.getApellido());
+		textNacimiento.setText(usuario.getFecha_nacimiento());
+		
+		if(usuario.getSexo().equals("Masculino")) {
+			System.out.println("true");
+			radioMasculino.setSelected(true);
+		} else {
+			radioMasculino.setSelected(true);
+			System.out.println("false");
+		}
+		
+		textEmail.setText(usuario.getEmail());
+		textCedula.setText(usuario.getCedula());
+		textDireccion.setText(usuario.getDireccion());
+		textTelefono.setText(usuario.getTelefono());
+	}
+	
+	public void bloquearBotonesUsuarios() {
+        btnModificarUsuario.setEnabled(false);
+        btnEliminarUsuario.setEnabled(false);
+	}
+	
+	public void activarBotonesUsuarios() {
+        btnModificarUsuario.setEnabled(true);
+        btnEliminarUsuario.setEnabled(true);
+	}
+	
+	public void activarBotonesFisico() {
+        btnModificarFisico.setEnabled(true);
+        btnEliminarFisico.setEnabled(true);
+	}
+	
+	public void bloquearBotonesFisico() {
+		btnModificarFisico.setEnabled(false);
+		btnEliminarFisico.setEnabled(false);
 	}
 	
 	// Constructor
@@ -55,6 +176,8 @@ public class UsuariosPanel extends JPanel {
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
         setLayout(null);
+        
+        buttonGroup = new ButtonGroup();
         
         JLabel lblNewLabel = new JLabel("USUARIOS");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -83,12 +206,12 @@ public class UsuariosPanel extends JPanel {
         
         JLabel lblNewLabel_1_2 = new JLabel("Cedula");
         lblNewLabel_1_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_2.setBounds(530, 74, 75, 14);
+        lblNewLabel_1_2.setBounds(30, 180, 75, 14);
         add(lblNewLabel_1_2);
         
         textCedula = new JTextField();
         textCedula.setColumns(10);
-        textCedula.setBounds(530, 90, 225, 25);
+        textCedula.setBounds(30, 196, 225, 25);
         add(textCedula);
         
         JLabel lblNewLabel_1_3 = new JLabel("Teléfono");
@@ -102,99 +225,108 @@ public class UsuariosPanel extends JPanel {
         add(textTelefono);
         
         JLabel lblNewLabel_9 = new JLabel("Sexo");
-        lblNewLabel_9.setBounds(280, 126, 46, 14);
+        lblNewLabel_9.setBounds(280, 183, 46, 14);
         add(lblNewLabel_9);
         
-        radioHombre = new JRadioButton("Hombre");
-        radioHombre.setBackground(Color.WHITE);
-        radioHombre.setBounds(280, 141, 109, 23);
-        add(radioHombre);
+        radioMasculino = new JRadioButton("Masculino");
+        radioMasculino.setFocusPainted(false);
+        radioMasculino.setBackground(Color.WHITE);
+        radioMasculino.setBounds(280, 198, 109, 23);
+        add(radioMasculino);
         
-        radioFactory = new JRadioButton("Mujer");
-        radioFactory.setBackground(Color.WHITE);
-        radioFactory.setBounds(385, 141, 109, 23);
-        add(radioFactory);
+        radioFemenino = new JRadioButton("Femenino");
+        radioFemenino.setFocusPainted(false);
+        radioFemenino.setBackground(Color.WHITE);
+        radioFemenino.setBounds(385, 198, 109, 23);
+        add(radioFemenino);
         
         JLabel lblDatosOpcionales = new JLabel("DATOS OPCIONALES");
         lblDatosOpcionales.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblDatosOpcionales.setBounds(30, 187, 225, 37);
+        lblDatosOpcionales.setBounds(30, 231, 225, 37);
         add(lblDatosOpcionales);
         
         JLabel lblNewLabel_1_4 = new JLabel("Fecha de nacimiento");
         lblNewLabel_1_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4.setBounds(30, 235, 125, 14);
+        lblNewLabel_1_4.setBounds(30, 279, 125, 14);
         add(lblNewLabel_1_4);
         
         textNacimiento = new JTextField();
         textNacimiento.setColumns(10);
-        textNacimiento.setBounds(30, 251, 225, 25);
+        textNacimiento.setBounds(30, 295, 225, 25);
         add(textNacimiento);
         
         JLabel lblNewLabel_1_1_1 = new JLabel("Dirección");
         lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_1_1.setBounds(280, 235, 109, 14);
+        lblNewLabel_1_1_1.setBounds(280, 279, 109, 14);
         add(lblNewLabel_1_1_1);
         
         textDireccion = new JTextField();
         textDireccion.setColumns(10);
-        textDireccion.setBounds(280, 251, 225, 25);
+        textDireccion.setBounds(280, 295, 225, 25);
         add(textDireccion);
         
         JLabel lblFsico = new JLabel("FÍSICO");
         lblFsico.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblFsico.setBounds(530, 187, 225, 37);
+        lblFsico.setBounds(527, 30, 225, 37);
         add(lblFsico);
         
         JLabel lblNewLabel_1_4_1 = new JLabel("Peso");
         lblNewLabel_1_4_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_1.setBounds(530, 235, 125, 14);
+        lblNewLabel_1_4_1.setBounds(527, 78, 125, 14);
         add(lblNewLabel_1_4_1);
         
         textPeso = new JTextField();
         textPeso.setColumns(10);
-        textPeso.setBounds(530, 251, 225, 25);
+        textPeso.setBounds(527, 94, 225, 25);
         add(textPeso);
         
         JLabel lblNewLabel_1_1_1_1 = new JLabel("Altura");
         lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_1_1_1.setBounds(780, 235, 109, 14);
+        lblNewLabel_1_1_1_1.setBounds(777, 78, 109, 14);
         add(lblNewLabel_1_1_1_1);
         
         textAltura = new JTextField();
         textAltura.setColumns(10);
-        textAltura.setBounds(780, 251, 225, 25);
+        textAltura.setBounds(777, 94, 225, 25);
         add(textAltura);
         
         btnAgregarUsuario = new JButton("Agregar");
         btnAgregarUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnAgregarUsuario.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		guardar();
         	}
         });
         btnAgregarUsuario.setForeground(new Color(255, 255, 255));
         btnAgregarUsuario.setBorder(null);
         btnAgregarUsuario.setBackground(new Color(46, 56, 64));
-        btnAgregarUsuario.setBounds(30, 309, 150, 30);
+        btnAgregarUsuario.setBounds(30, 353, 150, 30);
         add(btnAgregarUsuario);
         
         btnModificarUsuario = new JButton("Modificar");
+        btnModificarUsuario.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		modificar();
+        	}
+        });
         btnModificarUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnModificarUsuario.setForeground(new Color(255, 255, 255));
         btnModificarUsuario.setBorder(null);
         btnModificarUsuario.setBackground(new Color(46, 56, 64));
-        btnModificarUsuario.setBounds(190, 309, 150, 30);
+        btnModificarUsuario.setBounds(190, 353, 150, 30);
         add(btnModificarUsuario);
         
         btnEliminarUsuario = new JButton("Eliminar");
         btnEliminarUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminarUsuario.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		eliminar();
         	}
         });
         btnEliminarUsuario.setForeground(new Color(255, 255, 255));
         btnEliminarUsuario.setBorder(null);
         btnEliminarUsuario.setBackground(new Color(46, 56, 64));
-        btnEliminarUsuario.setBounds(350, 309, 150, 30);
+        btnEliminarUsuario.setBounds(350, 353, 150, 30);
         add(btnEliminarUsuario);
         
         btnAgregarFisico = new JButton("Agregar");
@@ -202,7 +334,7 @@ public class UsuariosPanel extends JPanel {
         btnAgregarFisico.setForeground(new Color(255, 255, 255));
         btnAgregarFisico.setBorder(null);
         btnAgregarFisico.setBackground(new Color(46, 56, 64));
-        btnAgregarFisico.setBounds(632, 309, 89, 30);
+        btnAgregarFisico.setBounds(627, 128, 89, 30);
         add(btnAgregarFisico);
         
         btnModificarFisico = new JButton("Modificar");
@@ -210,7 +342,7 @@ public class UsuariosPanel extends JPanel {
         btnModificarFisico.setForeground(new Color(255, 255, 255));
         btnModificarFisico.setBorder(null);
         btnModificarFisico.setBackground(new Color(46, 56, 64));
-        btnModificarFisico.setBounds(731, 309, 89, 30);
+        btnModificarFisico.setBounds(726, 128, 89, 30);
         add(btnModificarFisico);
         
         btnEliminarFisico = new JButton("Eliminar");
@@ -222,24 +354,32 @@ public class UsuariosPanel extends JPanel {
         btnEliminarFisico.setForeground(new Color(255, 255, 255));
         btnEliminarFisico.setBorder(null);
         btnEliminarFisico.setBackground(new Color(46, 56, 64));
-        btnEliminarFisico.setBounds(830, 309, 89, 30);
+        btnEliminarFisico.setBounds(825, 128, 89, 30);
         add(btnEliminarFisico);
         
         scrollPane = new JScrollPane();
         scrollPane.setBorder(null);
         scrollPane.setAutoscrolls(true);
         scrollPane.setBackground(new Color(255, 255, 255));
-        scrollPane.setBounds(30, 430, 583, 248);
+        scrollPane.setBounds(30, 430, 957, 248);
         add(scrollPane);
         
         tableUsuarios = new JTable();
+        tableUsuarios.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		idSeleccionado = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
+        		activarBotonesUsuarios();
+        		llenarFormulario();
+        	}
+        });
         tableUsuarios.setBackground(new Color(255, 255, 255));
         scrollPane.setViewportView(tableUsuarios);
         
         JScrollPane scrollPane_1 = new JScrollPane();
         scrollPane_1.setBorder(null);
         scrollPane_1.setAutoscrolls(true);
-        scrollPane_1.setBounds(632, 430, 422, 248);
+        scrollPane_1.setBounds(527, 179, 460, 204);
         add(scrollPane_1);
         
         tableFisico = new JTable();
@@ -256,13 +396,29 @@ public class UsuariosPanel extends JPanel {
         lblNewLabel_1_4_2.setBounds(30, 402, 53, 14);
         add(lblNewLabel_1_4_2);
         
-        JLabel lblNewLabel_1_4_3 = new JLabel("dd-mm-yyyy");
+        JLabel lblNewLabel_1_4_3 = new JLabel("yyyy-mm-dd");
         lblNewLabel_1_4_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_3.setBounds(30, 284, 125, 14);
+        lblNewLabel_1_4_3.setBounds(30, 328, 125, 14);
         add(lblNewLabel_1_4_3);
+        
+        buttonGroup.add(radioMasculino);
+        buttonGroup.add(radioFemenino);
+        
+        JLabel lblNewLabel_1_2_1 = new JLabel("Email");
+        lblNewLabel_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_1_2_1.setBounds(280, 126, 75, 14);
+        add(lblNewLabel_1_2_1);
+        
+        textEmail = new JTextField();
+        textEmail.setColumns(10);
+        textEmail.setBounds(280, 142, 225, 25);
+        add(textEmail);
         
         // Listar Usuarios
         listar(administrador_id);
+        
+        bloquearBotonesUsuarios();
+        bloquearBotonesFisico();
     }
 
 }
