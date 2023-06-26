@@ -27,7 +27,7 @@ public class BarraPanel extends JPanel {
         inicioButton.setBackground(new Color(46, 56, 64));
         inicioButton.setForeground(new Color(163, 175, 175));
         inicioButton.setBorder(null);
-        inicioButton.setFont(new Font("Corbel", Font.PLAIN, 18));
+        inicioButton.setFont(new Font("Candara", Font.PLAIN, 18));
         inicioButton.setBounds(0, 197, 200, 40);
         usuariosButton = new JButton("     Usuarios");
         usuariosButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -36,7 +36,7 @@ public class BarraPanel extends JPanel {
         usuariosButton.setBackground(new Color(46, 56, 64));
         usuariosButton.setForeground(new Color(163, 175, 175));
         usuariosButton.setBorder(null);
-        usuariosButton.setFont(new Font("Corbel", Font.PLAIN, 18));
+        usuariosButton.setFont(new Font("Candara", Font.PLAIN, 18));
         usuariosButton.setBounds(0, 248, 200, 40);
         membresiasButton = new JButton("     Membresias");
         membresiasButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -45,7 +45,7 @@ public class BarraPanel extends JPanel {
         membresiasButton.setBackground(new Color(46, 56, 64));
         membresiasButton.setForeground(new Color(163, 175, 175));
         membresiasButton.setBorder(null);
-        membresiasButton.setFont(new Font("Corbel", Font.PLAIN, 18));
+        membresiasButton.setFont(new Font("Candara", Font.PLAIN, 18));
         membresiasButton.setBounds(0, 299, 200, 40);
         planesButton = new JButton("     Planes");
         planesButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -54,7 +54,7 @@ public class BarraPanel extends JPanel {
         planesButton.setBackground(new Color(46, 56, 64));
         planesButton.setForeground(new Color(163, 175, 175));
         planesButton.setBorder(null);
-        planesButton.setFont(new Font("Corbel", Font.PLAIN, 18));
+        planesButton.setFont(new Font("Candara", Font.PLAIN, 18));
         planesButton.setBounds(0, 350, 200, 40);
 
         inicioButton.addActionListener(new ActionListener() {
@@ -103,7 +103,7 @@ public class BarraPanel extends JPanel {
         });
         btnCerrarSesin.setHorizontalAlignment(SwingConstants.LEFT);
         btnCerrarSesin.setForeground(new Color(163, 175, 175));
-        btnCerrarSesin.setFont(new Font("Corbel", Font.PLAIN, 18));
+        btnCerrarSesin.setFont(new Font("Candara", Font.PLAIN, 18));
         btnCerrarSesin.setFocusTraversalKeysEnabled(false);
         btnCerrarSesin.setFocusPainted(false);
         btnCerrarSesin.setBorder(null);

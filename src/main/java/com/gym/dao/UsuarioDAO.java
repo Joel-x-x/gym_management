@@ -2,6 +2,8 @@ package com.gym.dao;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,10 +18,18 @@ public class UsuarioDAO {
 		this.con  = con;
 	}
 	
-	public Integer guardar(Usuario usuario) {
+	public boolean toBoolean(int numero) {
+		if(numero != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean guardar(Usuario usuario) {
 		
 		try {
-			String sentencia = "insert into usuario(nombre, apellido, fecha_nacimiento, sexo, correo, cedula, direccion, telefono, cuenta_id) "
+			String sentencia = "insert into usuario(nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id) "
 					+ "values(?,?,?,?,?,?,?,?,?);";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
@@ -29,13 +39,13 @@ public class UsuarioDAO {
 				statement.setString(2, usuario.getApellido());
 				statement.setString(3, usuario.getFecha_nacimiento());
 				statement.setString(4, usuario.getSexo());
-				statement.setString(5, usuario.getCorreo());
+				statement.setString(5, usuario.getEmail());
 				statement.setString(6, usuario.getCedula());
 				statement.setString(7, usuario.getDireccion());
 				statement.setString(8, usuario.getTelefono());
-				statement.setString(9, usuario.getCuenta_id());
+				statement.setInt(9, usuario.getAdministrador_id());
 				
-				return statement.executeUpdate();
+				return toBoolean(statement.executeUpdate());
 			}
 			
 		} catch(SQLException e) {
@@ -43,7 +53,134 @@ public class UsuarioDAO {
 		}
 		
 	}
-	public Object[][] consultar(Usuario usuario) {
+	
+	public boolean modificar(Usuario usuario) {
+		
+		try {
+			String sentencia = "update usuario set nombre = ?, apellido = ?, fecha_nacimiento = ?,"
+					+ " sexo = ?, email = ?, cedula = ?, direccion = ?, telefono = ? where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, usuario.getNombre());
+				statement.setString(2, usuario.getApellido());
+				statement.setString(3, usuario.getFecha_nacimiento());
+				statement.setString(4, usuario.getSexo());
+				statement.setString(5, usuario.getEmail());
+				statement.setString(6, usuario.getCedula());
+				statement.setString(7, usuario.getDireccion());
+				statement.setString(8, usuario.getTelefono());
+				statement.setInt(9, usuario.getId());
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public boolean eliminar(int id) {
+		
+		try {
+			String sentencia = "delete usuario where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public List<Usuario> listar(int administrador_id) {
+		
+		try {
+			String sentencia = "select * from usuario where administrador_id = ?";
+			List<Usuario> resultado = new ArrayList<>();
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Usuario(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getString("fecha_nacimiento"),
+								resultSet.getString("sexo"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula"),
+								resultSet.getString("direccion"),
+								resultSet.getString("telefono"),
+								resultSet.getString("fecha_creacion")));
+					}
+					
+					return resultado;
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public List<Usuario> consultarUsuario(Usuario usuario) {
+		
+		try {
+			String sentencia = "select * from usuario where administrador_id = ? and cedula = ?";
+			List<Usuario> resultado = new ArrayList<>();
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, usuario.getAdministrador_id());
+				statement.setString(2, usuario.getCedula());
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Usuario(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getString("fecha_nacimiento"),
+								resultSet.getString("sexo"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula"),
+								resultSet.getString("direccion"),
+								resultSet.getString("telefono"),
+								resultSet.getString("fecha_creacion")));
+					}
+					
+					return resultado;
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+ 	public Object[][] consultar(Usuario usuario) {
 		Object obj[][]= null;
 		//obj= new Object[1][6];
 		String sentencia="";
@@ -84,8 +221,6 @@ public class UsuarioDAO {
 
 		return obj;
 
-			
-			
 	}
 	
 }

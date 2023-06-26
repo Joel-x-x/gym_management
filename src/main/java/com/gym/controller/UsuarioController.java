@@ -11,7 +11,7 @@ public class UsuarioController {
 		this.usuarioDAO = new UsuarioDAO(new ConnectionFactory().conectar());
 	}
 	
-	public int guardar(Usuario usuario) {
+	public boolean guardar(Usuario usuario) {
 		return usuarioDAO.guardar(usuario);
 	}
 	

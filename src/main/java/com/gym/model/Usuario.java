@@ -6,30 +6,48 @@ public class Usuario{
     String apellido;
     String fecha_nacimiento;
     String sexo;
-    String correo;
+    String email;
     String cedula;
     String direccion;
     String telefono;
-    String cuenta_id;
     String fecha_creacion;
-    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String correo, String cedula, String direccion, String telefono, String cuenta_id, String fecha_creacion) {
+    int administrador_id;
+    
+    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion, int administrador_id) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fecha_nacimiento = fecha_nacimiento;
         this.sexo = sexo;
-        this.correo = correo;
+        this.email = email;
         this.cedula = cedula;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.cuenta_id = cuenta_id;
         this.fecha_creacion = fecha_creacion;
+        this.administrador_id = administrador_id;
     }
 
-    public Usuario(  String ced) {
-		
-		this.cedula=ced;
+    public Usuario(  String cedula) {
+		this.cedula = cedula;
 	}
+    
+    public Usuario(int administrador_id, String cedula) {
+		this.administrador_id = administrador_id;
+		this.cedula = cedula;
+	}
+
+    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.sexo = sexo;
+        this.email = email;
+        this.cedula = cedula;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.fecha_creacion = fecha_creacion;
+    }
 
 	public int getId() {
         return id;
@@ -71,12 +89,12 @@ public class Usuario{
         this.sexo = sexo;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCedula() {
@@ -103,12 +121,12 @@ public class Usuario{
         this.telefono = telefono;
     }
 
-    public String getCuenta_id() {
-        return cuenta_id;
+    public int getAdministrador_id() {
+        return administrador_id;
     }
 
-    public void setCuenta_id(String cuenta_id) {
-        this.cuenta_id = cuenta_id;
+    public void setAdministrador_id(int administrador_id) {
+        this.administrador_id = administrador_id;
     }
 
     public String getFecha_creacion() {

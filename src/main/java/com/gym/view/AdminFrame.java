@@ -19,6 +19,7 @@ public class AdminFrame extends JFrame implements ActionListener{
     public AdminFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 800);
+        setResizable(false);
         setLocationRelativeTo(null);
         
         // BarraSuperiorPanel

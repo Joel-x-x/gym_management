@@ -1,7 +1,7 @@
 package com.gym.model;
 
 public class Administrador {
-    int id;
+    static int id;
     String nombre;
     String apellido; 
     String email;
@@ -11,7 +11,7 @@ public class Administrador {
     String clave;
     public Administrador(int id, String nombre, String apellido, String email, String password, int sesion_iniciada,
             int super_admin, String clave) {
-        this.id = id;
+        Administrador.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
@@ -29,11 +29,16 @@ public class Administrador {
         this.super_admin = super_admin;
         this.clave = clave;
     }
+    
+    public Administrador() {
+    	
+    }
+    
     public int getId() {
         return id;
     }
     public void setId(int id) {
-        this.id = id;
+        Administrador.id = id;
     }
     public String getNombre() {
         return nombre;

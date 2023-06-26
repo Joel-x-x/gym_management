@@ -1,19 +1,25 @@
 package com.gym.model;
 
 public class Fisico {
-    int id;
-    float altura;
-    double peso;
-    String fecha;
-    int usuario_id;
-    int usuario_cuenta_id;
-    public Fisico(int id, float altura, double peso, String fecha, int usuario_id, int usuario_cuenta_id) {
+    private int id;
+    private double altura;
+    private double peso;
+    private String fecha;
+    private int usuario_id;
+    
+    public Fisico(int id, float altura, double peso, String fecha, int usuario_id) {
         this.id = id;
         this.altura = altura;
         this.peso = peso;
         this.fecha = fecha;
         this.usuario_id = usuario_id;
-        this.usuario_cuenta_id = usuario_cuenta_id;
+    }
+    
+    public Fisico( float altura, double peso, String fecha, int usuario_id) {
+        this.altura = altura;
+        this.peso = peso;
+        this.fecha = fecha;
+        this.usuario_id = usuario_id;
     }
 
       public int getId() {
@@ -24,11 +30,11 @@ public class Fisico {
         this.id = id;
     }
 
-    public float getAltura() {
+    public double getAltura() {
         return altura;
     }
 
-    public void setAltura(float altura) {
+    public void setAltura(double altura) {
         this.altura = altura;
     }
 
@@ -54,14 +60,6 @@ public class Fisico {
 
     public void setUsuario_id(int usuario_id) {
         this.usuario_id = usuario_id;
-    }
-
-    public int getUsuario_cuenta_id() {
-        return usuario_cuenta_id;
-    }
-
-    public void setUsuario_cuenta_id(int usuario_cuenta_id) {
-        this.usuario_cuenta_id = usuario_cuenta_id;
     }
     
 }

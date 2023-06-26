@@ -141,15 +141,18 @@ public class PlanesPanel extends JPanel {
         txt_precio_planes.setColumns(10);
         
         rdbtn_anual_planes = new JRadioButton("Anual");
+        rdbtn_anual_planes.setBackground(new Color(255, 255, 255));
         rdbtn_anual_planes.setBounds(289, 98, 109, 23);
         
         add(rdbtn_anual_planes);
         
         rdbtn_diario_planes = new JRadioButton("Diario");
+        rdbtn_diario_planes.setBackground(new Color(255, 255, 255));
         rdbtn_diario_planes.setBounds(289, 118, 109, 23);
         add(rdbtn_diario_planes);
         
         rdbtn_mensual_planes = new JRadioButton("Mensual");
+        rdbtn_mensual_planes.setBackground(new Color(255, 255, 255));
         rdbtn_mensual_planes.setBounds(394, 98, 109, 23);
         add(rdbtn_mensual_planes);
         
@@ -243,10 +246,12 @@ public class PlanesPanel extends JPanel {
         add(lblNewLabel_9);
         
         JRadioButton rdbtn_sexo_hombre_entrenador = new JRadioButton("Hombre");
+        rdbtn_sexo_hombre_entrenador.setBackground(new Color(255, 255, 255));
         rdbtn_sexo_hombre_entrenador.setBounds(289, 342, 109, 23);
         add(rdbtn_sexo_hombre_entrenador);
         
         JRadioButton rdbtn_sexo_mujer_entrenador = new JRadioButton("Mujer");
+        rdbtn_sexo_mujer_entrenador.setBackground(new Color(255, 255, 255));
         rdbtn_sexo_mujer_entrenador.setBounds(394, 342, 109, 23);
         add(rdbtn_sexo_mujer_entrenador);
         
