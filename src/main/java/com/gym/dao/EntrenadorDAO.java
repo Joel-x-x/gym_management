@@ -17,8 +17,8 @@ Connection con;
 	}
 public boolean agregar(Entrenador entrenador) {
 	try {
-		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono) "
-				+ " values(?,?,?,?,?);";
+		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono,cedula) "
+				+ " values(?,?,?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
 			statement.setString(1, entrenador.getNombre());
@@ -26,6 +26,7 @@ public boolean agregar(Entrenador entrenador) {
 			statement.setString(3, entrenador.getSexo());
 			statement.setString(4, entrenador.getCorreo());
 			statement.setString(5, entrenador.getTelefono());
+			statement.setString(6, entrenador.getCedula());
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;
@@ -40,7 +41,7 @@ public boolean agregar(Entrenador entrenador) {
 }
 public boolean modificar(Entrenador entrenador) {
 	try {
-		String sentencia = "UPDATE entrenador SET  nombre= ?, apellido = ?, sexo = ?, correo= ?, telefono =?  WHERE id = ?";
+		String sentencia = "UPDATE entrenador SET  nombre= ?, apellido = ?, sexo = ?, correo= ?, telefono =?, cedula = ?  WHERE id = ?";
 				
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
@@ -49,7 +50,8 @@ public boolean modificar(Entrenador entrenador) {
 			statement.setString(3, entrenador.getSexo());
 			statement.setString(4, entrenador.getCorreo());
 			statement.setString(5, entrenador.getTelefono());
-			statement.setString(6, String.valueOf(entrenador.getId()));
+			statement.setString(6, entrenador.getCedula());
+			statement.setString(7, String.valueOf(entrenador.getId()));
 			
 			int i = statement.executeUpdate();
 			if(i>0) {
@@ -100,7 +102,7 @@ public Object[][] consultar(Entrenador entrenador) {
 	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
 	    	resultSet.last();
 	    	int nf=resultSet.getRow();
-			obj =new Object[nf][6];
+			obj =new Object[nf][7];
 			resultSet.beforeFirst();
 			int f=0;
 	        while (resultSet.next()) {
@@ -110,6 +112,44 @@ public Object[][] consultar(Entrenador entrenador) {
 	            obj[f][3] = resultSet.getObject(4);
 	            obj[f][4] = resultSet.getObject(5);
 	            obj[f][5] = resultSet.getObject(6);
+	            obj[f][6] = resultSet.getObject(7);
+	            
+	            System.out.println("JHJKUH " + obj[0][1]);
+	            System.out.println(obj[0][0]);
+	            f++;
+	        }
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+
+	return obj;
+
+		
+		
+}
+public String[][] consulta_id_nombres_entrenador(Entrenador entrenador) {
+	String obj[][]= null;
+	String sentencia="";
+
+	try {
+		
+			sentencia = "SELECT * FROM entrenador ";
+			
+		
+	    
+	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+	    
+	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
+	    	resultSet.last();
+	    	int nf=resultSet.getRow();
+			obj =new String[nf][2];
+			resultSet.beforeFirst();
+			int f=0;
+	        while (resultSet.next()) {
+	            obj[f][0] = resultSet.getObject(1).toString();
+	            obj[f][1] = resultSet.getObject(2).toString();
+	            
 	            
 	            System.out.println("JHJKUH " + obj[0][1]);
 	            System.out.println(obj[0][0]);
@@ -126,7 +166,7 @@ public Object[][] consultar(Entrenador entrenador) {
 		
 }
 public String[] consultar_(Entrenador entrenador) {
-	String obj[]= new String[5];
+	String obj[]= new String[6];
 	String sentencia="";
 	
 	try {
@@ -140,6 +180,7 @@ public String[] consultar_(Entrenador entrenador) {
             obj[2] = resultSet.getObject(4).toString();
             obj[3]=resultSet.getObject(5).toString();
             obj[4]=resultSet.getObject(6).toString();
+            obj[5]=resultSet.getObject(7).toString();
           
             
             
