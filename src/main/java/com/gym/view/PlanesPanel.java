@@ -498,6 +498,10 @@ public class PlanesPanel extends JPanel {
         txt_buscar_clase.setColumns(10);
         
         btn_agregar_clase = new JButton("Agregar");
+        btn_agregar_clase.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btn_agregar_clase.setBounds(137, 565, 89, 23);
         btn_agregar_clase.setBackground(new Color(46, 56, 64));
         btn_agregar_clase.setForeground(new Color(163, 175, 175));
