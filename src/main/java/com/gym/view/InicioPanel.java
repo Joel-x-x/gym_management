@@ -54,7 +54,7 @@ public class InicioPanel extends JPanel {
 		});
     	
     	setPreferredSize(new Dimension(1080, 800));
-        setBackground(new Color(192, 192, 192));
+        setBackground(new Color(255, 255, 255));
         setLayout(null);
         
         JLabel lblNewLabel = new JLabel("REGISTRO");
@@ -116,7 +116,7 @@ public class InicioPanel extends JPanel {
         btn_entrada.setForeground(Color.WHITE);
         btn_entrada.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_entrada.setBorder(null);
-        btn_entrada.setBackground(new Color(46, 56, 64));
+        btn_entrada.setBackground(new Color(31, 33, 38));
         btn_entrada.setBounds(137, 332, 150, 30);
         add(btn_entrada);
         
@@ -132,7 +132,7 @@ public class InicioPanel extends JPanel {
         btn_salida.setForeground(Color.WHITE);
         btn_salida.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_salida.setBorder(null);
-        btn_salida.setBackground(new Color(46, 56, 64));
+        btn_salida.setBackground(new Color(203, 39, 39));
         btn_salida.setBounds(297, 332, 150, 30);
         add(btn_salida);
         
