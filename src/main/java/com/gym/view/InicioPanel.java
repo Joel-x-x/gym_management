@@ -94,7 +94,7 @@ public class InicioPanel extends JPanel {
         
         JLabel lblInicio = new JLabel("INICIO");
         lblInicio.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblInicio.setBounds(28, 11, 84, 49);
+        lblInicio.setBounds(10, 11, 84, 49);
         add(lblInicio);
         
         JScrollPane scrollPane_1 = new JScrollPane();
