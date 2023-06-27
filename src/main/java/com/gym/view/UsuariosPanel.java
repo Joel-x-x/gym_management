@@ -135,7 +135,7 @@ public class UsuariosPanel extends JPanel {
 			System.out.println("true");
 			radioMasculino.setSelected(true);
 		} else {
-			radioMasculino.setSelected(true);
+			radioFemenino.setSelected(true);
 			System.out.println("false");
 		}
 		

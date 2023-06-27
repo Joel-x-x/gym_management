@@ -71,6 +71,7 @@ public class PlanesPanel extends JPanel {
     private JRadioButton rdbtn_sexo_hombre_entrenador;
     private JRadioButton rdbtn_sexo_mujer_entrenador;
     private JButton btn_eliminar_planes_1_2;
+    private JButton btn_cancelar_entrenador;
     public void llenar_tabla() {
 		String cabeceras[] = {"id","nombre","precio","descripción","duración"};
 		
@@ -79,10 +80,10 @@ public class PlanesPanel extends JPanel {
     
 
     public Plan llenarPlan() {
+
     	seleccion_planes = "";
+
 		if(rdbtn_anual_planes.isSelected()) {
-			seleccion_planes = rdbtn_anual_planes.getText();
-		}else if(rdbtn_mensual_planes.isSelected()) {
 			seleccion_planes = rdbtn_mensual_planes.getText();
 		}else if (rdbtn_diario_planes.isSelected()) {
 			seleccion_planes = rdbtn_diario_planes.getText();
@@ -216,7 +217,7 @@ public class PlanesPanel extends JPanel {
         		llenarTabla_plan();
         	}
         });
-        btn_agregar_planes.setBounds(102, 177, 89, 23);
+        btn_agregar_planes.setBounds(137, 177, 89, 23);
         btn_agregar_planes.setBackground(new Color(46, 56, 64));
         btn_agregar_planes.setForeground(new Color(163, 175, 175));
         btn_agregar_planes.setBorder(null);
@@ -239,7 +240,7 @@ public class PlanesPanel extends JPanel {
         		
         	}
         });
-        btn_modificar_planes.setBounds(201, 177, 89, 23);
+        btn_modificar_planes.setBounds(246, 177, 89, 23);
         btn_modificar_planes.setBackground(new Color(46, 56, 64));
         btn_modificar_planes.setForeground(new Color(163, 175, 175));
         btn_modificar_planes.setBorder(null);
@@ -262,7 +263,7 @@ public class PlanesPanel extends JPanel {
         	}
         });
         btn_eliminar_planes.setEnabled(false);
-        btn_eliminar_planes.setBounds(300, 177, 89, 23);
+        btn_eliminar_planes.setBounds(351, 177, 89, 23);
         btn_eliminar_planes.setBackground(new Color(46, 56, 64));
         btn_eliminar_planes.setForeground(new Color(163, 175, 175));
         btn_eliminar_planes.setBorder(null);
@@ -340,6 +341,7 @@ public class PlanesPanel extends JPanel {
         add(rdbtn_sexo_mujer_entrenador);
         
         btn_agregar_entrenador = new JButton("Agregar");
+
         btn_agregar_entrenador.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Entrenador entrenador_llenado = llenarEntrenador();
@@ -356,12 +358,16 @@ public class PlanesPanel extends JPanel {
         });
         btn_agregar_entrenador.setEnabled(false);
         btn_agregar_entrenador.setBounds(87, 374, 89, 23);
+
+        btn_agregar_entrenador.setBounds(137, 374, 89, 23);
+
         btn_agregar_entrenador.setBackground(new Color(46, 56, 64));
         btn_agregar_entrenador.setForeground(new Color(163, 175, 175));
         btn_agregar_entrenador.setBorder(null);
         add(btn_agregar_entrenador);
         
         btn_modificar_entrenador = new JButton("Modificar");
+
         btn_modificar_entrenador.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		tabal_entrenador();
@@ -380,12 +386,16 @@ public class PlanesPanel extends JPanel {
         });
         btn_modificar_entrenador.setEnabled(false);
         btn_modificar_entrenador.setBounds(190, 374, 89, 23);
+
+        btn_modificar_entrenador.setBounds(246, 374, 89, 23);
+
         btn_modificar_entrenador.setBackground(new Color(46, 56, 64));
         btn_modificar_entrenador.setForeground(new Color(163, 175, 175));
         btn_modificar_entrenador.setBorder(null);
         add(btn_modificar_entrenador);
         
         btn_eliminar_entrenador = new JButton("Eliminar");
+
         btn_eliminar_entrenador.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		tabal_entrenador();
@@ -404,6 +414,9 @@ public class PlanesPanel extends JPanel {
         });
         btn_eliminar_entrenador.setEnabled(false);
         btn_eliminar_entrenador.setBounds(289, 374, 89, 23);
+
+        btn_eliminar_entrenador.setBounds(351, 374, 89, 23);
+
         btn_eliminar_entrenador.setBackground(new Color(46, 56, 64));
         btn_eliminar_entrenador.setForeground(new Color(163, 175, 175));
         btn_eliminar_entrenador.setBorder(null);
@@ -454,21 +467,21 @@ public class PlanesPanel extends JPanel {
         txt_buscar_clase.setColumns(10);
         
         btn_agregar_clase = new JButton("Agregar");
-        btn_agregar_clase.setBounds(21, 565, 89, 23);
+        btn_agregar_clase.setBounds(137, 565, 89, 23);
         btn_agregar_clase.setBackground(new Color(46, 56, 64));
         btn_agregar_clase.setForeground(new Color(163, 175, 175));
         btn_agregar_clase.setBorder(null);
         add(btn_agregar_clase);
         
         btn_modificar_clase = new JButton("Modificar");
-        btn_modificar_clase.setBounds(157, 565, 89, 23);
+        btn_modificar_clase.setBounds(246, 565, 89, 23);
         btn_modificar_clase.setBackground(new Color(46, 56, 64));
         btn_modificar_clase.setForeground(new Color(163, 175, 175));
         btn_modificar_clase.setBorder(null);
         add(btn_modificar_clase);
         
         btn_eliminar_clase = new JButton("Eliminar");
-        btn_eliminar_clase.setBounds(289, 565, 89, 23);
+        btn_eliminar_clase.setBounds(351, 565, 89, 23);
         btn_eliminar_clase.setBackground(new Color(46, 56, 64));
         btn_eliminar_clase.setForeground(new Color(163, 175, 175));
         btn_eliminar_clase.setBorder(null);
@@ -574,7 +587,7 @@ public class PlanesPanel extends JPanel {
         btn_eliminar_planes_1.setForeground(new Color(163, 175, 175));
         btn_eliminar_planes_1.setBorder(null);
         btn_eliminar_planes_1.setBackground(new Color(46, 56, 64));
-        btn_eliminar_planes_1.setBounds(482, 53, 89, 23);
+        btn_eliminar_planes_1.setBounds(466, 66, 89, 23);
         add(btn_eliminar_planes_1);
         
         btn_nuevo_planes = new JButton("Nuevo");
@@ -588,7 +601,7 @@ public class PlanesPanel extends JPanel {
         btn_nuevo_planes.setForeground(new Color(163, 175, 175));
         btn_nuevo_planes.setBorder(null);
         btn_nuevo_planes.setBackground(new Color(46, 56, 64));
-        btn_nuevo_planes.setBounds(0, 177, 89, 23);
+        btn_nuevo_planes.setBounds(31, 177, 89, 23);
         add(btn_nuevo_planes);
         
         btn_nuevo_planes_1 = new JButton("Cancelar");
@@ -602,10 +615,11 @@ public class PlanesPanel extends JPanel {
         btn_nuevo_planes_1.setForeground(new Color(163, 175, 175));
         btn_nuevo_planes_1.setBorder(null);
         btn_nuevo_planes_1.setBackground(new Color(46, 56, 64));
-        btn_nuevo_planes_1.setBounds(399, 177, 89, 23);
+        btn_nuevo_planes_1.setBounds(464, 177, 89, 23);
         add(btn_nuevo_planes_1);
         
         btn_nuevo_entrenador = new JButton("Nuevo");
+
         btn_nuevo_entrenador.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		atextos_entrenador();
@@ -631,6 +645,34 @@ public class PlanesPanel extends JPanel {
         btn_nuevo_planes_3.setBackground(new Color(46, 56, 64));
         btn_nuevo_planes_3.setBounds(394, 374, 89, 23);
         add(btn_nuevo_planes_3);
+
+        btn_nuevo_entrenador.setForeground(new Color(163, 175, 175));
+        btn_nuevo_entrenador.setBorder(null);
+        btn_nuevo_entrenador.setBackground(new Color(46, 56, 64));
+        btn_nuevo_entrenador.setBounds(38, 374, 89, 23);
+        add(btn_nuevo_entrenador);
+        
+        btn_cancelar_entrenador = new JButton("Cancelar");
+        btn_cancelar_entrenador.setForeground(new Color(163, 175, 175));
+        btn_cancelar_entrenador.setBorder(null);
+        btn_cancelar_entrenador.setBackground(new Color(46, 56, 64));
+        btn_cancelar_entrenador.setBounds(466, 374, 89, 23);
+        add(btn_cancelar_entrenador);
+        
+        JButton btn_nuevo_clase = new JButton("Nuevo");
+        btn_nuevo_clase.setForeground(new Color(163, 175, 175));
+        btn_nuevo_clase.setBorder(null);
+        btn_nuevo_clase.setBackground(new Color(46, 56, 64));
+        btn_nuevo_clase.setBounds(38, 565, 89, 23);
+        add(btn_nuevo_clase);
+        
+        JButton btn_cancelar_clase = new JButton("Cancelar");
+        btn_cancelar_clase.setForeground(new Color(163, 175, 175));
+        btn_cancelar_clase.setBorder(null);
+        btn_cancelar_clase.setBackground(new Color(46, 56, 64));
+        btn_cancelar_clase.setBounds(466, 565, 89, 23);
+        add(btn_cancelar_clase);
+
         
         JButton btn_eliminar_planes_1_1 = new JButton("Buscar");
         btn_eliminar_planes_1_1.addActionListener(new ActionListener() {
