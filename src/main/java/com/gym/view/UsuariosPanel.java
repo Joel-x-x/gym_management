@@ -102,7 +102,7 @@ public class UsuariosPanel extends JPanel {
 	
 
 	protected void eliminar() {
-		int respuesta = JOptionPane.showConfirmDialog(null, "Estar seguro de eliminar");
+		int respuesta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar");
 		if(respuesta == 0) {
 			
 			if(usuarioController.eliminar(idSeleccionadoUsuario)) {
@@ -113,6 +113,19 @@ public class UsuariosPanel extends JPanel {
 			}
 		}
 		
+	}
+	
+	public void eliminarFisico() {
+		int respuesta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar");
+		
+		if(respuesta == 0) {
+			if(fisicoController.eliminar(idSeleccionadoFisico)) {
+				JOptionPane.showMessageDialog(null, "Registro eliminado!");
+				listarFisico();
+			} else {
+				JOptionPane.showMessageDialog(null, "No se puedo eliminar el registro");
+			}
+		}
 	}
 	
 	public void consultar() {
@@ -408,6 +421,7 @@ public class UsuariosPanel extends JPanel {
         btnEliminarFisico.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminarFisico.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		eliminarFisico();
         	}
         });
         btnEliminarFisico.setForeground(new Color(255, 255, 255));

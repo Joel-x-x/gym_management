@@ -25,6 +25,9 @@ public class FisicoController {
 	public boolean guardar(Fisico fisico) {
 		return fisicoDAO.guardar(fisico);
 	}
-	
-	
+
+	public boolean eliminar(int id) {
+		return fisicoDAO.eliminar(id);
+	}
+
 }

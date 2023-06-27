@@ -105,8 +105,8 @@ public class FisicoDAO {
 					while(resultSet.next()) {
 						resultado.add(new Fisico(
 								resultSet.getInt("id"),
-								resultSet.getDouble("altura"),
 								resultSet.getDouble("peso"),
+								resultSet.getDouble("altura"),
 								resultSet.getString("fecha"),
 								resultSet.getInt("usuario_id")));
 					}
@@ -139,8 +139,8 @@ public class FisicoDAO {
 					resultSet.next();
 						return new Fisico(
 								resultSet.getInt("id"),
-								resultSet.getDouble("altura"),
 								resultSet.getDouble("peso"),
+								resultSet.getDouble("altura"),
 								resultSet.getString("fecha"),
 								resultSet.getInt("usuario_id"));
 				}

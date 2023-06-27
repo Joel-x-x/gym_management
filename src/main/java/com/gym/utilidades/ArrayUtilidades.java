@@ -34,8 +34,8 @@ public class ArrayUtilidades {
     	
     	for(Fisico fisico : lista) {
     		matrizFisico[contador][0] = fisico.getId();
-    		matrizFisico[contador][1] = fisico.getAltura();
-    		matrizFisico[contador][2] = fisico.getPeso();
+    		matrizFisico[contador][1] = fisico.getPeso();
+    		matrizFisico[contador][2] = fisico.getAltura();
     		matrizFisico[contador][3] = fisico.getFecha();
 
     		contador++;
