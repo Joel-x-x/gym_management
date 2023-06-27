@@ -14,7 +14,6 @@ public class Plan {
         this.duracion = duracion;
     }
     public Plan(String nombre, Float precio, String descripcion, String duracion) {
-		// TODO Auto-generated constructor stub
     	this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -53,7 +52,8 @@ public class Plan {
 	public void setDuracion(String duracion) {
 		this.duracion = duracion;
 	}
-    
-    
-    
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
 }

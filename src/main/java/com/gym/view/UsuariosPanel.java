@@ -511,6 +511,19 @@ public class UsuariosPanel extends JPanel {
         btnBuscar.setBounds(218, 394, 89, 25);
         add(btnBuscar);
         
+        JButton btnLimpiar = new JButton("Limpiar");
+        btnLimpiar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		limpiarFormularioUsuario();
+        	}
+        });
+        btnLimpiar.setForeground(Color.WHITE);
+        btnLimpiar.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnLimpiar.setBorder(null);
+        btnLimpiar.setBackground(new Color(46, 56, 64));
+        btnLimpiar.setBounds(317, 394, 89, 25);
+        add(btnLimpiar);
+        
         // Listar Usuarios
         listar();
         
