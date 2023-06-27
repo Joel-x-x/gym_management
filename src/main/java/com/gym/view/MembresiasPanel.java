@@ -125,6 +125,7 @@ public class MembresiasPanel extends JPanel {
         btn_buscar_usuarios_membresias = new JButton("Buscar");
         btn_buscar_usuarios_membresias.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		
         	}
         });
         btn_buscar_usuarios_membresias.setForeground(Color.WHITE);
