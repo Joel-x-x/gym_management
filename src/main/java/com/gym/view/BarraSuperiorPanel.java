@@ -12,6 +12,6 @@ public class BarraSuperiorPanel extends JPanel {
 
 	public BarraSuperiorPanel() {
         setPreferredSize(new Dimension(1280, 80));
-        setBackground(Color.GRAY);
+        setBackground(new Color(192, 192, 192));
     }
 }

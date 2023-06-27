@@ -93,6 +93,7 @@ public class InicioPanel extends JPanel {
         System.out.println("xdxd");
         
         JLabel lblInicio = new JLabel("INICIO");
+
         lblInicio.setFont(new Font("Tahoma", Font.BOLD, 18));
         lblInicio.setBounds(28, 11, 84, 49);
         add(lblInicio);
