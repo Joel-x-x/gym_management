@@ -52,7 +52,9 @@ public class MembresiasPanel extends JPanel {
 	}
 	
 	private void listarClase() {
+		comboBoxModelClase.addAll(membresiaController.listarClase());
 		
+		comboBoxClase.setModel(comboBoxModelClase);
 	}
 	
     public MembresiasPanel(int panelAncho, int panelAlto) {
