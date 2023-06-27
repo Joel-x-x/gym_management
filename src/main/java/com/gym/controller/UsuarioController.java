@@ -37,5 +37,11 @@ public class UsuarioController {
 	public boolean eliminar(int idSeleccionado) {
 		return usuarioDAO.eliminar(idSeleccionado);
 	}
+
+	public Object[][] consultar(int administrador_id, String cedula) {
+		var listaUsuarios = usuarioDAO.consultarUsuario(administrador_id, cedula);
+		
+		return new ArrayUtilidades().toMatrizUsuario(listaUsuarios);
+	}
 	
 }

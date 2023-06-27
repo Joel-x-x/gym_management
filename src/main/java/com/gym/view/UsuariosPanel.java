@@ -3,13 +3,14 @@ package com.gym.view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.gym.controller.FisicoController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
+import com.gym.model.Fisico;
 import com.gym.model.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,7 +19,9 @@ public class UsuariosPanel extends JPanel {
 	private int administrador_id;
 	private DefaultTableModel modelo;
 	private UsuarioController usuarioController;
-	private int idSeleccionado;
+	private FisicoController fisicoController;
+	private int idSeleccionadoUsuario;
+	private int idSeleccionadoFisico;
 	
 	private static final long serialVersionUID = 6939534476162663420L;
 	private JTextField textNombre;
@@ -46,11 +49,18 @@ public class UsuariosPanel extends JPanel {
 	
 
 	
-	private void listar(int id) {
+	private void listar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
 		modelo = new DefaultTableModel(usuarioController.listar(administrador_id), cabeceras);
 		tableUsuarios.setModel(modelo);
+	}
+	
+	private void listarFisico() {
+		String[] cabeceras = {"Id","Peso","Altura", "Fecha"};
+		
+		modelo = new DefaultTableModel(fisicoController.listar(idSeleccionadoUsuario), cabeceras);
+		tableFisico.setModel(modelo);
 	}
 	
 	private void guardar() {
@@ -58,7 +68,7 @@ public class UsuariosPanel extends JPanel {
 		
 		if(usuarioController.guardar(usuario)) {
 			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
-			listar(administrador_id);
+			listar();
 			limpiarFormularioUsuario();
 		} else {
 			JOptionPane.showMessageDialog(null, "No se pudo Guardar");
@@ -66,13 +76,25 @@ public class UsuariosPanel extends JPanel {
 		
 	}
 	
-	protected void modificar() {
+	private void guardarFisico() {
+		Fisico fisico = llenarFisico();
+		
+		if(fisicoController.guardar(fisico)) {
+			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
+			listarFisico();
+			LimpiarFormularioFisico();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo Guardar");
+		}
+	}
+	
+	private void modificar() {
 		Usuario usuario = llenarUsuario();
 		
 		if(usuarioController.modificar(usuario)) {
 			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
 			limpiarFormularioUsuario();
-			listar(administrador_id);
+			listar();
 		} else {
 			JOptionPane.showMessageDialog(null, "Error al intentar modificar");
 		}
@@ -83,9 +105,9 @@ public class UsuariosPanel extends JPanel {
 		int respuesta = JOptionPane.showConfirmDialog(null, "Estar seguro de eliminar");
 		if(respuesta == 0) {
 			
-			if(usuarioController.eliminar(idSeleccionado)) {
+			if(usuarioController.eliminar(idSeleccionadoUsuario)) {
 				JOptionPane.showMessageDialog(null, "Registro eliminado!");
-				listar(administrador_id);
+				listar();
 			} else {
 				JOptionPane.showMessageDialog(null, "No se puedo eliminar el registro");
 			}
@@ -93,13 +115,30 @@ public class UsuariosPanel extends JPanel {
 		
 	}
 	
+	public void consultar() {
+		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
+		
+		String cedula = textBuscar.getText();
+		
+		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, cedula), cabeceras);
+		tableUsuarios.setModel(modelo);
+	}
+	
 	private Usuario llenarUsuario() {
-		return new Usuario( idSeleccionado,
+		return new Usuario( idSeleccionadoUsuario,
 							textNombre.getText(), textApellido.getText(),
 							textNacimiento.getText(), getRadioButton(), 
 							textEmail.getText(), textCedula.getText(), 
 							textDireccion.getText(), textTelefono.getText(),
 							administrador_id);
+	}
+	
+	private Fisico llenarFisico() {
+		return new Fisico(
+				idSeleccionadoFisico,
+				Double.parseDouble(textPeso.getText()),
+				Double.parseDouble(textAltura.getText()),
+				idSeleccionadoUsuario);
 	}
 	
 	// Obtener el botón seleccionado
@@ -124,9 +163,13 @@ public class UsuariosPanel extends JPanel {
 		textTelefono.setText("");
 	}
 	
+	private void LimpiarFormularioFisico() {
+		textPeso.setText("");
+		textAltura.setText("");
+	}
+	
 	public void llenarFormulario() {
-		
-		Usuario usuario = usuarioController.consulta(idSeleccionado, administrador_id);
+		Usuario usuario = usuarioController.consulta(idSeleccionadoUsuario, administrador_id);
 		textNombre.setText(usuario.getNombre());
 		textApellido.setText(usuario.getApellido());
 		textNacimiento.setText(usuario.getFecha_nacimiento());
@@ -145,6 +188,14 @@ public class UsuariosPanel extends JPanel {
 		textTelefono.setText(usuario.getTelefono());
 	}
 	
+	public void llenarFormularioFisico() {
+		Fisico fisico = fisicoController.consulta(idSeleccionadoFisico, idSeleccionadoUsuario);
+		
+		textPeso.setText(fisico.getPeso() + "");
+		textAltura.setText(fisico.getAltura() + "");
+		
+	}
+	
 	public void bloquearBotonesUsuarios() {
         btnModificarUsuario.setEnabled(false);
         btnEliminarUsuario.setEnabled(false);
@@ -161,6 +212,7 @@ public class UsuariosPanel extends JPanel {
 	}
 	
 	public void bloquearBotonesFisico() {
+		btnAgregarFisico.setEnabled(false);
 		btnModificarFisico.setEnabled(false);
 		btnEliminarFisico.setEnabled(false);
 	}
@@ -170,6 +222,7 @@ public class UsuariosPanel extends JPanel {
 		
 		administrador_id = new Administrador().getId();
 		usuarioController = new UsuarioController();
+		fisicoController = new FisicoController();
 		
 		setFocusTraversalPolicyProvider(true);
     	
@@ -330,6 +383,12 @@ public class UsuariosPanel extends JPanel {
         add(btnEliminarUsuario);
         
         btnAgregarFisico = new JButton("Agregar");
+        btnAgregarFisico.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		guardarFisico();
+        	}
+        });
         btnAgregarFisico.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnAgregarFisico.setForeground(new Color(255, 255, 255));
         btnAgregarFisico.setBorder(null);
@@ -361,16 +420,18 @@ public class UsuariosPanel extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setAutoscrolls(true);
         scrollPane.setBackground(new Color(255, 255, 255));
-        scrollPane.setBounds(30, 430, 957, 248);
+        scrollPane.setBounds(30, 430, 972, 248);
         add(scrollPane);
         
         tableUsuarios = new JTable();
         tableUsuarios.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		idSeleccionado = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
+        		idSeleccionadoUsuario = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
         		activarBotonesUsuarios();
         		llenarFormulario();
+        		listarFisico();
+        		btnAgregarFisico.setEnabled(true); 
         	}
         });
         tableUsuarios.setBackground(new Color(255, 255, 255));
@@ -379,10 +440,19 @@ public class UsuariosPanel extends JPanel {
         JScrollPane scrollPane_1 = new JScrollPane();
         scrollPane_1.setBorder(null);
         scrollPane_1.setAutoscrolls(true);
-        scrollPane_1.setBounds(527, 179, 460, 204);
+        scrollPane_1.setBounds(527, 179, 475, 204);
         add(scrollPane_1);
         
         tableFisico = new JTable();
+        tableFisico.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		idSeleccionadoFisico = (int) tableFisico.getValueAt(tableFisico.getSelectedRow(),0);
+        		activarBotonesFisico();
+        		llenarFormularioFisico();
+        		listarFisico();
+        	}
+        });
         tableFisico.setBackground(new Color(255, 255, 255));
         scrollPane_1.setViewportView(tableFisico);
         
@@ -414,11 +484,23 @@ public class UsuariosPanel extends JPanel {
         textEmail.setBounds(280, 142, 225, 25);
         add(textEmail);
         
+        JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		consultar();
+        	}
+        });
+        btnBuscar.setForeground(Color.WHITE);
+        btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnBuscar.setBorder(null);
+        btnBuscar.setBackground(new Color(46, 56, 64));
+        btnBuscar.setBounds(218, 394, 89, 25);
+        add(btnBuscar);
+        
         // Listar Usuarios
-        listar(administrador_id);
+        listar();
         
         bloquearBotonesUsuarios();
         bloquearBotonesFisico();
     }
-
 }

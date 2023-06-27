@@ -2,27 +2,34 @@ package com.gym.model;
 
 public class Fisico {
     private int id;
-    private double altura;
     private double peso;
+    private double altura;
     private String fecha;
     private int usuario_id;
     
-    public Fisico(int id, double altura, double peso, String fecha, int usuario_id) {
+    public Fisico(int id, double peso, double altura, String fecha, int usuario_id) {
         this.id = id;
-        this.altura = altura;
         this.peso = peso;
+        this.altura = altura;
         this.fecha = fecha;
         this.usuario_id = usuario_id;
     }
     
-    public Fisico( double altura, double peso, String fecha, int usuario_id) {
+    public Fisico( double peso, double altura, String fecha, int usuario_id) {
+    	this.peso = peso;
         this.altura = altura;
-        this.peso = peso;
         this.fecha = fecha;
         this.usuario_id = usuario_id;
     }
 
-      public int getId() {
+      public Fisico(int id, double peso, double altura, int usuario_id) {
+          this.id = id;
+          this.peso = peso;
+          this.altura = altura;
+          this.usuario_id = usuario_id;
+	}
+
+	public int getId() {
         return id;
     }
 

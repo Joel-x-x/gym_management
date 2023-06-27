@@ -84,8 +84,69 @@ public class UsuarioDAO {
 
 	public boolean eliminar(int id) {
 		
+		eliminarFisico(id);
+		eliminarRegistro(id);
+		eliminarMembresia(id);
+		
 		try {
 			String sentencia = "delete from usuario where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public boolean eliminarFisico(int id) {
+		
+		try {
+			String sentencia = "delete from fisico where usuario_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean eliminarRegistro(int id) {
+		
+		try {
+			String sentencia = "delete from registro where usuario_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean eliminarMembresia(int id) {
+		
+		try {
+			String sentencia = "delete from membresia where usuario_id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -176,7 +237,7 @@ public class UsuarioDAO {
 		
 	}
 	
-	public List<Usuario> consultarUsuario(Usuario usuario) {
+	public List<Usuario> consultarUsuario(int administrador_id, String cedula) {
 		
 		try {
 			String sentencia = "select * from usuario where administrador_id = ? and cedula = ?";
@@ -185,8 +246,8 @@ public class UsuarioDAO {
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
-				statement.setInt(1, usuario.getAdministrador_id());
-				statement.setString(2, usuario.getCedula());
+				statement.setInt(1, administrador_id);
+				statement.setString(2, cedula);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

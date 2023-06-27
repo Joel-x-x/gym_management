@@ -120,5 +120,36 @@ public class FisicoDAO {
 		}
 		
 	}
+
+	public Fisico consulta(int id, int usuario_id) {
+
+		try {
+			String sentencia = "select * from fisico where id = ? and usuario_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				statement.setInt(2, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+						return new Fisico(
+								resultSet.getInt("id"),
+								resultSet.getDouble("altura"),
+								resultSet.getDouble("peso"),
+								resultSet.getString("fecha"),
+								resultSet.getInt("usuario_id"));
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
 	
 }
