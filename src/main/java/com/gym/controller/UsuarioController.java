@@ -15,10 +15,6 @@ public class UsuarioController {
 	public boolean guardar(Usuario usuario) {
 		return usuarioDAO.guardar(usuario);
 	}
-	
-	public Object[][]  consulta(Usuario usuario) {
-		return usuarioDAO.consultar(usuario);
-	}
 
 	public Object[][] listar(int administrador_id) {
 		var listaUsuarios = usuarioDAO.listar(administrador_id);

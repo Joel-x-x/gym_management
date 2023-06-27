@@ -240,14 +240,25 @@ public class UsuarioDAO {
 	public List<Usuario> consultarUsuario(int administrador_id, String cedula) {
 		
 		try {
-			String sentencia = "select * from usuario where administrador_id = ? and cedula = ?";
+			String sentencia = "";
+			
+			if(!cedula.equals("")) {
+				sentencia = "select * from usuario where administrador_id = ? and cedula = ?";
+			} else {
+				sentencia = "select * from usuario where administrador_id = ?";
+			}
+			
 			List<Usuario> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
-				statement.setInt(1, administrador_id);
-				statement.setString(2, cedula);
+				if(!cedula.equals("")) {
+					statement.setInt(1, administrador_id);
+					statement.setString(2, cedula);
+				} else {
+					statement.setInt(1, administrador_id);
+				}
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

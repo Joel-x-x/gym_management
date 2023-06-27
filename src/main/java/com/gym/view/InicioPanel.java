@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
+import com.gym.model.Administrador;
 import com.gym.model.Registro;
 import com.gym.model.Usuario;
 
@@ -19,11 +20,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class InicioPanel extends JPanel {
+	UsuarioController usuarioController;
+	RegistroController registroController;
+	private int administrador_id; 
 
-	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
     private JTable tabla_registro;
     private JTextField txt_cedula;
@@ -36,14 +36,19 @@ public class InicioPanel extends JPanel {
     private JButton btn_entrada;
     private JButton btn_salida;
     
+    private void listarUsuarios() {
+		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
+		
+		modelo = new DefaultTableModel(usuarioController.listar(administrador_id),cabeceras);
+		tabla_registro.setModel(modelo);
+    }
+    
 	public InicioPanel(int panelAncho, int panelAlto) {
 		
-		 UsuarioController usuarioController = new UsuarioController();
-		 RegistroController  registroController = new RegistroController();  
+		 usuarioController = new UsuarioController();
+		 registroController = new RegistroController();  
+		 administrador_id = new Administrador().getId();
 		
-		
-		//Usuario usuario = llenarUsuario();
-		 
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -59,11 +64,11 @@ public class InicioPanel extends JPanel {
         
         JLabel lblNewLabel = new JLabel("REGISTRO");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel.setBounds(28, 316, 113, 56);
+        lblNewLabel.setBounds(30, 359, 113, 39);
         add(lblNewLabel);
         
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 105, 993, 202);
+        scrollPane.setBounds(30, 124, 993, 234);
         add(scrollPane);
         
         tabla_registro = new JTable();
@@ -83,23 +88,23 @@ public class InicioPanel extends JPanel {
         
         txt_cedula = new JTextField();
         txt_cedula.setColumns(10);
-        txt_cedula.setBounds(126, 70, 194, 20);
+        txt_cedula.setBounds(129, 88, 194, 25);
         add(txt_cedula);
         
-        JLabel lblNewLabel_2_1 = new JLabel("Cedula");
-        lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_2_1.setBounds(28, 71, 84, 14);
+        JLabel lblNewLabel_2_1 = new JLabel("Buscar por cédula");
+        lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1.setBounds(29, 93, 101, 14);
         add(lblNewLabel_2_1);
         System.out.println("xdxd");
         
         JLabel lblInicio = new JLabel("INICIO");
 
         lblInicio.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblInicio.setBounds(28, 11, 84, 49);
+        lblInicio.setBounds(30, 30, 84, 49);
         add(lblInicio);
         
         JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(10, 383, 993, 248);
+        scrollPane_1.setBounds(30, 450, 993, 248);
         add(scrollPane_1);
         
         table = new JTable();
@@ -118,7 +123,7 @@ public class InicioPanel extends JPanel {
         btn_entrada.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_entrada.setBorder(null);
         btn_entrada.setBackground(new Color(31, 33, 38));
-        btn_entrada.setBounds(137, 332, 150, 30);
+        btn_entrada.setBounds(30, 409, 150, 30);
         add(btn_entrada);
         
         btn_salida = new JButton("Registrar Salida");
@@ -134,25 +139,23 @@ public class InicioPanel extends JPanel {
         btn_salida.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_salida.setBorder(null);
         btn_salida.setBackground(new Color(203, 39, 39));
-        btn_salida.setBounds(297, 332, 150, 30);
+        btn_salida.setBounds(190, 409, 150, 30);
         add(btn_salida);
         
         JButton btn_buscar = new JButton("Buscar");
         btn_buscar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Usuario usuario = llenarUsuario();
-        		
-        	
-        		
-        		llenarTabla();
+        		consultarUsuario();
         	}
         });
         btn_buscar.setForeground(Color.WHITE);
         btn_buscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_buscar.setBorder(null);
         btn_buscar.setBackground(new Color(46, 56, 64));
-        btn_buscar.setBounds(342, 65, 150, 30);
+        btn_buscar.setBounds(333, 88, 150, 25);
         add(btn_buscar);
+        
+        listarUsuarios();
     }
 	
 	private Usuario llenarUsuario() {
@@ -168,23 +171,21 @@ public class InicioPanel extends JPanel {
 		return new Registro(codigo_id);
 	}
 
-	public  void llenarTabla() {
-		 UsuarioController usuarioController= new UsuarioController();
+	public  void consultarUsuario() {
 		Usuario usuario = llenarUsuario();
-		String[] cabeceras = {"Codigo","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
+		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
 		
-		modelo = new DefaultTableModel(usuarioController.consulta(usuario),cabeceras);
+		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, txt_cedula.getText()),cabeceras);
 		tabla_registro.setModel(modelo);
-			System.out.println(usuarioController.consulta(usuario)[0][0]);
+		
 		}
+	
 	public  void llenarTabla_registro() {
-		 RegistroController registroController= new RegistroController();
 		Registro registro = llenarRegistro();
-		String[] cabeceras = {"id","Fecha entrada","Fecha salida"};
+		String[] cabeceras = {"Id","Fecha de entrada","Fecha de salida"};
 		
 		modelo1 = new DefaultTableModel(registroController.consulta(registro),cabeceras);
 		table.setModel(modelo1);
-		
 		
 	}
 	public void abotones(){

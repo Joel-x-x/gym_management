@@ -472,12 +472,12 @@ public class UsuariosPanel extends JPanel {
         
         textBuscar = new JTextField();
         textBuscar.setColumns(10);
-        textBuscar.setBounds(71, 394, 137, 25);
+        textBuscar.setBounds(139, 394, 137, 25);
         add(textBuscar);
         
-        JLabel lblNewLabel_1_4_2 = new JLabel("Buscar:");
+        JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por cédula:");
         lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_2.setBounds(30, 402, 53, 14);
+        lblNewLabel_1_4_2.setBounds(30, 405, 99, 14);
         add(lblNewLabel_1_4_2);
         
         JLabel lblNewLabel_1_4_3 = new JLabel("yyyy-mm-dd");
@@ -508,7 +508,7 @@ public class UsuariosPanel extends JPanel {
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setBorder(null);
         btnBuscar.setBackground(new Color(46, 56, 64));
-        btnBuscar.setBounds(218, 394, 89, 25);
+        btnBuscar.setBounds(286, 394, 89, 25);
         add(btnBuscar);
         
         JButton btnLimpiar = new JButton("Limpiar");
@@ -521,7 +521,7 @@ public class UsuariosPanel extends JPanel {
         btnLimpiar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnLimpiar.setBorder(null);
         btnLimpiar.setBackground(new Color(46, 56, 64));
-        btnLimpiar.setBounds(317, 394, 89, 25);
+        btnLimpiar.setBounds(385, 394, 89, 25);
         add(btnLimpiar);
         
         // Listar Usuarios
