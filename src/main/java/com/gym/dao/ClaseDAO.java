@@ -6,26 +6,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.gym.model.Clase;
 import com.gym.model.Entrenador;
-import com.gym.model.Plan;
 
-public class EntrenadorDAO {
+public class ClaseDAO {
 Connection con;
 	
-	public EntrenadorDAO(Connection con) {
+	public ClaseDAO(Connection con) {
 		this.con = con;
 	}
-public boolean agregar(Entrenador entrenador) {
+public boolean agregar(Clase clase) {
 	try {
-		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono) "
+		String sentencia = "insert into clase (nombre, apellido, sexo, correo, telefono) "
 				+ " values(?,?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
-			statement.setString(1, entrenador.getNombre());
-			statement.setString(2, entrenador.getApellido());
-			statement.setString(3, entrenador.getSexo());
-			statement.setString(4, entrenador.getCorreo());
-			statement.setString(5, entrenador.getTelefono());
+		
+			statement.setString(1, clase.getClase());
+			statement.setString(3, clase.getDescripcion());
+			statement.setString(4, String.valueOf(clase.getEntrenador_id()));
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;
@@ -38,6 +37,7 @@ public boolean agregar(Entrenador entrenador) {
 	}
 	
 }
+	
 public boolean modificar(Entrenador entrenador) {
 	try {
 		String sentencia = "UPDATE entrenador SET  nombre= ?, apellido = ?, sexo = ?, correo= ?, telefono =?  WHERE id = ?";
