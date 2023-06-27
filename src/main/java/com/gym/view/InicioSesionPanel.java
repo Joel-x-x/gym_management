@@ -14,14 +14,15 @@ import com.gym.controller.AdministradorController;
 import com.gym.model.Administrador;
 
 import java.awt.Font;
+import javax.swing.JPasswordField;
 
 public class InicioSesionPanel extends JPanel {
     private RegistroFrame registroFrame;
     private JButton registrarButton;
     private JButton iniciarSesionButton;
     private JTextField textUsuario;
-    private JTextField textContra;
     private AdministradorController administradorController;
+    private JPasswordField textContra;
     
     
     public InicioSesionPanel(RegistroFrame frame) {
@@ -35,7 +36,7 @@ public class InicioSesionPanel extends JPanel {
         iniciarSesionButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Administrador administrador = llenarAdministrador();
-        		
+        		System.out.println(textContra.getPassword());
         		if(administradorController.sesion(administrador)) {
 					
         			// Ya logeado asignaremos el id statico a la clase Administrador para que usuario tenga su referencia
@@ -98,21 +99,20 @@ public class InicioSesionPanel extends JPanel {
         lblCorreo.setBounds(438, 96, 63, 14);
         add(lblCorreo);
         
-        textContra = new JTextField();
-        textContra.setText("1234");
-        textContra.setColumns(10);
-        textContra.setBounds(438, 173, 289, 35);
-        add(textContra);
-        
         JLabel lblContrasea = new JLabel("Contraseña");
         lblContrasea.setBounds(438, 157, 63, 14);
         add(lblContrasea);
+        
+        textContra = new JPasswordField();
+        textContra.setText("1234");
+        textContra.setBounds(438, 174, 290, 35);
+        add(textContra);
     }
     public Administrador llenarAdministrador() {
     	return new Administrador(
     			"",
     			textUsuario.getText(),
-    			textContra.getText(),
+    			String.valueOf(textContra.getPassword()),
     			0,
     			0,
     			"");

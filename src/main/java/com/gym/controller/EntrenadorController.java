@@ -27,5 +27,8 @@ public class EntrenadorController {
 	public boolean eliminar(Entrenador entrenador) {
 		return entrenadorDAO.eliminar(entrenador);
 	}
+	public String[][] consulta_id_nombres_entrenador(Entrenador entrenador) {
+		return entrenadorDAO.consulta_id_nombres_entrenador(entrenador);
+	}
 
 }

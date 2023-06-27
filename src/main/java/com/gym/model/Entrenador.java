@@ -7,14 +7,16 @@ public class Entrenador {
     String sexo;
     String correo;
     String telefono;
+    String cedula;
 
-    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono) {
+    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
         this.correo = correo;
         this.telefono = telefono;
+        this.cedula = cedula;
     }
 
     public int getId() {
@@ -64,6 +66,15 @@ public class Entrenador {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+    
     
 
 }
