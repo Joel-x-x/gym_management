@@ -1,17 +1,15 @@
 package com.gym.controller;
 
-import com.gym.dao.EntrenadorDAO;
 import com.gym.dao.ClaseDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Clase;
-import com.gym.model.Entrenador;
 
 public class ClaseController {
 	ClaseDAO claseDAO;
 	public ClaseController() {
 		claseDAO = new ClaseDAO(new ConnectionFactory().conectar());
 	}
-	public boolean registrar(Clase clase) {
+	public boolean agregar(Clase clase) {
 		return claseDAO.agregar(clase);
 	}
 	public Object[][] consulta(Clase clase) {

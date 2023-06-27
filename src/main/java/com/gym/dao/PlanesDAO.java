@@ -18,14 +18,16 @@ public class PlanesDAO {
 	}
 public boolean agregar(Plan plan) {
 	try {
-		String sentencia = "insert into plan (nombre, precio, descripcion, duracion) "
-				+ " values(?,?,?,?);";
+		String sentencia = "insert into plan (nombre, precio, descripcion, duracion, administrador_id) "
+				+ " values(?,?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
+			System.out.println(plan.getDuracion());
 			statement.setString(1, plan.getNombre());
 			statement.setFloat(2, plan.getPrecio());
 			statement.setString(3, plan.getDescripcion());
 			statement.setString(4, plan.getDuracion());
+			statement.setInt(5, plan.getAdministrador_id());
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;

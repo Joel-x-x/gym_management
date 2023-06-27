@@ -9,7 +9,8 @@ public class Membresia {
     private int clase_id;
     private float valor_extra;
     private float valor_total;
-    
+    private int administrador_id;
+
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
 			float valor_extra, float valor_total) {
 		this.id = id;
@@ -95,6 +96,14 @@ public class Membresia {
 
 	public void setValor_total(float valor_total) {
 		this.valor_total = valor_total;
+	}
+	
+	public int getAdministrador_id() {
+		return administrador_id;
+	}
+
+	public void setAdministrador_id(int administrador_id) {
+		this.administrador_id = administrador_id;
 	}
 	
 }

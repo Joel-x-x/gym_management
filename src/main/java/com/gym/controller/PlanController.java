@@ -11,7 +11,7 @@ public class PlanController {
 	public PlanController() {
 		planesDAO = new PlanesDAO(new ConnectionFactory().conectar());
 	}
-	public boolean registrar(Plan plan) {
+	public boolean agregar(Plan plan) {
 		return planesDAO.agregar(plan);
 	}
 	public Object[][] consulta(Plan plan) {

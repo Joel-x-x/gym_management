@@ -18,15 +18,17 @@ public class MembresiaDAO {
 		this.con = con;
 	}
 
-	public List<Plan> listarPlan() {
+	public List<Plan> listarPlan(int administrador_id) {
 
 		try {
-			String sentencia = "select * from plan";
+			String sentencia = "select * from plan where administrador_id = ?";
 			List<Plan> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
+				
+				statement.setInt(1, administrador_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				try(resultSet) {
@@ -50,15 +52,17 @@ public class MembresiaDAO {
 		
 	}
 	
-	public List<Clase> listarClase() {
+	public List<Clase> listarClase(int administrador_id) {
 
 		try {
-			String sentencia = "select * from clase";
+			String sentencia = "select * from clase where administrador_id = ?";
 			List<Clase> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
+				
+				statement.setInt(1, administrador_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				try(resultSet) {

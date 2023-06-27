@@ -5,8 +5,9 @@ public class Clase {
     String clase;
     String descripcion;
     int entrenador_id;
+    int administrador_id;
 
-    public Clase(int id, String clase, String descripcion, int entrenador_id) {
+	public Clase(int id, String clase, String descripcion, int entrenador_id) {
         this.id = id;
         this.clase = clase;
         this.descripcion = descripcion;
@@ -44,5 +45,13 @@ public class Clase {
     public void setEntrenador_id(int entrenador_id) {
         this.entrenador_id = entrenador_id;
     }
+    
+    public int getAdministrador_id() {
+		return administrador_id;
+	}
+
+	public void setAdministrador_id(int administrador_id) {
+		this.administrador_id = administrador_id;
+	}
     
 }

@@ -27,7 +27,6 @@ public class MembresiasPanel extends JPanel {
 	
 	private static final long serialVersionUID = -6442770399461125032L;
 	private JTextField textValorExtra;
-	private JTextField textClase;
 	private JTextField textBuscar;
 	private JTable tableMembresias;
 	private JTable tableUsuarios;
@@ -46,13 +45,13 @@ public class MembresiasPanel extends JPanel {
 	
 	private void listarPlan() {
 		
-		comboBoxModelPlan.addAll(membresiaController.listarPlan());
+		comboBoxModelPlan.addAll(membresiaController.listarPlan(administrador_id));
 		
 		comboBoxPlan.setModel(comboBoxModelPlan);
 	}
 	
 	private void listarClase() {
-		comboBoxModelClase.addAll(membresiaController.listarClase());
+		comboBoxModelClase.addAll(membresiaController.listarClase(administrador_id));
 		
 		comboBoxClase.setModel(comboBoxModelClase);
 	}
@@ -70,6 +69,9 @@ public class MembresiasPanel extends JPanel {
 		        
         comboBoxPlan.setBounds(30, 99, 235, 25);
         add(comboBoxPlan);
+        
+        comboBoxClase.setBounds(304, 99, 218, 25);
+        add(comboBoxClase);
         
         JLabel lblNewLabel = new JLabel("MEMBRESIAS");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -92,11 +94,6 @@ public class MembresiasPanel extends JPanel {
         JLabel lblNewLabel_3 = new JLabel("Clase");
         lblNewLabel_3.setBounds(304, 84, 46, 14);
         add(lblNewLabel_3);
-        
-        textClase = new JTextField();
-        textClase.setBounds(304, 99, 218, 25);
-        add(textClase);
-        textClase.setColumns(10);
         
         JLabel lblNewLabel_4 = new JLabel("VALOR TOTAL");
         lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -183,5 +180,6 @@ public class MembresiasPanel extends JPanel {
         listarUsuarios();
         
         listarPlan();
+        listarClase();
     }
 }

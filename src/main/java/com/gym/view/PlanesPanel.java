@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.EntrenadorController;
 import com.gym.controller.PlanController;
 import com.gym.controller.UsuarioController;
+import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Entrenador;
 import com.gym.model.Plan;
@@ -21,11 +22,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class PlanesPanel extends JPanel {
+	private int administrador_id;
 	
-	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -7779240291090260615L;
     private JTextField txt_nombre_planes;
     private JTextField txt_descripcion_planes;
@@ -94,9 +92,11 @@ public class PlanesPanel extends JPanel {
     	
 
 		if(rdbtn_anual_planes.isSelected()) {
-			seleccion_planes = rdbtn_mensual_planes.getText();
+			seleccion_planes = rdbtn_anual_planes.getText();
 		}else if (rdbtn_diario_planes.isSelected()) {
 			seleccion_planes = rdbtn_diario_planes.getText();
+		} else {
+			seleccion_planes = rdbtn_mensual_planes.getText();
 		}
 		
 		Float precio_plan = Float.parseFloat(txt_precio_planes.getText());
@@ -104,7 +104,8 @@ public class PlanesPanel extends JPanel {
 		return new Plan(txt_nombre_planes.getText(),
 						precio_plan,
 						txt_descripcion_planes.getText(),
-						seleccion_planes);
+						seleccion_planes.toLowerCase(),
+						administrador_id);
 	}
     public Entrenador llenarEntrenador() {
     	seleccion_entrenador = "";
@@ -145,6 +146,8 @@ public class PlanesPanel extends JPanel {
 				llenar_modelo_box();
 			}
 		});
+		
+		administrador_id = new Administrador().getId();
 		
 		PlanController planController = new PlanController();
 		EntrenadorController entrenadorController = new EntrenadorController();
@@ -235,7 +238,7 @@ public class PlanesPanel extends JPanel {
         	public void actionPerformed(ActionEvent e) {
         		Plan plan_llenado = llenarPlan();
         		
-        		if(planController.registrar(plan_llenado)) {
+        		if(planController.agregar(plan_llenado)) {
         			JOptionPane.showMessageDialog(null, "Se ha registrado el plan");
         		}else {
         			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");

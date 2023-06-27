@@ -6,18 +6,21 @@ public class Plan {
     Float precio;
     String descripcion;
     String duracion;
-    public Plan(int id, String nombre, Float precio, String descripcion, String duracion) {
+    int administrador_id;
+    
+	public Plan(int id, String nombre, Float precio, String descripcion, String duracion) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.duracion = duracion;
     }
-    public Plan(String nombre, Float precio, String descripcion, String duracion) {
+    public Plan(String nombre, Float precio, String descripcion, String duracion, int administrador_id) {
     	this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.duracion = duracion;
+        this.administrador_id = administrador_id;
 	}
     public Plan(String nombre_ingreso) {
     	this.nombre=nombre_ingreso;
@@ -52,6 +55,14 @@ public class Plan {
 	public void setDuracion(String duracion) {
 		this.duracion = duracion;
 	}
+	
+    public int getAdministrador_id() {
+		return administrador_id;
+	}
+	public void setAdministrador_id(int administrador_id) {
+		this.administrador_id = administrador_id;
+	}
+	
 	@Override
 	public String toString() {
 		return this.nombre;
