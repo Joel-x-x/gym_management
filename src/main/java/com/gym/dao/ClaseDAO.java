@@ -17,14 +17,16 @@ Connection con;
 	}
 public boolean agregar(Clase clase) {
 	try {
-		String sentencia = "insert into clase (clase, descripcion, entrenador_id) "
-				+ " values(?,?,?);";
+		String sentencia = "insert into clase (clase, descripcion, entrenador_id, administrador_id) "
+				+ " values(?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
 		
 			statement.setString(1, clase.getClase());
-			statement.setString(3, clase.getDescripcion());
-			statement.setString(4, String.valueOf(clase.getEntrenador_id()));
+			statement.setString(2, clase.getDescripcion());
+			statement.setString(3, String.valueOf(clase.getEntrenador_id()));
+			System.out.println("clase entrenador id "+clase.getAdministrador_id());
+			statement.setString(4, String.valueOf(clase.getAdministrador_id()));
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;
@@ -40,13 +42,14 @@ public boolean agregar(Clase clase) {
 	
 public boolean modificar(Clase clase) {
 	try {
-		String sentencia = "UPDATE clases SET  clase= ?, descripcion = ?, entrenador_id = ? ";
+		String sentencia = "UPDATE clase SET  clase= ?, descripcion = ?, entrenador_id = ? where id =?";
 				
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
 			statement.setString(1, clase.getClase());
-			statement.setString(3, clase.getDescripcion());
-			statement.setString(4, String.valueOf(clase.getEntrenador_id()));
+			statement.setString(2, clase.getDescripcion());
+			statement.setString(3, String.valueOf(clase.getEntrenador_id()));
+			statement.setString(4, String.valueOf(clase.getId()));
 			
 			int i = statement.executeUpdate();
 			if(i>0) {
@@ -89,7 +92,7 @@ public Object[][] consultar(Clase clase) {
 			sentencia = "SELECT * FROM clase ";
 			
 		}else {
-			sentencia = "SELECT * FROM clase where nombre = "+clase.getClase();
+			sentencia = "SELECT * FROM clase where clase = '"+clase.getClase()+"'";
 			}
 	    
 	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);

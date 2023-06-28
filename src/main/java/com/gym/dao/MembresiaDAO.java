@@ -72,7 +72,8 @@ public class MembresiaDAO {
 								resultSet.getInt("id"),
 								resultSet.getString("clase"),
 								resultSet.getString("descripcion"),
-								resultSet.getInt("entrenador_id")));
+								resultSet.getInt("entrenador_id"),
+								resultSet.getInt("administrador_id")));
 					}
 					
 					return resultado;
