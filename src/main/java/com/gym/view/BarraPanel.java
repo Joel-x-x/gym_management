@@ -1,17 +1,21 @@
 package com.gym.view;
 
 import javax.swing.*;
+
+import com.gym.model.Administrador;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class BarraPanel extends JPanel {
-
-    private JButton inicioButton;
+	
+	private static final long serialVersionUID = -5747117121149449033L;
+	private AdminFrame adminFrame;
+	private JButton inicioButton;
     private JButton usuariosButton;
     private JButton membresiasButton;
     private JButton planesButton;
-    private AdminFrame adminFrame;
     int panelAncho = 1080, panelAlto = 750;
     private JPanel panel_1;
 
@@ -96,19 +100,33 @@ public class BarraPanel extends JPanel {
         panel_1.setBounds(58, 32, 80, 83);
         add(panel_1); 
         
-        JButton btnCerrarSesin = new JButton("     Cerrar Sesión");
-        btnCerrarSesin.addActionListener(new ActionListener() {
+        JButton btnCerrarSesion = new JButton("     Cerrar Sesión");
+        btnCerrarSesion.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        			
+					// Abre la ventana del panel de administrador
+	        		RegistroFrame registroFrame = new RegistroFrame();
+	        		registroFrame.setVisible(true);
+	        		
+	        		// Cierra el frame de registro
+	        		adminFrame.dispose(); 
         	}
         });
-        btnCerrarSesin.setHorizontalAlignment(SwingConstants.LEFT);
-        btnCerrarSesin.setForeground(new Color(163, 175, 175));
-        btnCerrarSesin.setFont(new Font("Candara", Font.PLAIN, 18));
-        btnCerrarSesin.setFocusTraversalKeysEnabled(false);
-        btnCerrarSesin.setFocusPainted(false);
-        btnCerrarSesin.setBorder(null);
-        btnCerrarSesin.setBackground(new Color(46, 56, 64));
-        btnCerrarSesin.setBounds(0, 646, 200, 40);
-        add(btnCerrarSesin);
+        btnCerrarSesion.setHorizontalAlignment(SwingConstants.LEFT);
+        btnCerrarSesion.setForeground(new Color(163, 175, 175));
+        btnCerrarSesion.setFont(new Font("Candara", Font.PLAIN, 18));
+        btnCerrarSesion.setFocusTraversalKeysEnabled(false);
+        btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.setBorder(null);
+        btnCerrarSesion.setBackground(new Color(46, 56, 64));
+        btnCerrarSesion.setBounds(0, 646, 200, 40);
+        add(btnCerrarSesion);
+        
+        JLabel lblNewLabel = new JLabel("Gym");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setForeground(new Color(163, 175, 175));
+        lblNewLabel.setFont(new Font("Candara", Font.BOLD, 18));
+        lblNewLabel.setBounds(0, 137, 200, 22);
+        add(lblNewLabel);
     }
 }

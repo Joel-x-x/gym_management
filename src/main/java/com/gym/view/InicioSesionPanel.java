@@ -17,7 +17,9 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 
 public class InicioSesionPanel extends JPanel {
-    private RegistroFrame registroFrame;
+	
+	private static final long serialVersionUID = -8083841348236094297L;
+	private RegistroFrame registroFrame;
     private JButton registrarButton;
     private JButton iniciarSesionButton;
     private JTextField textUsuario;
@@ -27,9 +29,10 @@ public class InicioSesionPanel extends JPanel {
     
     public InicioSesionPanel(RegistroFrame frame) {
         registroFrame = frame;
-        AdministradorController administradorController = new AdministradorController();
         setSize(1280, 720);
         setBackground(Color.white);
+        
+        administradorController = new AdministradorController();
         
         iniciarSesionButton = new JButton("Iniciar Sesion");
         iniciarSesionButton.setBounds(535, 229, 95, 23);
@@ -48,18 +51,11 @@ public class InicioSesionPanel extends JPanel {
 					// Abre la ventana del panel de administrador
 	        		AdminFrame adminFrame = new AdminFrame();
 	        		adminFrame.setVisible(true);
-	        		adminFrame.setVisible(true);
 	        		
 	        		registroFrame.dispose(); 
 	        		 // Cierra el frame de registro
 				} else {
 					JOptionPane.showMessageDialog(null, "Intruso");
-					
-				
-					
-					
-					
-					
 				}
         		// Realizar las operaciones de inicio de sesión
         		

@@ -3,13 +3,11 @@ package com.gym.view;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 
 public class RegistroFrame extends JFrame {
 
-	 private RegistroPanel registroPanel;
+	private static final long serialVersionUID = -8043917424973103874L;
+	private RegistroPanel registroPanel;
 	 private InicioSesionPanel inicioSesionPanel;
 	
 	public static void main(String[] args) {
