@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.gym.model.Entrenador;
-import com.gym.model.Plan;
 
 public class EntrenadorDAO {
 Connection con;
@@ -17,7 +16,7 @@ Connection con;
 	}
 public boolean agregar(Entrenador entrenador) {
 	try {
-		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono,cedula,administrador_id) "
+		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id) "
 				+ " values(?,?,?,?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
@@ -27,7 +26,7 @@ public boolean agregar(Entrenador entrenador) {
 			statement.setString(4, entrenador.getCorreo());
 			statement.setString(5, entrenador.getTelefono());
 			statement.setString(6, entrenador.getCedula());
-			statement.setString(7, String.valueOf(entrenador.getAdministrador_id()));
+			statement.setInt(7, entrenador.getAdministrador_id());
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;

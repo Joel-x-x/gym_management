@@ -2,8 +2,6 @@ package com.gym.view;
 
 import javax.swing.*;
 
-import com.gym.model.Administrador;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

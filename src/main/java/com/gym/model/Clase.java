@@ -1,7 +1,8 @@
 package com.gym.model;
 
 public class Clase {
-    int id;
+
+	int id;
     String clase;
     String descripcion;
     int entrenador_id;
@@ -56,6 +57,11 @@ public class Clase {
 
 	public void setAdministrador_id(int administrador_id) {
 		this.administrador_id = administrador_id;
+	}
+	
+    @Override
+	public String toString() {
+		return this.clase;
 	}
     
 }

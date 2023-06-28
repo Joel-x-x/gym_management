@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 public class AdminFrame extends JFrame implements ActionListener{
 
+	private static final long serialVersionUID = -3509542713044310899L;
 	private BarraSuperiorPanel barraSuperiorPanel;
     private BarraPanel barraPanel;
     private JPanel panelPrincipal;

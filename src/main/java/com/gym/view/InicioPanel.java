@@ -10,8 +10,6 @@ import com.gym.model.Administrador;
 import com.gym.model.Registro;
 import com.gym.model.Usuario;
 
-
-import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ActionListener;
