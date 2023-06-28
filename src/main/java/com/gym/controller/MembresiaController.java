@@ -33,4 +33,12 @@ public class MembresiaController {
 	public boolean guardar(Membresia membresia) {
 		return membresiaDAO.guardar(membresia);
 	}
+
+	public Membresia consulta(int id, int usuario_id) {
+		return membresiaDAO.consulta(id, usuario_id);
+	}
+
+	public boolean modificar(Membresia membresia) {
+		return membresiaDAO.modificar(membresia);
+	}
 }

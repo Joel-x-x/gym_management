@@ -46,13 +46,14 @@ public class ArrayUtilidades {
 	
 	public Object[][] toMatrizMembresia(List<Membresia> lista) {
 		int contador = 0;
-		Object[][] matrizMembresia =  new Object[lista.size()][4];
+		Object[][] matrizMembresia =  new Object[lista.size()][5];
     	
     	for(Membresia membresia : lista) {
     		matrizMembresia[contador][0] = membresia.getId();
-    		matrizMembresia[contador][1] = membresia.getFecha_inicio();
-    		matrizMembresia[contador][2] = membresia.getFecha_fin();
-    		matrizMembresia[contador][3] = membresia.getValor_total();
+    		matrizMembresia[contador][1] = membresia.getFecha_fin();
+    		matrizMembresia[contador][2] = membresia.getPlan();
+    		matrizMembresia[contador][3] = membresia.getClase();
+    		matrizMembresia[contador][4] = membresia.getValor_total();
 
     		contador++;
     	}

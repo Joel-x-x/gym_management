@@ -1,8 +1,11 @@
 package com.gym.view;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.formdev.flatlaf.json.ParseException;
 import com.gym.controller.MembresiaController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
@@ -15,12 +18,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class MembresiasPanel extends JPanel {
 	private int administrador_id;
 	private int idSeleccionado;
+	private int idSeleccionadoMembresia;
 	private DefaultTableModel modelo;
 	private UsuarioController usuarioController;
 	private MembresiaController membresiaController;
@@ -39,7 +50,6 @@ public class MembresiasPanel extends JPanel {
 	private JButton btnAgregar;
 	private JButton btnModificar;
 	private JButton btnEliminar;
-	private JButton btnCalcular;
 	
 	private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
@@ -49,20 +59,25 @@ public class MembresiasPanel extends JPanel {
 	}
 	
 	private void listarPlan() {
-		
 		comboBoxModelPlan.addAll(membresiaController.listarPlan(administrador_id));
-		
+		comboBoxPlan.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				calcularPrecioTotal();
+			}
+		});
 		comboBoxPlan.setModel(comboBoxModelPlan);
+		comboBoxPlan.setSelectedIndex(0);
 	}
 	
 	private void listarClase() {
 		comboBoxModelClase.addAll(membresiaController.listarClase(administrador_id));
-		
 		comboBoxClase.setModel(comboBoxModelClase);
+		comboBoxClase.setSelectedIndex(0);
 	}
 	
 	private void listarMembresias() {
-		String[] cabeceras = {"Id","Fecha de Inicio","Fecha de Fin","Valor Total"};
+		String[] cabeceras = {"Id","Fecha de Fin", "Plan", "Clase", "Valor Total"};
 		
 		modelo = new DefaultTableModel(membresiaController.listar(idSeleccionado), cabeceras);
 		tableMembresias.setModel(modelo);
@@ -80,13 +95,34 @@ public class MembresiasPanel extends JPanel {
 		}
 	}
 	
+	private void modificar() {
+		Membresia membresia = llenarMembresiaModificar();
+		
+		System.out.println(llenarMembresiaModificar().getFecha_fin());
+		
+		if(membresiaController.modificar(membresia)) {
+			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
+			listarMembresias();
+			limpiarFormulario();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se puedo modificar");
+		}
+	}
+ 	
 	private void calcularPrecioTotal() {
 		
-		float precio = ((Plan) comboBoxPlan.getSelectedItem()).getPrecio();
+		float precio = 0;
+		float valorTotal = 0;
 		
-		float valorTotal = precio + Float.parseFloat(textValorExtra.getText());
-		
-		labelTotal.setText(valorTotal+"");
+		// Verificar que no este vacio el plan antes de extraer el precio
+		if(!textValorExtra.getText().equals("") && comboBoxPlan.getSelectedIndex() != 0) {
+			
+			precio = ((Plan) comboBoxPlan.getSelectedItem()).getPrecio();
+			
+			valorTotal = precio + Float.parseFloat(textValorExtra.getText());
+			
+			labelTotal.setText(valorTotal+"");
+		}
 		
 	}
 	
@@ -94,7 +130,7 @@ public class MembresiasPanel extends JPanel {
 		
 		int idPlan = ((Plan) comboBoxPlan.getSelectedItem()).getId();
 		String duracion = ((Plan) comboBoxPlan.getSelectedItem()).getDuracion();
-		String fechaFin = fechaFin(duracion);
+		String fechaFin = fechaFin(duracion, "");
 		
 		int idClase = ((Clase) comboBoxClase.getSelectedItem()).getId();
 		
@@ -108,12 +144,62 @@ public class MembresiasPanel extends JPanel {
 				administrador_id);
 	}
 	
-	private String fechaFin(String duracion) {
-		// Obtén la fecha actual
-		Calendar calendar = Calendar.getInstance();
-
-
+	private Membresia llenarMembresiaModificar() {
 		
+		String fechaInicio = membresiaController.consulta(idSeleccionadoMembresia, idSeleccionado).getFecha_inicio();
+		
+		int idPlan = ((Plan) comboBoxPlan.getSelectedItem()).getId();
+		String duracion = ((Plan) comboBoxPlan.getSelectedItem()).getDuracion();
+		String fechaFin = fechaFin(duracion, fechaInicio);
+		
+		int idClase = ((Clase) comboBoxClase.getSelectedItem()).getId();
+		
+		return new Membresia(
+				idSeleccionadoMembresia,
+				fechaFin,
+				idSeleccionado,
+				idPlan,
+				idClase,
+				Float.parseFloat(textValorExtra.getText()),
+				Float.parseFloat(labelTotal.getText()),
+				administrador_id);
+	}
+	
+	private void llenarFormulario() {
+		Membresia membresia = membresiaController.consulta(idSeleccionadoMembresia, idSeleccionado);
+		
+		labelTotal.setText(membresia.getValor_total() + "");
+		textValorExtra.setText(membresia.getValor_extra() + "");
+		
+		for(int i = 0; i < comboBoxPlan.getItemCount(); i++) {
+			Plan plan = (Plan) comboBoxPlan.getItemAt(i);
+			
+			if(membresia.getPlan_id() == plan.getId()) {
+				comboBoxPlan.setSelectedItem(plan);
+			}
+		}
+
+		for(int i = 0; i < comboBoxClase.getItemCount(); i++) {
+			Clase clase = (Clase) comboBoxClase.getItemAt(i);
+			
+			if(membresia.getClase_id() == clase.getId()) {
+				comboBoxClase.setSelectedItem(clase);
+			}
+		}
+		
+	}
+	
+	private String fechaFin(String duracion, String fechaInicio) {
+		
+		Calendar calendar = null;
+		
+		if(fechaInicio.equals("")) {
+			// Obtén la fecha actual
+			calendar = Calendar.getInstance();
+		} else {
+			calendar = stringToCalendar(fechaInicio);
+		}
+
 		switch (duracion) {
 		case "diario":
 			calendar.add(Calendar.DAY_OF_MONTH, 1); 
@@ -136,6 +222,24 @@ public class MembresiasPanel extends JPanel {
 		return fechaFin;
 	}
 	
+	private Calendar stringToCalendar(String fecha) {
+		String pattern = "yyyy-MM-dd HH:mm:ss";
+		
+		Calendar calendar = Calendar.getInstance();
+        	
+    	SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        Date date = null;
+		try {
+			date = dateFormat.parse(fecha);
+		} catch (java.text.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        calendar.setTime(date);
+            
+        return calendar;
+	}
+	
 	private void bloquearBotones() {
 		btnAgregar.setEnabled(false);
 		btnModificar.setEnabled(false);
@@ -143,10 +247,14 @@ public class MembresiasPanel extends JPanel {
 	}
 	
 	private void limpiarFormulario() {
-		
+		labelTotal.setText("");
+		textValorExtra.setText("");
+		comboBoxClase.setSelectedIndex(0);
+		comboBoxPlan.setSelectedIndex(0);
 	}
 	
     public MembresiasPanel(int panelAncho, int panelAlto) {
+    	setFocusTraversalKeysEnabled(false);
     	
     	setPreferredSize(new Dimension(1080, 800));
 
@@ -173,7 +281,12 @@ public class MembresiasPanel extends JPanel {
         add(lblNewLabel_1);
         
         textValorExtra = new JTextField();
-        textValorExtra.setText("0");
+        textValorExtra.setText("0.0");
+        textValorExtra.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		calcularPrecioTotal();
+        	}
+        });
         textValorExtra.setBounds(30, 161, 235, 25);
         add(textValorExtra);
         textValorExtra.setColumns(10);
@@ -197,6 +310,7 @@ public class MembresiasPanel extends JPanel {
         add(labelTotal);
         
         btnAgregar = new JButton("Agregar");
+        btnAgregar.setFocusPainted(false);
         btnAgregar.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
@@ -211,6 +325,12 @@ public class MembresiasPanel extends JPanel {
         add(btnAgregar);
         
         btnModificar = new JButton("Modificar");
+        btnModificar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		modificar();
+        	}
+        });
+        btnModificar.setFocusPainted(false);
         btnModificar.setForeground(Color.WHITE);
         btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnModificar.setBorder(null);
@@ -219,6 +339,7 @@ public class MembresiasPanel extends JPanel {
         add(btnModificar);
         
         btnEliminar = new JButton("Eliminar");
+        btnEliminar.setFocusPainted(false);
         btnEliminar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
@@ -230,20 +351,36 @@ public class MembresiasPanel extends JPanel {
         btnEliminar.setBounds(370, 309, 150, 30);
         add(btnEliminar);
         
-        JLabel lblNewLabel_5 = new JLabel("Buscar:");
-        lblNewLabel_5.setBounds(30, 394, 46, 14);
+        JLabel lblNewLabel_5 = new JLabel("Buscar por cédula:");
+        lblNewLabel_5.setBounds(30, 394, 107, 14);
         add(lblNewLabel_5);
         
         textBuscar = new JTextField();
-        textBuscar.setBounds(72, 389, 213, 25);
+        textBuscar.setBounds(147, 388, 213, 25);
         add(textBuscar);
         textBuscar.setColumns(10);
         
         JScrollPane scrollPane_membresias_membresias = new JScrollPane();
+        scrollPane_membresias_membresias.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        	}
+        });
         scrollPane_membresias_membresias.setBounds(532, 41, 468, 233);
         add(scrollPane_membresias_membresias);
         
         tableMembresias = new JTable();
+        tableMembresias.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		idSeleccionadoMembresia = (int) tableMembresias.getValueAt(tableMembresias.getSelectedRow(),0);
+        		
+        		btnModificar.setEnabled(true);
+        		btnEliminar.setEnabled(true);
+        		
+        		llenarFormulario();
+        	}
+        });
         scrollPane_membresias_membresias.setViewportView(tableMembresias);
         
         JScrollPane scrollPane_usuarios_membresias = new JScrollPane();
@@ -263,6 +400,7 @@ public class MembresiasPanel extends JPanel {
         scrollPane_usuarios_membresias.setViewportView(tableUsuarios);
         
         btnBuscar = new JButton("Buscar");
+        btnBuscar.setFocusPainted(false);
         btnBuscar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
@@ -272,22 +410,8 @@ public class MembresiasPanel extends JPanel {
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setBorder(null);
         btnBuscar.setBackground(new Color(46, 56, 64));
-        btnBuscar.setBounds(295, 389, 150, 25);
+        btnBuscar.setBounds(370, 388, 150, 25);
         add(btnBuscar);
-        
-        btnCalcular = new JButton("Calcular");
-        btnCalcular.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		calcularPrecioTotal();
-        	}
-        });
-        btnCalcular.setForeground(Color.WHITE);
-        btnCalcular.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btnCalcular.setBorder(null);
-        btnCalcular.setBackground(new Color(46, 56, 64));
-        btnCalcular.setBounds(43, 249, 124, 25);
-        add(btnCalcular);
         
         // Listar Usuarios
         listarUsuarios();

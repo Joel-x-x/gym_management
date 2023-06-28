@@ -10,6 +10,8 @@ public class Membresia {
     private float valor_extra;
     private float valor_total;
     private int administrador_id;
+    private String plan;
+    private String clase;
 
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
 			float valor_extra, float valor_total) {
@@ -21,6 +23,18 @@ public class Membresia {
 		this.clase_id = clase_id;
 		this.valor_extra = valor_extra;
 		this.valor_total = valor_total;
+	}
+	
+	public Membresia(int id, String fecha_fin, int usuario_id, int plan_id, int clase_id,
+			float valor_extra, float valor_total, int administrador_id) {
+		this.id = id;
+		this.fecha_fin = fecha_fin;
+		this.usuario_id = usuario_id;
+		this.plan_id = plan_id;
+		this.clase_id = clase_id;
+		this.valor_extra = valor_extra;
+		this.valor_total = valor_total;
+		this.administrador_id = administrador_id;
 	}
 	
 	public Membresia(String fecha_fin, int usuario_id, int plan_id, int clase_id, float valor_extra, float valor_total, int administrador_id) {
@@ -44,7 +58,7 @@ public class Membresia {
 	}
 	
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
-			float valor_extra, float valor_total, int administrador_id) {
+			float valor_extra, float valor_total, int administrador_id, String plan, String clase) {
 		super();
 		this.id = id;
 		this.fecha_inicio = fecha_inicio;
@@ -55,6 +69,24 @@ public class Membresia {
 		this.valor_extra = valor_extra;
 		this.valor_total = valor_total;
 		this.administrador_id = administrador_id;
+		this.plan = plan;
+		this.clase = clase;
+	}
+
+	public String getPlan() {
+		return plan;
+	}
+
+	public void setPlan(String plan) {
+		this.plan = plan;
+	}
+
+	public String getClase() {
+		return clase;
+	}
+
+	public void setClase(String clase) {
+		this.clase = clase;
 	}
 
 	public int getId() {

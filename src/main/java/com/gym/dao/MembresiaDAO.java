@@ -42,6 +42,8 @@ public class MembresiaDAO {
 				final ResultSet resultSet = statement.executeQuery();
 				try(resultSet) {
 					
+					resultado.add(new Plan("-- Selecciona un Plan --"));
+					
 					while(resultSet.next()) {
 						resultado.add(new Plan(
 								resultSet.getInt("id"),
@@ -76,6 +78,8 @@ public class MembresiaDAO {
 				final ResultSet resultSet = statement.executeQuery();
 				try(resultSet) {
 					
+					resultado.add(new Clase("-- Selecciona una Clase --"));
+					
 					while(resultSet.next()) {
 						resultado.add(new Clase(
 								resultSet.getInt("id"),
@@ -97,7 +101,10 @@ public class MembresiaDAO {
 	public List<Membresia> listar(int usuario_id) {
 
 		try {
-			String sentencia = "select * from membresia where usuario_id = ?";
+			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
+					+ " join plan p on p.id = m.plan_id"
+					+ " join clase c on c.id = m.clase_id"
+					+ " where usuario_id = ?";
 			List<Membresia> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
@@ -111,15 +118,17 @@ public class MembresiaDAO {
 					
 					while(resultSet.next()) {
 						resultado.add(new Membresia(
-								resultSet.getInt("id"),
-								resultSet.getString("fecha_inicio"),
-								resultSet.getString("fecha_fin"),
-								resultSet.getInt("usuario_id"),
-								resultSet.getInt("plan_id"),
-								resultSet.getInt("clase_id"),
-								resultSet.getFloat("valor_extra"),
-								resultSet.getFloat("valor_total"),
-								resultSet.getInt("administrador_id")
+								resultSet.getInt("m.id"),
+								resultSet.getString("m.fecha_inicio"),
+								resultSet.getString("m.fecha_fin"),
+								resultSet.getInt("m.usuario_id"),
+								resultSet.getInt("m.plan_id"),
+								resultSet.getInt("m.clase_id"),
+								resultSet.getFloat("m.valor_extra"),
+								resultSet.getFloat("m.valor_total"),
+								resultSet.getInt("m.administrador_id"),
+								resultSet.getString("p.nombre"),
+								resultSet.getString("c.clase")
 								));
 					}
 					
@@ -150,6 +159,75 @@ public class MembresiaDAO {
 				statement.setFloat(5, membresia.getValor_extra());
 				statement.setFloat(6, membresia.getValor_total());
 				statement.setInt(7, membresia.getAdministrador_id());
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public Membresia consulta(int id, int usuario_id) {
+
+		try {
+			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
+					+ " join plan p on p.id = m.plan_id"
+					+ " join clase c on c.id = m.clase_id"
+					+ " where m.id = ? and m.usuario_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, id);
+				statement.setInt(2, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+						return new Membresia(
+								resultSet.getInt("m.id"),
+								resultSet.getString("m.fecha_inicio"),
+								resultSet.getString("m.fecha_fin"),
+								resultSet.getInt("m.usuario_id"),
+								resultSet.getInt("m.plan_id"),
+								resultSet.getInt("m.clase_id"),
+								resultSet.getFloat("m.valor_extra"),
+								resultSet.getFloat("m.valor_total"),
+								resultSet.getInt("m.administrador_id"),
+								resultSet.getString("p.nombre"),
+								resultSet.getString("c.clase")
+								);
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public boolean modificar(Membresia membresia) {
+
+		try {
+			String sentencia = "update membresia set fecha_fin = ?, plan_id = ?, clase_id = ?, valor_extra = ?, valor_total = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setString(1, membresia.getFecha_fin());
+				statement.setInt(2, membresia.getPlan_id());
+				statement.setInt(3, membresia.getClase_id());
+				statement.setFloat(4, membresia.getValor_extra());
+				statement.setFloat(5, membresia.getValor_total());
+				statement.setInt(6, membresia.getId());
 					
 					return toBoolean(statement.executeUpdate());
 			}
