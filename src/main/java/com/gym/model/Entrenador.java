@@ -8,8 +8,9 @@ public class Entrenador {
     String correo;
     String telefono;
     String cedula;
+    int administrador_id;
 
-    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula) {
+    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula,  int administrador_id) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -17,9 +18,24 @@ public class Entrenador {
         this.correo = correo;
         this.telefono = telefono;
         this.cedula = cedula;
+        this.administrador_id=administrador_id;
     }
+    public Entrenador(String nombre) {
+    	this.nombre=nombre;
+    }
+    
 
-    public int getId() {
+    public int getAdministrador_id() {
+		return administrador_id;
+	}
+
+
+	public void setAdministrador_id(int administrador_id) {
+		this.administrador_id = administrador_id;
+	}
+
+
+	public int getId() {
         return id;
     }
 
@@ -74,7 +90,10 @@ public class Entrenador {
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
-    
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
     
 
 }

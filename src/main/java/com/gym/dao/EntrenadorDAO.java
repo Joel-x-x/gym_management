@@ -17,8 +17,8 @@ Connection con;
 	}
 public boolean agregar(Entrenador entrenador) {
 	try {
-		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono,cedula) "
-				+ " values(?,?,?,?,?,?);";
+		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono,cedula,administrador_id) "
+				+ " values(?,?,?,?,?,?,?);";
 		final PreparedStatement statement = con.prepareStatement(sentencia);
 		try(statement){
 			statement.setString(1, entrenador.getNombre());
@@ -27,6 +27,7 @@ public boolean agregar(Entrenador entrenador) {
 			statement.setString(4, entrenador.getCorreo());
 			statement.setString(5, entrenador.getTelefono());
 			statement.setString(6, entrenador.getCedula());
+			statement.setString(7, String.valueOf(entrenador.getAdministrador_id()));
 			int i = statement.executeUpdate();
 			if(i>0) {
 				return true;
@@ -94,7 +95,7 @@ public Object[][] consultar(Entrenador entrenador) {
 			sentencia = "SELECT * FROM entrenador ";
 			
 		}else {
-			sentencia = "SELECT * FROM entrenador where nombre = "+entrenador.getNombre();
+			sentencia = "SELECT * FROM entrenador where nombre = '"+entrenador.getNombre()+"'";
 			}
 	    
 	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
