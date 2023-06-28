@@ -41,4 +41,8 @@ public class MembresiaController {
 	public boolean modificar(Membresia membresia) {
 		return membresiaDAO.modificar(membresia);
 	}
+
+	public boolean eliminar(int id) {
+		return membresiaDAO.eliminar(id);
+	}
 }

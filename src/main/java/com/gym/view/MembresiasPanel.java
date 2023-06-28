@@ -105,10 +105,20 @@ public class MembresiasPanel extends JPanel {
 			listarMembresias();
 			limpiarFormulario();
 		} else {
-			JOptionPane.showMessageDialog(null, "No se puedo modificar");
+			JOptionPane.showMessageDialog(null, "No se pudo modificar");
 		}
 	}
  	
+	private void eliminar() {
+		if(membresiaController.eliminar(idSeleccionadoMembresia)) {
+			JOptionPane.showMessageDialog(null, "Eliminado con Exito!");
+			listarMembresias();
+			limpiarFormulario();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo eliminar");
+		}
+	}
+	
 	private void calcularPrecioTotal() {
 		
 		float precio = 0;
@@ -202,9 +212,11 @@ public class MembresiasPanel extends JPanel {
 
 		switch (duracion) {
 		case "diario":
+			// Agrega 1 dia a la fecha actual
 			calendar.add(Calendar.DAY_OF_MONTH, 1); 
 			break;
 		case "mensual":
+			// Agrega 1 mes a la fecha actual
 			calendar.add(Calendar.MONTH, 1);
 			break;
 		case "anual":
@@ -342,6 +354,7 @@ public class MembresiasPanel extends JPanel {
         btnEliminar.setFocusPainted(false);
         btnEliminar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		eliminar();
         	}
         });
         btnEliminar.setForeground(Color.WHITE);
