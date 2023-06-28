@@ -23,8 +23,17 @@ public class Membresia {
 		this.valor_total = valor_total;
 	}
 	
-	public Membresia(String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
-			float valor_extra, float valor_total) {
+	public Membresia(String fecha_fin, int usuario_id, int plan_id, int clase_id, float valor_extra, float valor_total, int administrador_id) {
+		this.fecha_fin = fecha_fin;
+		this.usuario_id = usuario_id;
+		this.plan_id = plan_id;
+		this.clase_id = clase_id;
+		this.valor_extra = valor_extra;
+		this.valor_total = valor_total;
+		this.administrador_id = administrador_id;
+	}
+	
+	public Membresia(String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id, float valor_extra, float valor_total) {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
@@ -34,6 +43,20 @@ public class Membresia {
 		this.valor_total = valor_total;
 	}
 	
+	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
+			float valor_extra, float valor_total, int administrador_id) {
+		super();
+		this.id = id;
+		this.fecha_inicio = fecha_inicio;
+		this.fecha_fin = fecha_fin;
+		this.usuario_id = usuario_id;
+		this.plan_id = plan_id;
+		this.clase_id = clase_id;
+		this.valor_extra = valor_extra;
+		this.valor_total = valor_total;
+		this.administrador_id = administrador_id;
+	}
+
 	public int getId() {
 		return id;
 	}

@@ -3,6 +3,7 @@ package com.gym.utilidades;
 import java.util.List;
 
 import com.gym.model.Fisico;
+import com.gym.model.Membresia;
 import com.gym.model.Usuario;
 
 public class ArrayUtilidades {
@@ -41,6 +42,21 @@ public class ArrayUtilidades {
     		contador++;
     	}
     	return matrizFisico;
+	}
+	
+	public Object[][] toMatrizMembresia(List<Membresia> lista) {
+		int contador = 0;
+		Object[][] matrizMembresia =  new Object[lista.size()][4];
+    	
+    	for(Membresia membresia : lista) {
+    		matrizMembresia[contador][0] = membresia.getId();
+    		matrizMembresia[contador][1] = membresia.getFecha_inicio();
+    		matrizMembresia[contador][2] = membresia.getFecha_fin();
+    		matrizMembresia[contador][3] = membresia.getValor_total();
+
+    		contador++;
+    	}
+    	return matrizMembresia;
 	}
 	
 }

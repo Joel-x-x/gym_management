@@ -98,6 +98,13 @@ delete from duracion where cantidad = 1;
 delete from plan where id = 1; 
 
 select * from membresia;
+select * from plan;
+select * from clase;
+select * from usuario;
+select * from administrador;
+
+insert into membresia(fecha_fin, usuario_id, plan_id, clase_id, valor_extra, valor_total, administrador_id)
+values(date_add(current_timestamp, interval 1 year), 2, 8, 3, 0, 150.0,1); 
 
 alter table plan
 add column duracion enum('diario','mensual','anual'); 
