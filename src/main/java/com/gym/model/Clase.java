@@ -7,13 +7,17 @@ public class Clase {
     int entrenador_id;
     int administrador_id;
 
-	public Clase(int id, String clase, String descripcion, int entrenador_id) {
+	public Clase(int id, String clase, String descripcion, int entrenador_id, int administrador_id) {
         this.id = id;
         this.clase = clase;
         this.descripcion = descripcion;
         this.entrenador_id = entrenador_id;
+        this.administrador_id= administrador_id;
     }
-
+	public Clase(String nombre) {
+		this.clase = nombre;
+	}
+	
     public int getId() {
         return id;
     }
