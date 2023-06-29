@@ -35,7 +35,7 @@ public class InicioSesionPanel extends JPanel {
         administradorController = new AdministradorController();
         
         iniciarSesionButton = new JButton("Iniciar Sesion");
-        iniciarSesionButton.setBounds(535, 229, 95, 23);
+        iniciarSesionButton.setBounds(473, 220, 95, 23);
         iniciarSesionButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Administrador administrador = llenarAdministrador();
@@ -67,8 +67,8 @@ public class InicioSesionPanel extends JPanel {
         });
         
         registrarButton = new JButton("Registrarse");
-        registrarButton.setFont(new Font("Tahoma", Font.PLAIN, 9));
-        registrarButton.setBounds(649, 267, 79, 14);
+        registrarButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        registrarButton.setBounds(592, 221, 95, 21);
         registrarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	registroFrame.mostrarPanelRegistro();

@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.UIManager;
+
 
 public class BarraPanel extends JPanel {
 	
@@ -16,12 +18,14 @@ public class BarraPanel extends JPanel {
     private JButton planesButton;
     int panelAncho = 1080, panelAlto = 750;
     private JPanel panel_1;
+    
+    
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
         setPreferredSize(new Dimension(200, 750));
         setBackground(new Color(46, 56, 64));
-
+        
         inicioButton = new JButton("     Inicio");
         inicioButton.setHorizontalAlignment(SwingConstants.LEFT);
         inicioButton.setFocusPainted(false);
