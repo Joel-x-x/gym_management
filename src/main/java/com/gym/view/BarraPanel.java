@@ -5,7 +5,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.UIManager;
+import java.awt.geom.Ellipse2D;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
+
+import com.formdev.flatlaf.FlatLightLaf;
+import com.gym.factory.ConnectionFactory;
 
 
 public class BarraPanel extends JPanel {
@@ -17,9 +29,6 @@ public class BarraPanel extends JPanel {
     private JButton membresiasButton;
     private JButton planesButton;
     int panelAncho = 1080, panelAlto = 750;
-    private JPanel panel_1;
-    
-    
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
@@ -91,16 +100,15 @@ public class BarraPanel extends JPanel {
                 adminFrame.cambiarPanel(new PlanesPanel(panelAncho, panelAlto));
             }
         });
+        
         setLayout(null);
-        System.out.println("Hola");
         add(inicioButton);
         add(usuariosButton);
         add(membresiasButton);
         add(planesButton);
         
-        panel_1 = new JPanel();
-        panel_1.setBounds(58, 32, 80, 83);
-        add(panel_1); 
+        CircularPanel logoEmpresa = new CircularPanel();
+        add(logoEmpresa); 
         
         JButton btnCerrarSesion = new JButton("     Cerrar Sesión");
         btnCerrarSesion.addActionListener(new ActionListener() {
@@ -112,6 +120,8 @@ public class BarraPanel extends JPanel {
 	        		
 	        		// Cierra el frame de registro
 	        		adminFrame.dispose(); 
+	        		new ConnectionFactory();
+					ConnectionFactory.desconectar();
         	}
         });
         btnCerrarSesion.setHorizontalAlignment(SwingConstants.LEFT);
@@ -131,4 +141,63 @@ public class BarraPanel extends JPanel {
         lblNewLabel.setBounds(0, 137, 200, 22);
         add(lblNewLabel);
     }
+
+    public class CircularPanel extends JPanel {
+
+		private static final long serialVersionUID = -7560565167117132164L;
+		private Image image;
+
+        public CircularPanel() {
+            try {
+                // Carga la imagen desde un archivo o recurso
+                URL imageUrl = getClass().getResource("pesas 1.jpg");
+                image = ImageIO.read(imageUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            setBounds(58, 32, 80, 83);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+        	super.paintComponent(g);
+
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Establece el color de fondo del panel a transparente
+            setBackground(new Color(0, 0, 0, 0));
+
+            // Habilita el suavizado de dibujado para una apariencia más suave            
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+            // Dibuja el círculo
+            g2d.setColor(new Color(46, 56, 64));
+            g2d.setStroke(new BasicStroke(10.0f)); // Trazo de grosor 2
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            Shape circle = new Ellipse2D.Double(0, 0, getWidth() - 1, getHeight() - 1);
+            g2d.fill(circle);
+
+            // Guarda el área de recorte actual
+            Shape previousClip = g2d.getClip();
+
+            // Establece el área de recorte al círculo
+            g2d.setClip(circle);
+
+            // Calcula las coordenadas y dimensiones para ajustar la imagen al tamaño del panel
+            int imageSize = Math.min(getWidth(), getHeight());
+            int x = (getWidth() - imageSize) / 2;
+            int y = (getHeight() - imageSize) / 2;
+
+            // Dibuja la imagen ajustada al tamaño del panel dentro del área de recorte
+            g2d.drawImage(image, x, y, imageSize, imageSize, null);
+
+            // Restaura el área de recorte anterior
+            g2d.setClip(previousClip);
+
+            // Libera los recursos del objeto Graphics2D
+            g2d.dispose();
+        }
+    }
+    
 }

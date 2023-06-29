@@ -8,10 +8,14 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class PanelRound extends JPanel {
 
-    public int getRoundTopLeft() {
+	private static final long serialVersionUID = 3644804670305640569L;
+
+	public int getRoundTopLeft() {
         return roundTopLeft;
     }
 
@@ -47,13 +51,14 @@ public class PanelRound extends JPanel {
         repaint();
     }
 
-    private int roundTopLeft = 0;
-    private int roundTopRight = 0;
-    private int roundBottomLeft = 0;
-    private int roundBottomRight = 0;
+    private int roundTopLeft = 50;
+    private int roundTopRight = 50;
+    private int roundBottomLeft = 50;
+    private int roundBottomRight = 50;
 
     public PanelRound() {
         setOpaque(false);
+        setLayout(null);
     }
 
     @Override

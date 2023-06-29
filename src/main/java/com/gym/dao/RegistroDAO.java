@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.gym.model.Registro;
-import com.gym.model.Usuario;
 
 public class RegistroDAO {
 	Connection con;

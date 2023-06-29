@@ -6,11 +6,21 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	
-	public Connection conectar() {
+	public static Connection conectar() {
 		try {
+			System.out.println("Sesion abierta");
 			return DriverManager.getConnection("jdbc:mysql://localhost/bdd_gym?serverTimezone=UTC", "root", "");
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	public static void desconectar() {
+		try {
+			conectar().close();
+			System.out.println("Sesion Cerrada");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }

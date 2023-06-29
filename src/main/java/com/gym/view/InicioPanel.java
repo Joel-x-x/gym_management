@@ -76,8 +76,6 @@ public class InicioPanel extends JPanel {
         		//abotones();
         		idSeleccionadoUsuario = (int )tabla_registro.getValueAt(tabla_registro.getSelectedRow(),0);
         		
-        		Registro registro = llenarRegistro();
-        		
         		llenarTabla_registro();
         		
         		botones_ides();
@@ -164,12 +162,12 @@ public class InicioPanel extends JPanel {
         listarUsuarios();
     }
 	
-	private Usuario llenarUsuario() {
-		
-		
-		return new Usuario(txt_cedula.getText());
-		
-	}
+//	private Usuario llenarUsuario() {
+//		
+//		
+//		return new Usuario(txt_cedula.getText());
+//		
+//	}
 	private Registro llenarRegistro() {
 		return new Registro(idSeleccionadoUsuario);
 	}
@@ -178,7 +176,6 @@ public class InicioPanel extends JPanel {
 	}
 
 	public  void consultarUsuario() {
-		Usuario usuario = llenarUsuario();
 		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
 		
 		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, txt_cedula.getText()),cabeceras);
