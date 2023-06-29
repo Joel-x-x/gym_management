@@ -237,5 +237,25 @@ public class MembresiaDAO {
 		}
 		
 	}
+
+	public boolean eliminar(int id) {
+
+		try {
+			String sentencia = "delete from membresia where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, id);
+				
+				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
 	
 }
