@@ -1,5 +1,7 @@
 use bdd_gym;
 
+SELECT * from usuario;
+
 insert into administrador(nombre, apellido, email, password, sesion_iniciada, super) values("wacho","wachin","wacho@gmai.com","1234",0,0);
 insert into cuenta(nombre_empresa, administrador_id) values("Sin nombre", 1);
 

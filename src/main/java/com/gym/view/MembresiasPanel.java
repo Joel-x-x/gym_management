@@ -277,10 +277,10 @@ public class MembresiasPanel extends JPanel {
 		usuarioController = new UsuarioController();
 		membresiaController = new MembresiaController();
 		        
-        comboBoxPlan.setBounds(30, 99, 235, 25);
+        comboBoxPlan.setBounds(30, 99, 218, 25);
         add(comboBoxPlan);
         
-        comboBoxClase.setBounds(304, 99, 218, 25);
+        comboBoxClase.setBounds(30, 150, 218, 25);
         add(comboBoxClase);
         
         JLabel lblNewLabel = new JLabel("MEMBRESIAS");
@@ -299,26 +299,26 @@ public class MembresiasPanel extends JPanel {
         		calcularPrecioTotal();
         	}
         });
-        textValorExtra.setBounds(30, 161, 235, 25);
+        textValorExtra.setBounds(30, 201, 218, 25);
         add(textValorExtra);
         textValorExtra.setColumns(10);
         
         JLabel lblNewLabel_2 = new JLabel("Valor Extra");
-        lblNewLabel_2.setBounds(30, 146, 72, 14);
+        lblNewLabel_2.setBounds(30, 186, 218, 14);
         add(lblNewLabel_2);
         
         JLabel lblNewLabel_3 = new JLabel("Clase");
-        lblNewLabel_3.setBounds(304, 84, 46, 14);
+        lblNewLabel_3.setBounds(30, 135, 46, 14);
         add(lblNewLabel_3);
         
         JLabel lblNewLabel_4 = new JLabel("VALOR TOTAL");
         lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel_4.setBounds(198, 188, 164, 64);
+        lblNewLabel_4.setBounds(91, 247, 164, 64);
         add(lblNewLabel_4);
         
         labelTotal = new JLabel("0");
         labelTotal.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        labelTotal.setBounds(240, 238, 101, 46);
+        labelTotal.setBounds(133, 297, 108, 46);
         add(labelTotal);
         
         btnAgregar = new JButton("Agregar");
@@ -333,7 +333,7 @@ public class MembresiasPanel extends JPanel {
         btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnAgregar.setBorder(null);
         btnAgregar.setBackground(new Color(46, 56, 64));
-        btnAgregar.setBounds(30, 309, 150, 30);
+        btnAgregar.setBounds(279, 330, 100, 30);
         add(btnAgregar);
         
         btnModificar = new JButton("Modificar");
@@ -347,7 +347,7 @@ public class MembresiasPanel extends JPanel {
         btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnModificar.setBorder(null);
         btnModificar.setBackground(new Color(46, 56, 64));
-        btnModificar.setBounds(198, 309, 150, 30);
+        btnModificar.setBounds(389, 330, 100, 30);
         add(btnModificar);
         
         btnEliminar = new JButton("Eliminar");
@@ -361,7 +361,7 @@ public class MembresiasPanel extends JPanel {
         btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminar.setBorder(null);
         btnEliminar.setBackground(new Color(46, 56, 64));
-        btnEliminar.setBounds(370, 309, 150, 30);
+        btnEliminar.setBounds(499, 330, 100, 30);
         add(btnEliminar);
         
         JLabel lblNewLabel_5 = new JLabel("Buscar por cédula:");
@@ -379,7 +379,7 @@ public class MembresiasPanel extends JPanel {
         	public void mouseClicked(MouseEvent e) {
         	}
         });
-        scrollPane_membresias_membresias.setBounds(532, 41, 468, 233);
+        scrollPane_membresias_membresias.setBounds(279, 41, 765, 263);
         add(scrollPane_membresias_membresias);
         
         tableMembresias = new JTable();
@@ -397,7 +397,7 @@ public class MembresiasPanel extends JPanel {
         scrollPane_membresias_membresias.setViewportView(tableMembresias);
         
         JScrollPane scrollPane_usuarios_membresias = new JScrollPane();
-        scrollPane_usuarios_membresias.setBounds(30, 424, 970, 292);
+        scrollPane_usuarios_membresias.setBounds(30, 424, 1014, 292);
         add(scrollPane_usuarios_membresias);
         
         tableUsuarios = new JTable();
@@ -426,6 +426,12 @@ public class MembresiasPanel extends JPanel {
         btnBuscar.setBounds(370, 388, 150, 25);
         add(btnBuscar);
         
+        JLabel lblNewLabel_5_1 = new JLabel("¡ Selecciona un usuario !");
+        lblNewLabel_5_1.setForeground(new Color(0, 0, 0));
+        lblNewLabel_5_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel_5_1.setBounds(87, 346, 182, 14);
+        add(lblNewLabel_5_1);
+        
         // Listar Usuarios
         listarUsuarios();
         
@@ -433,5 +439,4 @@ public class MembresiasPanel extends JPanel {
         listarClase();
         bloquearBotones();
     }
-
 }

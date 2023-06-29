@@ -28,6 +28,10 @@ public class UsuarioDAO {
 	
 	public boolean guardar(Usuario usuario) {
 		
+		if(usuario.getFecha_nacimiento().equals("")) {
+			usuario.setFecha_nacimiento("1800-1-1");
+		}
+		
 		try {
 			String sentencia = "insert into usuario(nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id) "
 					+ "values(?,?,?,?,?,?,?,?,?);";
@@ -55,6 +59,10 @@ public class UsuarioDAO {
 	}
 	
 	public boolean modificar(Usuario usuario) {
+		
+		if(usuario.getFecha_nacimiento().equals("")) {
+			usuario.setFecha_nacimiento("1800-1-1");
+		}
 		
 		try {
 			String sentencia = "update usuario set nombre = ?, apellido = ?, fecha_nacimiento = ?,"

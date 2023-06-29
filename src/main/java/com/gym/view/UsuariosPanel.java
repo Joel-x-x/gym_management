@@ -46,6 +46,7 @@ public class UsuariosPanel extends JPanel {
 	private JButton btnEliminarFisico;
 	private ButtonGroup buttonGroup;
 	private JTextField textEmail;
+	private JLabel lblNewLabel_5;
 	
 
 	
@@ -523,6 +524,12 @@ public class UsuariosPanel extends JPanel {
         btnLimpiar.setBackground(new Color(46, 56, 64));
         btnLimpiar.setBounds(385, 394, 89, 25);
         add(btnLimpiar);
+        
+        lblNewLabel_5 = new JLabel("¡ Selecciona un usuario !");
+        lblNewLabel_5.setForeground(Color.BLACK);
+        lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel_5.setBounds(527, 160, 182, 14);
+        add(lblNewLabel_5);
         
         // Listar Usuarios
         listar();

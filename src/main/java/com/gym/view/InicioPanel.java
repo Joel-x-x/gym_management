@@ -25,7 +25,7 @@ public class InicioPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
     private JTable tabla_registro;
     private JTextField txt_cedula;
-    int codigo=0;
+    private int idSeleccionadoUsuario;
     String codigo_id ="";
   
     public static DefaultTableModel modelo;
@@ -74,10 +74,12 @@ public class InicioPanel extends JPanel {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		//abotones();
-        		 codigo = (int )tabla_registro.getValueAt(tabla_registro.getSelectedRow(),0);
-        		System.out.println(codigo);
+        		idSeleccionadoUsuario = (int )tabla_registro.getValueAt(tabla_registro.getSelectedRow(),0);
+        		
         		Registro registro = llenarRegistro();
+        		
         		llenarTabla_registro();
+        		
         		botones_ides();
         		
         	}
@@ -153,6 +155,12 @@ public class InicioPanel extends JPanel {
         btn_buscar.setBounds(333, 88, 150, 25);
         add(btn_buscar);
         
+        JLabel lblNewLabel_5_1 = new JLabel("¡ Selecciona un usuario !");
+        lblNewLabel_5_1.setForeground(Color.BLACK);
+        lblNewLabel_5_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel_5_1.setBounds(153, 370, 182, 14);
+        add(lblNewLabel_5_1);
+        
         listarUsuarios();
     }
 	
@@ -163,7 +171,7 @@ public class InicioPanel extends JPanel {
 		
 	}
 	private Registro llenarRegistro() {
-		return new Registro(codigo);
+		return new Registro(idSeleccionadoUsuario);
 	}
 	private Registro llenarRegistro_id() {
 		return new Registro(codigo_id);
@@ -180,7 +188,7 @@ public class InicioPanel extends JPanel {
 	
 	public  void llenarTabla_registro() {
 		Registro registro = llenarRegistro();
-		String[] cabeceras = {"Id","Fecha de entrada","Fecha de salida"};
+		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Clase", "Plan"};
 		
 		modelo1 = new DefaultTableModel(registroController.consulta(registro),cabeceras);
 		table.setModel(modelo1);
@@ -195,12 +203,11 @@ public class InicioPanel extends JPanel {
 			Registro registro = llenarRegistro();
 			boolean salida=false;
 		for(int i=0;i<registroController.consulta(registro).length;i++) {
-			if(registroController.consulta(registro)[i][2]==null) {
+			if(registroController.consulta(registro)[i][3]==null) {
 				
 				salida = true;
 				codigo_id=registroController.consulta(registro)[i][0].toString();
 			}
-			System.out.println(" impresion :"+String.valueOf(registroController.consulta(registro)[i][2]));
 		}
 		if(salida) {
 			btn_salida.setEnabled(true);

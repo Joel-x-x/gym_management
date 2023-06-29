@@ -56,21 +56,26 @@ public class RegistroDAO {
 			Object obj[][]= null;
 			String sentencia="";
 			try {
-					sentencia = "SELECT * FROM registro where usuario_id =  "+registro.getUsuario();
+					sentencia = "SELECT r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase from membresia m"
+							+ " join usuario u on u.id = m.usuario_id"
+							+ " join plan p on p.id = m.plan_id"
+							+ " join clase c on c.id = m.clase_id"
+							+ " join registro r on r.usuario_id = u.id where r.usuario_id = "+registro.getUsuario();
 			    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
 			    	resultSet.last();
 			    	int nf=resultSet.getRow();
-					obj =new Object[nf][3];
+					obj =new Object[nf][6];
 					resultSet.beforeFirst();
 					int f=0;
 			        while (resultSet.next()) {
 			            obj[f][0] = resultSet.getObject(1);
 			            obj[f][1] = resultSet.getObject(2);
 			            obj[f][2] = resultSet.getObject(3);
+			            obj[f][3] = resultSet.getObject(4);
+			            obj[f][4] = resultSet.getObject(5);
+			            obj[f][5] = resultSet.getObject(6);
 			            
-			            System.out.println("JHJKUH " + obj[0][1]);
-			            System.out.println(obj[0][0]);
 			            f++;
 			        }
 			    }
