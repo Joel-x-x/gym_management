@@ -283,21 +283,17 @@ public class Membresia {
 	    Calendar calendar = new FechasUtilidades().stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, -this.getAnticipacion());
+	    calendar.add(Calendar.DAY_OF_MONTH, - this.getAnticipacion());
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();
-	    
-	    // Establecer la hora, los minutos, los segundos y los milisegundos a cero para evitar discrepancias
-	    fechaActual.set(Calendar.HOUR_OF_DAY, 0);
-	    fechaActual.set(Calendar.MINUTE, 0);
-	    fechaActual.set(Calendar.SECOND, 0);
-	    fechaActual.set(Calendar.MILLISECOND, 0);
-	    
+
 	    // Comparar la fecha resultante con la fecha actual
-	    if (fechaActual.before(calendar)) {
+	    if (calendar.before(fechaActual)) {
+	    	System.out.println("true");
 	        return true;
 	    } else {
+	    	System.out.println("false");
 	        return false;
 	    }
 	}

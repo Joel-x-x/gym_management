@@ -152,7 +152,8 @@ public class RegistroDAO {
 			    		+ " join plan p on p.id = m.plan_id"
 			    		+ " join clase c on c.id = m.clase_id"
 			    		+ " where r.usuario_id = ?"
-			    		+ " order by r.id desc";
+			    		+ " order by r.id desc"
+			    		+ " limit 30";
 
 			    final PreparedStatement statement = con.prepareStatement(sentencia);
 
