@@ -17,11 +17,11 @@ public class RegistroController {
 	public Object[][] consultar(int usuario_id) {
 		var listaRegistros = registroDAO.consultar(usuario_id);
 		
-		return new ArrayUtilidades().toMatrizRegistro(listaRegistros);
+		return new ArrayUtilidades().toMatrizMembresiaRegistro(listaRegistros);
 	}
 	
 	public List<Registro> consultarLista(int usuario_id) {
-		return registroDAO.consultar(usuario_id);
+		return registroDAO.consultarRegistro(usuario_id);
 	}
 	
 	public boolean registrarSalida(int id) {

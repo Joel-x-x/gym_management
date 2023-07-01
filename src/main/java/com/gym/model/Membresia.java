@@ -20,6 +20,12 @@ public class Membresia {
     private int activo;
     private int anticipacion;
     
+    private String nombreUsuario;
+    private String fecha_entrada;
+    private String fecha_salida;
+    private int membresia_id;
+    
+    
     private MembresiaController membresiaController;
     
     public int getAnticipacion() {
@@ -106,6 +112,61 @@ public class Membresia {
 		this.clase = clase;
 		this.activo = activo;
 		this.anticipacion = anticipacion;
+	}
+	
+	// Listar Registro
+	public Membresia(int id, String nombreUsuario, String fecha_entrada, String fecha_salida, String plan, String clase, int membresia_id, String fecha_inicio, String fecha_fin, int activo, int anticipacion) {
+		this.id = id;
+		this.nombreUsuario = nombreUsuario;
+		this.fecha_entrada = fecha_entrada;
+		this.fecha_salida = fecha_salida;
+		this.plan = plan;
+		this.clase = clase;
+		this.membresia_id = membresia_id;
+		this.fecha_inicio = fecha_inicio;
+		this.fecha_fin = fecha_fin;
+		this.activo = activo;
+		this.anticipacion = anticipacion;
+	}
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getFecha_entrada() {
+		return fecha_entrada;
+	}
+
+	public void setFecha_entrada(String fecha_entrada) {
+		this.fecha_entrada = fecha_entrada;
+	}
+
+	public String getFecha_salida() {
+		return fecha_salida;
+	}
+
+	public void setFecha_salida(String fecha_salida) {
+		this.fecha_salida = fecha_salida;
+	}
+
+	public int getMembresia_id() {
+		return membresia_id;
+	}
+
+	public void setMembresia_id(int membresia_id) {
+		this.membresia_id = membresia_id;
+	}
+
+	public MembresiaController getMembresiaController() {
+		return membresiaController;
+	}
+
+	public void setMembresiaController(MembresiaController membresiaController) {
+		this.membresiaController = membresiaController;
 	}
 
 	public String getPlan() {
@@ -251,8 +312,6 @@ public class Membresia {
 	
 	// Valida membresia y devuelve un mensaje si activa o caducada
 	public String mensajeMembresia() {
-		
-		this.cambiarActivoMembresia();
 		
 		if(this.validarMembresia()) {
 			return "Activa";

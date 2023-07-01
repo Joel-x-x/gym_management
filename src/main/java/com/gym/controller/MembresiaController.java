@@ -25,7 +25,6 @@ public class MembresiaController {
 	}
 
 	public Object[][] listar(int usuario_id) {
-		System.out.println("Hol");
 		var listaMembresia = membresiaDAO.listar(usuario_id);
 		
 		return new ArrayUtilidades().toMatrizMembresia(listaMembresia);
@@ -37,6 +36,10 @@ public class MembresiaController {
 
 	public Membresia consulta(int id, int usuario_id) {
 		return membresiaDAO.consulta(id, usuario_id);
+	}
+	
+	public Membresia consultaUltimaMembresia(int usuario_id) {
+		return membresiaDAO.consultaUltimaMembresia(usuario_id);
 	}
 	
 	// Consulta si ese usuario ya tiene una membresia activa

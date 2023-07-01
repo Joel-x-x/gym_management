@@ -87,6 +87,10 @@ public class MembresiasPanel extends JPanel {
 	
 	private void guardar() {
 		
+		// Verificar caducidad
+		Membresia membresiaVerificar = membresiaController.consultaUltimaMembresia(idSeleccionado);
+		membresiaVerificar.cambiarActivoMembresia();
+		
 		if(membresiaController.consultaActivo(idSeleccionado)) {
 			JOptionPane.showMessageDialog(null, "Ya existe una membresia activa, eliminala o espera a que caduque");
 			return;

@@ -22,6 +22,8 @@ public class RegistroDAO {
 			
 			var membresia = this.consultaMembresia(usuario_id);
 			
+			System.out.println(membresia.getId());
+			
 			try {
 				String sentencia = "insert into registro(usuario_id, membresia_id) values(?, ?)";
 				
@@ -93,17 +95,18 @@ public class RegistroDAO {
 			
 		}
 		
-		public List<Registro> consultar(int usuario_id) {
+		public List<Registro> consultarRegistro(int usuario_id) {
 			
 			List<Registro> resultado = new ArrayList<>();
 			
 			try {
-			    String sentencia = "SELECT r.*, u.id, u.nombre, p.nombre, c.clase, m.* from membresia m"
-			        + " join usuario u on u.id = m.usuario_id"
-			        + " join plan p on p.id = m.plan_id"
-			        + " join clase c on c.id = m.clase_id"
-			        + " join registro r on r.usuario_id = u.id where r.usuario_id = ? and u.id = m.usuario_id"
-			        + " order by r.id desc";
+			    String sentencia = "select r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre as plan, c.clase, m.* from registro r"
+			    		+ " join usuario u on u.id = r.usuario_id"
+			    		+ " join membresia m on m.id = r.membresia_id"
+			    		+ " join plan p on p.id = m.plan_id"
+			    		+ " join clase c on c.id = m.clase_id"
+			    		+ " where r.usuario_id = ?"
+			    		+ " order by r.id desc";
 
 			    final PreparedStatement statement = con.prepareStatement(sentencia);
 
@@ -121,10 +124,59 @@ public class RegistroDAO {
 			                    resultSet.getString("r.fecha_salida"),
 			                    usuario_id,
 			                    resultSet.getString("u.nombre"),
-			                    resultSet.getString("p.nombre"),
+			                    resultSet.getString("p.plan"),
 			                    resultSet.getString("c.clase"),
 			                    resultSet.getInt("m.activo")
 			                ));
+			            }
+			        }
+			    }
+
+			} catch (SQLException e) {
+			    throw new RuntimeException(e);
+			}
+
+			return resultado;
+
+
+		}
+		
+		public List<Membresia> consultar(int usuario_id) {
+			
+			List<Membresia> resultado = new ArrayList<>();
+			
+			try {
+			    String sentencia = "select r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre as plan, c.clase, m.* from registro r"
+			    		+ " join usuario u on u.id = r.usuario_id"
+			    		+ " join membresia m on m.id = r.membresia_id"
+			    		+ " join plan p on p.id = m.plan_id"
+			    		+ " join clase c on c.id = m.clase_id"
+			    		+ " where r.usuario_id = ?"
+			    		+ " order by r.id desc";
+
+			    final PreparedStatement statement = con.prepareStatement(sentencia);
+
+			    try (statement) {
+			        statement.setInt(1, usuario_id);
+
+			        final ResultSet resultSet = statement.executeQuery();
+
+			        try (resultSet) {
+			        	
+			            while (resultSet.next()) {
+			            	
+			                resultado.add(new Membresia(
+			                    resultSet.getInt("r.id"),
+			                    resultSet.getString("u.nombre"),
+			                    resultSet.getString("r.fecha_entrada"),
+			                    resultSet.getString("r.fecha_salida"),
+			                    resultSet.getString("p.plan"),
+			                    resultSet.getString("c.clase"),
+			                    resultSet.getInt("m.id"),
+			                    resultSet.getString("m.fecha_inicio"),
+			                    resultSet.getString("m.fecha_fin"),
+			                    resultSet.getInt("m.activo"),
+			                    resultSet.getInt("m.anticipacion")));
 			            }
 			        }
 			    }

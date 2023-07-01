@@ -1,25 +1,49 @@
 use bdd_gym;
 
-SELECT u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase from membresia m
-join usuario u on u.id = m.usuario_id
+SELECT m.*, p.nombre, c.clase
+FROM membresia m
+JOIN plan p ON p.id = m.plan_id
+JOIN clase c ON c.id = m.clase_id
+WHERE m.id = (
+    SELECT MAX(id) FROM membresia WHERE usuario_id = 11
+)
+AND m.usuario_id = 11
+GROUP BY m.id, p.nombre, c.clase;
+
+
+SELECT MAX(id) FROM membresia WHERE usuario_id = 11;
+
+select r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre as plan, c.clase, m.* from registro r
+join usuario u on u.id = r.usuario_id
+join membresia m on m.id = r.membresia_id
 join plan p on p.id = m.plan_id
-join clase c on c.id = m.clase_id
-join registro r on r.usuario_id = u.id where r.usuario_id = 11
-order by r.fecha_salida desc;
+join clase c on c.id = m.clase_id where r.usuario_id = 11
+order by r.id desc;
+
+select r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre as plan, c.clase, m.* from registro 
+join usuario u on u.id = r.usuario_id 
+join membresia m on m.id = r.membresia_id 
+join plan p on p.id = m.plan_id 
+join clase c on c.id = m.clase_id 
+order by r.id desc;
 
 select * from membresia;
-update membresia set fecha_fin = '2023-06-25 23:34:54' where id = 23;
-select * from registro;
+
+update membresia set fecha_fin = '2023-06-25 23:34:54' where id = 26;
+select * from registro order by id desc;
 delete from registro where membresia_id = 24;
 select * from administrador;
 
 select * from usuario;
 select * from registro;
 
-SELECT r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase, m.* 
+delete from registro where usuario_id = 11;
+
+SELECT r.id, u.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase, m.* 
 from membresia m join usuario u on u.id = m.usuario_id 
 join plan p on p.id = m.plan_id join clase c on c.id = m.clase_id 
-join registro r on r.usuario_id = u.id where r.usuario_id = 11 and r.membresia_id = 24;
+join registro r on r.usuario_id = u.id where r.usuario_id = 11 and u.id = m.usuario_id
+order by r.id desc;
 
 delete from registro where usuario_id in (2,7,8);
 
