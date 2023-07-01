@@ -105,6 +105,7 @@ public class MembresiaDAO {
 					+ " join plan p on p.id = m.plan_id"
 					+ " join clase c on c.id = m.clase_id"
 					+ " where usuario_id = ?";
+			
 			List<Membresia> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
@@ -128,7 +129,9 @@ public class MembresiaDAO {
 								resultSet.getFloat("m.valor_total"),
 								resultSet.getInt("m.administrador_id"),
 								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase")
+								resultSet.getString("c.clase"),
+								resultSet.getInt("m.activo"),
+								resultSet.getInt("m.anticipacion")
 								));
 					}
 					
@@ -145,8 +148,8 @@ public class MembresiaDAO {
 	public boolean guardar(Membresia membresia) {
 		
 		try {
-			String sentencia = "insert into membresia(fecha_fin, usuario_id, plan_id, clase_id, valor_extra, valor_total, administrador_id) "
-					+ "values(?,?,?,?,?,?,?)";
+			String sentencia = "insert into membresia(fecha_fin, usuario_id, plan_id, clase_id, valor_extra, valor_total, activo, anticipacion, administrador_id) "
+					+ "values(?,?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -158,7 +161,9 @@ public class MembresiaDAO {
 				statement.setInt(4, membresia.getClase_id());
 				statement.setFloat(5, membresia.getValor_extra());
 				statement.setFloat(6, membresia.getValor_total());
-				statement.setInt(7, membresia.getAdministrador_id());
+				statement.setInt(7, membresia.getActivo());
+				statement.setInt(8, membresia.getAnticipacion());
+				statement.setInt(9, membresia.getAdministrador_id());
 					
 					return toBoolean(statement.executeUpdate());
 			}
@@ -201,7 +206,9 @@ public class MembresiaDAO {
 								resultSet.getFloat("m.valor_total"),
 								resultSet.getInt("m.administrador_id"),
 								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase")
+								resultSet.getString("c.clase"),
+								resultSet.getInt("m.activo"),
+								resultSet.getInt("m.anticipacion")
 								);
 				}
 			}
@@ -215,7 +222,7 @@ public class MembresiaDAO {
 	public boolean modificar(Membresia membresia) {
 
 		try {
-			String sentencia = "update membresia set fecha_fin = ?, plan_id = ?, clase_id = ?, valor_extra = ?, valor_total = ?"
+			String sentencia = "update membresia set fecha_fin = ?, plan_id = ?, clase_id = ?, valor_extra = ?, valor_total = ?, activo = ?, anticipacion = ?"
 					+ " where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
@@ -227,7 +234,9 @@ public class MembresiaDAO {
 				statement.setInt(3, membresia.getClase_id());
 				statement.setFloat(4, membresia.getValor_extra());
 				statement.setFloat(5, membresia.getValor_total());
-				statement.setInt(6, membresia.getId());
+				statement.setFloat(6, membresia.getActivo());
+				statement.setFloat(7, membresia.getAnticipacion());
+				statement.setInt(8, membresia.getId());
 					
 					return toBoolean(statement.executeUpdate());
 			}
@@ -250,6 +259,51 @@ public class MembresiaDAO {
 				statement.setInt(1, id);
 				
 				return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public boolean modificarActivo(int id, int activo) {
+
+		try {
+			String sentencia = "update membresia set activo = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, activo);
+				statement.setFloat(2, id);
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public boolean consultaActivo(int usuario_id) {
+
+		try {
+			String sentencia = "select activo from membresia where usuario_id = ? and activo = 1";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+						return resultSet.next();
+				}
 			}
 			
 		} catch(SQLException e) {

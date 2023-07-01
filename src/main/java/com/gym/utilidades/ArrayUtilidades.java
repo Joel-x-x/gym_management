@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gym.model.Fisico;
 import com.gym.model.Membresia;
+import com.gym.model.Registro;
 import com.gym.model.Usuario;
 
 public class ArrayUtilidades {
@@ -46,18 +47,42 @@ public class ArrayUtilidades {
 	
 	public Object[][] toMatrizMembresia(List<Membresia> lista) {
 		int contador = 0;
-		Object[][] matrizMembresia =  new Object[lista.size()][5];
+		Object[][] matrizMembresia =  new Object[lista.size()][7];
     	
     	for(Membresia membresia : lista) {
+    		
     		matrizMembresia[contador][0] = membresia.getId();
     		matrizMembresia[contador][1] = membresia.getFecha_fin();
     		matrizMembresia[contador][2] = membresia.getPlan();
     		matrizMembresia[contador][3] = membresia.getClase();
-    		matrizMembresia[contador][4] = membresia.getValor_total();
+    		matrizMembresia[contador][4] = membresia.mensajeMembresia();
+    		matrizMembresia[contador][5] = membresia.getAnticipacion();
+    		matrizMembresia[contador][6] = membresia.getValor_total();
 
     		contador++;
     	}
     	return matrizMembresia;
+	}
+
+	public Object[][] toMatrizRegistro(List<Registro> lista) {
+		int contador = 0;
+		Object[][] matrizRegistro =  new Object[lista.size()][7];
+    	
+    	for(Registro registro : lista) {
+    		
+    		
+    		matrizRegistro[contador][0] = registro.getId();
+    		matrizRegistro[contador][1] = registro.getNombreUsuario();
+    		matrizRegistro[contador][2] = registro.getFecha_entrada();
+    		matrizRegistro[contador][3] = registro.getFecha_salida();
+    		matrizRegistro[contador][4] = registro.getNombrePlan();
+    		matrizRegistro[contador][5] = registro.getClase();
+    		matrizRegistro[contador][6] = registro.mensajeMembresia();
+
+    		contador++;
+    	}
+    	
+    	return matrizRegistro;
 	}
 	
 }

@@ -150,13 +150,14 @@ public class BarraPanel extends JPanel {
         public CircularPanel() {
             try {
                 // Carga la imagen desde un archivo o recurso
-                URL imageUrl = getClass().getResource("pesas 1.jpg");
+                URL imageUrl = getClass().getResource("sapo8.jpg");
                 image = ImageIO.read(imageUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            setBounds(58, 32, 80, 83);
+            setBounds(48, 32, 100, 100);
+            //setBounds(58, 32, 175, 175);
         }
 
         @Override

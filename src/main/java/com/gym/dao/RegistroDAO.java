@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.gym.model.Membresia;
 import com.gym.model.Registro;
+import com.gym.utilidades.Utilidades;
 
 public class RegistroDAO {
 	Connection con;
@@ -15,17 +18,21 @@ public class RegistroDAO {
 			this.con  = con;
 		}
 	
-		public Integer guardar(Registro registro) {
+		public boolean registrar(int usuario_id) {
+			
+			var membresia = this.consultaMembresia(usuario_id);
 			
 			try {
-				String sentencia = "insert into registro(usuario_id) values(?);";
+				String sentencia = "insert into registro(usuario_id, membresia_id) values(?, ?)";
 				
 				PreparedStatement statement = con.prepareStatement(sentencia);
 				
 				try(statement) {
-					statement.setInt(1, registro.getUsuario());
+					statement.setInt(1, usuario_id);
+					statement.setInt(2, membresia.getId());
 					
-					return statement.executeUpdate();
+					// Transforma el 0 o 1 a booleano
+					return  new Utilidades().toBoolean(statement.executeUpdate());
 				}
 				
 			} catch(SQLException e) {
@@ -33,17 +40,32 @@ public class RegistroDAO {
 			}
 			
 		}
-		public Integer guardar_salida(Registro registro) {
-			
+		
+		public Membresia consultaMembresia(int usuario_id) {
+
 			try {
-				String sentencia = "update registro set fecha_salida = current_timestamp where id = ?;";
+				String sentencia = "select * from membresia where usuario_id = ? and activo = 1";
 				
 				PreparedStatement statement = con.prepareStatement(sentencia);
 				
 				try(statement) {
-					statement.setInt(1, registro.getId());
+					statement.setInt(1, usuario_id);
 					
-					return statement.executeUpdate();
+					final ResultSet resultSet = statement.executeQuery();
+					
+					try(resultSet) {
+						
+						resultSet.next();
+						
+						return  new Membresia(
+								resultSet.getInt("id"),
+								resultSet.getString("fecha_inicio"),
+								resultSet.getString("fecha_fin"),
+								resultSet.getInt("usuario_id"),
+								resultSet.getInt("activo"),
+								resultSet.getInt("anticipacion")
+								);
+					}
 				}
 				
 			} catch(SQLException e) {
@@ -51,41 +73,69 @@ public class RegistroDAO {
 			}
 			
 		}
-		public Object[][] consultar(Registro registro) {
-			Object obj[][]= null;
-			String sentencia="";
+		
+		public boolean registrarSalida(int id) {
+			
 			try {
-					sentencia = "SELECT r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase from membresia m"
-							+ " join usuario u on u.id = m.usuario_id"
-							+ " join plan p on p.id = m.plan_id"
-							+ " join clase c on c.id = m.clase_id"
-							+ " join registro r on r.usuario_id = u.id where r.usuario_id = "+registro.getUsuario();
-			    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-			    	resultSet.last();
-			    	int nf=resultSet.getRow();
-					obj =new Object[nf][6];
-					resultSet.beforeFirst();
-					int f=0;
-			        while (resultSet.next()) {
-			            obj[f][0] = resultSet.getObject(1);
-			            obj[f][1] = resultSet.getObject(2);
-			            obj[f][2] = resultSet.getObject(3);
-			            obj[f][3] = resultSet.getObject(4);
-			            obj[f][4] = resultSet.getObject(5);
-			            obj[f][5] = resultSet.getObject(6);
-			            
-			            f++;
+				String sentencia = "update registro set fecha_salida = current_timestamp where id = ?";
+				
+				PreparedStatement statement = con.prepareStatement(sentencia);
+				
+				try(statement) {
+					statement.setInt(1, id);
+					
+					return new Utilidades().toBoolean(statement.executeUpdate());
+				}
+				
+			} catch(SQLException e) {
+				throw new RuntimeException(e);
+			}
+			
+		}
+		
+		public List<Registro> consultar(int usuario_id) {
+			
+			List<Registro> resultado = new ArrayList<>();
+			
+			try {
+			    String sentencia = "SELECT r.*, u.id, u.nombre, p.nombre, c.clase, m.* from membresia m"
+			        + " join usuario u on u.id = m.usuario_id"
+			        + " join plan p on p.id = m.plan_id"
+			        + " join clase c on c.id = m.clase_id"
+			        + " join registro r on r.usuario_id = u.id where r.usuario_id = ? and u.id = m.usuario_id"
+			        + " order by r.id desc";
+
+			    final PreparedStatement statement = con.prepareStatement(sentencia);
+
+			    try (statement) {
+			        statement.setInt(1, usuario_id);
+
+			        final ResultSet resultSet = statement.executeQuery();
+
+			        try (resultSet) {
+			            while (resultSet.next()) {
+			            	
+			                resultado.add(new Registro(
+			                    resultSet.getInt("r.id"),
+			                    resultSet.getString("r.fecha_entrada"),
+			                    resultSet.getString("r.fecha_salida"),
+			                    usuario_id,
+			                    resultSet.getString("u.nombre"),
+			                    resultSet.getString("p.nombre"),
+			                    resultSet.getString("c.clase"),
+			                    resultSet.getInt("m.activo")
+			                ));
+			            }
 			        }
 			    }
+
 			} catch (SQLException e) {
-			    e.printStackTrace();
+			    throw new RuntimeException(e);
 			}
 
-			return obj;
+			return resultado;
 
-				
-				
+
 		}
 		
 		

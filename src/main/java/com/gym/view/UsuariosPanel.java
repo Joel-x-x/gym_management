@@ -337,7 +337,7 @@ public class UsuariosPanel extends JPanel {
         lblFsico.setBounds(527, 30, 225, 37);
         add(lblFsico);
         
-        JLabel lblNewLabel_1_4_1 = new JLabel("Peso");
+        JLabel lblNewLabel_1_4_1 = new JLabel("Peso (Kg)");
         lblNewLabel_1_4_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_4_1.setBounds(527, 78, 125, 14);
         add(lblNewLabel_1_4_1);
@@ -347,7 +347,7 @@ public class UsuariosPanel extends JPanel {
         textPeso.setBounds(527, 94, 225, 25);
         add(textPeso);
         
-        JLabel lblNewLabel_1_1_1_1 = new JLabel("Altura");
+        JLabel lblNewLabel_1_1_1_1 = new JLabel("Altura (m)");
         lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_1_1_1.setBounds(777, 78, 109, 14);
         add(lblNewLabel_1_1_1_1);
@@ -478,7 +478,7 @@ public class UsuariosPanel extends JPanel {
         
         JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por cédula:");
         lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_2.setBounds(30, 405, 99, 14);
+        lblNewLabel_1_4_2.setBounds(30, 400, 99, 14);
         add(lblNewLabel_1_4_2);
         
         JLabel lblNewLabel_1_4_3 = new JLabel("yyyy-mm-dd");
@@ -525,7 +525,7 @@ public class UsuariosPanel extends JPanel {
         btnLimpiar.setBounds(385, 394, 89, 25);
         add(btnLimpiar);
         
-        lblNewLabel_5 = new JLabel("¡ Selecciona un usuario !");
+        lblNewLabel_5 = new JLabel("Selecciona un usuario");
         lblNewLabel_5.setForeground(Color.BLACK);
         lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel_5.setBounds(527, 160, 182, 14);

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.gym.model.Membresia;
 import com.gym.model.Usuario;
 
 
@@ -208,7 +209,7 @@ public class UsuarioDAO {
 		
 	}
 
-	public Usuario consultar(int id, int administrador_id) {
+	public Usuario consulta(int id, int administrador_id) {
 		
 		try {
 			String sentencia = "select * from usuario where id = ? and administrador_id = ?";
@@ -245,7 +246,7 @@ public class UsuarioDAO {
 		
 	}
 	
-	public List<Usuario> consultarUsuario(int administrador_id, String cedula) {
+	public List<Usuario> consultar(int administrador_id, String cedula) {
 		
 		try {
 			String sentencia = "";
@@ -295,48 +296,38 @@ public class UsuarioDAO {
 		}
 		
 	}
-	
- 	public Object[][] consultar(Usuario usuario) {
-		Object obj[][]= null;
-		//obj= new Object[1][6];
-		String sentencia="";
+
+	public Membresia consultaMembresia(int usuario_id) {
 
 		try {
-			if(usuario.getCedula().equals("")) {
-				sentencia = "SELECT * FROM usuario  ";
+			String sentencia = "select * from membresia where usuario_id = ? and activo = 1";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, usuario_id);
 				
-			}else {
-				sentencia = "SELECT * FROM usuario where cedula =  "+usuario.getCedula();
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					return  new Membresia(
+							resultSet.getInt("id"),
+							resultSet.getString("fecha_inicio"),
+							resultSet.getString("fecha_fin"),
+							resultSet.getInt("usuario_id"),
+							resultSet.getInt("activo"),
+							resultSet.getInt("anticipacion")
+							);
 				}
-		    
-		    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-		    //statement.setString(1, usuario.getCedula().toString());
-		    
-		    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-		    	resultSet.last();
-		    	int nf=resultSet.getRow();
-				obj =new Object[nf][7];
-				resultSet.beforeFirst();
-				int f=0;
-		        while (resultSet.next()) {
-		            obj[f][0] = resultSet.getObject(1);
-		            obj[f][1] = resultSet.getObject(2);
-		            obj[f][2] = resultSet.getObject(3);
-		            obj[f][3] = resultSet.getObject(4);
-		            obj[f][4] = resultSet.getObject(5);
-		            obj[f][5] = resultSet.getObject(6);
-		            obj[f][6] = resultSet.getObject(7);
-		            System.out.println("JHJKUH " + obj[0][1]);
-		            System.out.println(obj[0][0]);
-		            f++;
-		        }
-		    }
-		} catch (SQLException e) {
-		    e.printStackTrace();
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
 		}
-
-		return obj;
-
+		
 	}
 	
 }

@@ -13,7 +13,7 @@ public class MembresiaController {
 	private MembresiaDAO membresiaDAO;
 	
 	public MembresiaController() {
-		membresiaDAO = new MembresiaDAO(new ConnectionFactory().conectar());
+		membresiaDAO = new MembresiaDAO( ConnectionFactory.conectar());
 	}
 	
 	public List<Plan> listarPlan(int administrador_id) {
@@ -25,6 +25,7 @@ public class MembresiaController {
 	}
 
 	public Object[][] listar(int usuario_id) {
+		System.out.println("Hol");
 		var listaMembresia = membresiaDAO.listar(usuario_id);
 		
 		return new ArrayUtilidades().toMatrizMembresia(listaMembresia);
@@ -37,9 +38,18 @@ public class MembresiaController {
 	public Membresia consulta(int id, int usuario_id) {
 		return membresiaDAO.consulta(id, usuario_id);
 	}
+	
+	// Consulta si ese usuario ya tiene una membresia activa
+	public boolean consultaActivo(int usuario_id) {
+		return membresiaDAO.consultaActivo(usuario_id);
+	}
 
 	public boolean modificar(Membresia membresia) {
 		return membresiaDAO.modificar(membresia);
+	}
+	
+	public boolean modificarActivo(int id, int activo) {
+		return membresiaDAO.modificarActivo(id, activo);
 	}
 
 	public boolean eliminar(int id) {

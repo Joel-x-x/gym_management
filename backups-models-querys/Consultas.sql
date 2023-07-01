@@ -1,6 +1,27 @@
 use bdd_gym;
 
-SELECT * from usuario;
+SELECT u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase from membresia m
+join usuario u on u.id = m.usuario_id
+join plan p on p.id = m.plan_id
+join clase c on c.id = m.clase_id
+join registro r on r.usuario_id = u.id where r.usuario_id = 11
+order by r.fecha_salida desc;
+
+select * from membresia;
+update membresia set fecha_fin = '2023-06-25 23:34:54' where id = 23;
+select * from registro;
+delete from registro where membresia_id = 24;
+select * from administrador;
+
+select * from usuario;
+select * from registro;
+
+SELECT r.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase, m.* 
+from membresia m join usuario u on u.id = m.usuario_id 
+join plan p on p.id = m.plan_id join clase c on c.id = m.clase_id 
+join registro r on r.usuario_id = u.id where r.usuario_id = 11 and r.membresia_id = 24;
+
+delete from registro where usuario_id in (2,7,8);
 
 insert into administrador(nombre, apellido, email, password, sesion_iniciada, super) values("wacho","wachin","wacho@gmai.com","1234",0,0);
 insert into cuenta(nombre_empresa, administrador_id) values("Sin nombre", 1);

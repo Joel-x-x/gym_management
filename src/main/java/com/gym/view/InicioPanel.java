@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.gym.controller.MembresiaController;
 import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
-import com.gym.model.Registro;
-import com.gym.model.Usuario;
+import com.gym.model.Membresia;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -20,16 +20,16 @@ import java.awt.event.MouseEvent;
 public class InicioPanel extends JPanel {
 	UsuarioController usuarioController;
 	RegistroController registroController;
+	MembresiaController membresiaController;
 	private int administrador_id; 
 
 	private static final long serialVersionUID = 1L;
-    private JTable tabla_registro;
+    private JTable tableUsuarios;
     private JTextField txt_cedula;
     private int idSeleccionadoUsuario;
-    String codigo_id ="";
+    private int idUltimoRegistro;
   
     public static DefaultTableModel modelo;
-    public static DefaultTableModel modelo1;
     private JTable table;
     private JButton btn_entrada;
     private JButton btn_salida;
@@ -38,21 +38,76 @@ public class InicioPanel extends JPanel {
 		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
 		
 		modelo = new DefaultTableModel(usuarioController.listar(administrador_id),cabeceras);
-		tabla_registro.setModel(modelo);
+		tableUsuarios.setModel(modelo);
     }
+    
+	public void consultarUsuario() {
+		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
+		
+		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, txt_cedula.getText()),cabeceras);
+		tableUsuarios.setModel(modelo);
+		
+	}
+	
+	public void listarRegistros() {
+		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Plan", "Clase", "Membresia"};
+		
+		modelo = new DefaultTableModel(registroController.consultar(idSeleccionadoUsuario),cabeceras);
+		table.setModel(modelo);
+	}
+	
+	public void registrar() {
+		
+		if(!membresiaController.consultaActivo(idSeleccionadoUsuario)) {
+			JOptionPane.showMessageDialog(null, "La membresia de este usuario a caducado o no tiene membresias");
+			return;
+		}
+		
+		Membresia membresia = usuarioController.consultaMembresia(idSeleccionadoUsuario);
+		
+		if(membresia.notificarMembresia()) {
+			JOptionPane.showMessageDialog(null, "La membresia caducara en " + membresia.getAnticipacion() + " días");
+		}
+		
+		registroController.registrar(idSeleccionadoUsuario);
+		listarRegistros();
+		validarRegistros();
+	}
+	
+	public void validarRegistros() {
+		boolean salida = false;
+		for(int i=0;i<registroController.consultar(idSeleccionadoUsuario).length;i++) {
+			if(registroController.consultar(idSeleccionadoUsuario)[i][3]==null) {
+				salida = true;
+				idUltimoRegistro = registroController.consultarLista(idSeleccionadoUsuario).get(i).getId();
+			}
+		}
+		if(salida) {
+			btn_salida.setEnabled(true);
+			btn_entrada.setEnabled(false);
+		}else {
+			btn_entrada.setEnabled(true);
+			btn_salida.setEnabled(false);
+		}
+		
+	}
+
+	public void bloquearBotones(){
+		btn_entrada.setEnabled(false);
+		btn_salida.setEnabled(false);
+	}
     
 	public InicioPanel(int panelAncho, int panelAlto) {
 		
 		 usuarioController = new UsuarioController();
-		 registroController = new RegistroController();  
+		 registroController = new RegistroController(); 
+		 membresiaController = new MembresiaController();
 		 administrador_id = new Administrador().getId();
 		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				btn_entrada.setEnabled(false);
-				btn_salida.setEnabled(false);
-				dbotones();
+				bloquearBotones();
 			}
 		});
     	
@@ -69,20 +124,19 @@ public class InicioPanel extends JPanel {
         scrollPane.setBounds(30, 124, 993, 234);
         add(scrollPane);
         
-        tabla_registro = new JTable();
-        tabla_registro.addMouseListener(new MouseAdapter() {
+        tableUsuarios = new JTable();
+        tableUsuarios.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		//abotones();
-        		idSeleccionadoUsuario = (int )tabla_registro.getValueAt(tabla_registro.getSelectedRow(),0);
+        		idSeleccionadoUsuario = (int)tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
+        		listarRegistros();
         		
-        		llenarTabla_registro();
-        		
-        		botones_ides();
+        		validarRegistros();
         		
         	}
         });
-        scrollPane.setViewportView(tabla_registro);
+        scrollPane.setViewportView(tableUsuarios);
         
         txt_cedula = new JTextField();
         txt_cedula.setColumns(10);
@@ -111,10 +165,7 @@ public class InicioPanel extends JPanel {
         btn_entrada = new JButton("Registrar Entrada");
         btn_entrada.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Registro registro = llenarRegistro();
-        		registroController.guardar(registro);
-        		llenarTabla_registro();
-        		botones_ides();
+        		registrar();
         	}
         });
         btn_entrada.setForeground(Color.WHITE);
@@ -127,10 +178,9 @@ public class InicioPanel extends JPanel {
         btn_salida = new JButton("Registrar Salida");
         btn_salida.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		Registro registro = llenarRegistro_id();
-        		registroController.guardar_salida(registro);
-        		llenarTabla_registro();
-        		botones_ides();
+        		registroController.registrarSalida(idUltimoRegistro);
+        		listarRegistros();
+        		validarRegistros();
         	}
         });
         btn_salida.setForeground(Color.WHITE);
@@ -153,7 +203,7 @@ public class InicioPanel extends JPanel {
         btn_buscar.setBounds(333, 88, 150, 25);
         add(btn_buscar);
         
-        JLabel lblNewLabel_5_1 = new JLabel("¡ Selecciona un usuario !");
+        JLabel lblNewLabel_5_1 = new JLabel("Selecciona un usuario");
         lblNewLabel_5_1.setForeground(Color.BLACK);
         lblNewLabel_5_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel_5_1.setBounds(153, 370, 182, 14);
@@ -162,63 +212,4 @@ public class InicioPanel extends JPanel {
         listarUsuarios();
     }
 	
-//	private Usuario llenarUsuario() {
-//		
-//		
-//		return new Usuario(txt_cedula.getText());
-//		
-//	}
-	private Registro llenarRegistro() {
-		return new Registro(idSeleccionadoUsuario);
-	}
-	private Registro llenarRegistro_id() {
-		return new Registro(codigo_id);
-	}
-
-	public  void consultarUsuario() {
-		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
-		
-		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, txt_cedula.getText()),cabeceras);
-		tabla_registro.setModel(modelo);
-		
-		}
-	
-	public  void llenarTabla_registro() {
-		Registro registro = llenarRegistro();
-		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Clase", "Plan"};
-		
-		modelo1 = new DefaultTableModel(registroController.consulta(registro),cabeceras);
-		table.setModel(modelo1);
-		
-	}
-	public void abotones(){
-		//btn_entrada.setEnabled(true);
-		
-	}
-	public void botones_ides() {
-		 RegistroController registroController= new RegistroController();
-			Registro registro = llenarRegistro();
-			boolean salida=false;
-		for(int i=0;i<registroController.consulta(registro).length;i++) {
-			if(registroController.consulta(registro)[i][3]==null) {
-				
-				salida = true;
-				codigo_id=registroController.consulta(registro)[i][0].toString();
-			}
-		}
-		if(salida) {
-			btn_salida.setEnabled(true);
-			btn_entrada.setEnabled(false);
-		}else {
-			btn_entrada.setEnabled(true);
-			btn_salida.setEnabled(false);
-		}
-			//System.out.println(usuarioController.consulta(usuario)[0][0]);
-		
-	}
-
-	public void dbotones(){
-		btn_entrada.setEnabled(false);
-		btn_salida.setEnabled(false);
-	}
 }
