@@ -364,5 +364,29 @@ public class MembresiaDAO {
 		}
 		
 	}
+
+	public boolean existeMembresia(int usuario_id) {
+
+		try {
+			String sentencia = "select * from membresia where usuario_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+						return resultSet.next();
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
 	
 }

@@ -65,6 +65,8 @@ public class InicioPanel extends JPanel {
 		
 		Membresia membresia = usuarioController.consultaMembresia(idSeleccionadoUsuario);
 		
+		System.out.println(membresia.notificarMembresia());
+		
 		if(membresia.notificarMembresia()) {
 			JOptionPane.showMessageDialog(null, "La membresia caducara en " + membresia.getAnticipacion() + " días");
 		}

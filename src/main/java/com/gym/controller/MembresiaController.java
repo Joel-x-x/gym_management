@@ -58,4 +58,8 @@ public class MembresiaController {
 	public boolean eliminar(int id) {
 		return membresiaDAO.eliminar(id);
 	}
+
+	public boolean existeMembresia(int usuario_id) {
+		return membresiaDAO.existeMembresia(usuario_id);
+	}
 }

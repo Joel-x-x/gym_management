@@ -28,13 +28,9 @@ public class Membresia {
     
     private MembresiaController membresiaController;
     
-    public int getAnticipacion() {
-		return anticipacion;
-	}
-
-	public void setAnticipacion(int anticipacion) {
-		this.anticipacion = anticipacion;
-	}
+    public Membresia() {
+    	
+    }
 
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
 			float valor_extra, float valor_total) {
@@ -126,6 +122,14 @@ public class Membresia {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.activo = activo;
+		this.anticipacion = anticipacion;
+	}
+	
+    public int getAnticipacion() {
+		return anticipacion;
+	}
+
+	public void setAnticipacion(int anticipacion) {
 		this.anticipacion = anticipacion;
 	}
 
@@ -291,7 +295,7 @@ public class Membresia {
 	    fechaActual.set(Calendar.MILLISECOND, 0);
 	    
 	    // Comparar la fecha resultante con la fecha actual
-	    if (calendar.before(fechaActual)) {
+	    if (fechaActual.before(calendar)) {
 	        return true;
 	    } else {
 	        return false;
