@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.gym.model.Fisico;
 import com.gym.model.Plan;
 import com.gym.model.Registro;
 import com.gym.model.Usuario;
+import com.gym.utilidades.Utilidades;
 
 public class PlanesDAO {
 	Connection con;
@@ -16,148 +20,199 @@ public class PlanesDAO {
 	public PlanesDAO(Connection con) {
 		this.con = con;
 	}
-public boolean agregar(Plan plan) {
-	try {
-		String sentencia = "insert into plan (nombre, precio, descripcion, duracion, administrador_id) "
-				+ " values(?,?,?,?,?);";
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
-			System.out.println(plan.getDuracion());
-			statement.setString(1, plan.getNombre());
-			statement.setFloat(2, plan.getPrecio());
-			statement.setString(3, plan.getDescripcion());
-			statement.setString(4, plan.getDuracion());
-			statement.setInt(5, plan.getAdministrador_id());
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
-		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
-	
-}
-public boolean modificar(Plan plan) {
-	try {
-		String sentencia = "UPDATE plan SET  nombre= ?, precio = ?, descripcion = ?, duracion= ?  WHERE id = ?";
-				
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
-			statement.setString(1, plan.getNombre());
-			statement.setFloat(2, plan.getPrecio());
-			statement.setString(3, plan.getDescripcion());
-			statement.setString(4, plan.getDuracion());
-			statement.setString(5, String.valueOf(plan.getId()));
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
-		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
-	
-}
-public boolean eliminar(Plan plan) {
-	try {
-		String sentencia = "DELETE FROM plan WHERE id = ?";
-				
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
+	public boolean guardar(Plan plan) {
+		
+		int item = 0;
+		
+		try {
 			
-			statement.setString(1, String.valueOf(plan.getId()));
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
-		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
-	
-}
-public Object[][] consultar(Plan plan) {
-	Object obj[][]= null;
-	String sentencia="";
-
-	try {
-		if(plan.getNombre().equals("")) {
-			sentencia = "SELECT * FROM plan ";
+			String sentencia = "insert into plan (nombre, precio, descripcion, duracion, administrador_id) "
+					+ " values(?,?,?,?,?);";
 			
-		}else {
-			sentencia = "select * from plan where nombre = '"+plan.getNombre()+"'";
-			}
-	    
-	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	    
-	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-	    	resultSet.last();
-	    	int nf=resultSet.getRow();
-			obj =new Object[nf][5];
-			resultSet.beforeFirst();
-			int f=0;
-	        while (resultSet.next()) {
-	            obj[f][0] = resultSet.getObject(1);
-	            obj[f][1] = resultSet.getObject(2);
-	            obj[f][2] = resultSet.getObject(3);
-	            obj[f][3] = resultSet.getObject(4);
-	            obj[f][4] = resultSet.getObject(5);
-	            
-	            System.out.println("JHJKUH " + obj[0][1]);
-	            System.out.println(obj[0][0]);
-	            f++;
-	        }
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-
-	return obj;
-
-		
-		
-}
-public String[] consultar_(Plan plan) {
-	String obj[]= new String[4];
-	String sentencia="";
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setString(1, plan.getNombre());
+				statement.setFloat(2, plan.getPrecio());
+				statement.setString(3, plan.getDescripcion());
+				statement.setString(4, plan.getDuracion());
+				statement.setInt(5, plan.getAdministrador_id());
+				
+				item = statement.executeUpdate();
 	
-	try {
-			sentencia = "SELECT * FROM plan where id =  "+plan.getId();
-	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-	    	
-		if(resultSet.next()) {
-			obj[0] = resultSet.getObject(2).toString();
-            obj[1] = resultSet.getObject(3).toString();
-            obj[2] = resultSet.getObject(4).toString();
-            obj[3]=resultSet.getObject(5).toString();
-            
-            
-            System.out.println("JHJKUH " + obj[0]);
-            System.out.println(obj[1]);
-            
-		}else {
-			System.out.println("no se ecndfg");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-	        
-	            
-	        
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
+		
+		return new Utilidades().toBoolean(item);
+		
 	}
-
-	return obj;
-
+	public boolean modificar(Plan plan) {
 		
+		int item = 0;
 		
-}
+		try {
+			String sentencia = "update plan set nombre= ?, precio = ?, descripcion = ?, duracion= ?  where id = ?";
+					
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setString(1, plan.getNombre());
+				statement.setFloat(2, plan.getPrecio());
+				statement.setString(3, plan.getDescripcion());
+				statement.setString(4, plan.getDuracion());
+				statement.setInt(5, plan.getId());
+				
+				item = statement.executeUpdate();
+				
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	public boolean eliminar(int id) {
+		
+		int item = 0;
+		
+		try {
+			String sentencia = "delete from plan where id = ?";
+					
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setInt(1, id);
+				
+				item = statement.executeUpdate();
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+		public List<Plan> consultar(String plan, int administrador_id) {
+			
+			List<Plan> resultado = new ArrayList<>();
+			
+			try {
+				
+				String sentencia = "select * from plan where administrador_id = ?";
+				
+				if(!plan.equals("")) {
+					sentencia = "select * from plan where nombre = ? and administrador_id = ?";
+				}
+				
+				
+				final PreparedStatement statement = con.prepareStatement(sentencia);
+				
+				try(statement) {
+					statement.setInt(1, administrador_id);
+					
+					if(!plan.equals("")) {
+						statement.setString(1, plan);
+						statement.setInt(2, administrador_id);
+					}
+					
+					final ResultSet resultSet = statement.executeQuery();
+					
+					try(resultSet) {
+						
+						while(resultSet.next()) {
+							resultado.add(new Plan(
+									resultSet.getInt("id"),
+									resultSet.getString("nombre"),
+									resultSet.getFloat("precio"),
+									resultSet.getString("descripcion"),
+									resultSet.getString("duracion")));
+						}
+					}
+				}
+				
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+			return resultado;
+			
+		}
+	
+	public String[] consultar_(Plan plan) {
+		String obj[]= new String[4];
+		String sentencia="";
+		
+		try {
+				sentencia = "SELECT * FROM plan where id =  "+plan.getId();
+		    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+		    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
+		    	
+			if(resultSet.next()) {
+				obj[0] = resultSet.getObject(2).toString();
+	            obj[1] = resultSet.getObject(3).toString();
+	            obj[2] = resultSet.getObject(4).toString();
+	            obj[3]=resultSet.getObject(5).toString();
+	            
+	            
+	            System.out.println("JHJKUH " + obj[0]);
+	            System.out.println(obj[1]);
+	            
+			}else {
+				System.out.println("no se ecndfg");
+			}
+		        
+		            
+		        
+		    }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+	
+		return obj;
+	
+			
+			
+	}
+	public Plan consulta(int id) {
+	
+		Plan plan = null;
+		
+		try {
+			
+			String sentencia = "select * from plan where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					plan = new Plan(
+							resultSet.getInt("id"),
+							resultSet.getString("nombre"),
+							resultSet.getFloat("precio"),
+							resultSet.getString("descripcion"),
+							resultSet.getString("duracion"));
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return plan;
+		
+	}
 
 }

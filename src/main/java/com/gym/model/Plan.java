@@ -8,6 +8,7 @@ public class Plan {
     String duracion;
     int administrador_id;
     
+    // Consulta
 	public Plan(int id, String nombre, Float precio, String descripcion, String duracion) {
         this.id = id;
         this.nombre = nombre;

@@ -189,11 +189,9 @@ public class UsuariosPanel extends JPanel {
 		textNacimiento.setText(usuario.getFecha_nacimiento());
 		
 		if(usuario.getSexo().equals("Masculino")) {
-			System.out.println("true");
 			radioMasculino.setSelected(true);
 		} else {
 			radioFemenino.setSelected(true);
-			System.out.println("false");
 		}
 		
 		textEmail.setText(usuario.getEmail());

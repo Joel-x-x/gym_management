@@ -93,7 +93,7 @@ public class FisicoDAO {
 			String sentencia = "select * from fisico where usuario_id = ?";
 			List<Fisico> resultado = new ArrayList<>();
 			
-			PreparedStatement statement = con.prepareStatement(sentencia);
+			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, usuario_id);

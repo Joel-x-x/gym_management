@@ -164,6 +164,7 @@ public class InicioPanel extends JPanel {
         scrollPane_1.setViewportView(table);
         
         btn_entrada = new JButton("Registrar Entrada");
+        btn_entrada.setFocusPainted(false);
         btn_entrada.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		registrar();
@@ -177,6 +178,7 @@ public class InicioPanel extends JPanel {
         add(btn_entrada);
         
         btn_salida = new JButton("Registrar Salida");
+        btn_salida.setFocusPainted(false);
         btn_salida.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		registroController.registrarSalida(idUltimoRegistro);
@@ -192,6 +194,7 @@ public class InicioPanel extends JPanel {
         add(btn_salida);
         
         JButton btn_buscar = new JButton("Buscar");
+        btn_buscar.setFocusPainted(false);
         btn_buscar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		consultarUsuario();
