@@ -72,8 +72,13 @@ public class EntrenadorDAO {
 		return new Utilidades().toBoolean(item);
 		
 	}
+	
 	public boolean eliminar(int id) {
 		int item = 0;
+		
+		if(!this.eliminarClase(id)) {
+			System.out.println("No se puedo eliminar las clases");
+		}
 		
 		try {
 			String sentencia = "delete from entrenador where id = ?";
@@ -91,6 +96,158 @@ public class EntrenadorDAO {
 		}
 		
 		return new Utilidades().toBoolean(item);
+		
+	}
+	
+	public boolean eliminarClase(int entrenador_id) {
+		int item = 0;
+		
+		List<Integer> clase_id = this.consultarClaseId(entrenador_id);
+		
+		for(int i : clase_id) {
+			if(!this.eliminarMembresia(i)) {
+				System.out.println("No se pudo eliminar las membresias");
+			}	
+			
+		}
+		
+		
+		try {
+			String sentencia = "delete from clase where entrenador_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
+				
+				statement.setInt(1, entrenador_id);
+				
+				item = statement.executeUpdate();
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}	
+	
+	public boolean eliminarMembresia(int clase_id) {
+		int item = 0;
+		
+		List<Integer> membresia_id = this.consultarMembresiaId(clase_id);
+		
+		for(int i : membresia_id) {
+			
+			if(!this.eliminarRegistro(i)) {
+				System.out.println("No se puedo eliminar los registros");
+			}	
+			
+		}
+		
+		try {
+			String sentencia = "delete from membresia where clase_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
+				
+				statement.setInt(1, clase_id);
+				
+				item = statement.executeUpdate();
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	
+	public boolean eliminarRegistro(int membresia_id) {
+		int item = 0;
+		
+		try {
+			String sentencia = "delete from registro where membresia_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
+				
+				statement.setInt(1, membresia_id);
+				
+				item = statement.executeUpdate();
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	
+	// Número de clase_id que esten relacionandas al entrenador
+	public List<Integer> consultarClaseId(int entrenador_id) {
+
+		List<Integer> clase_id = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from clase where entrenador_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, entrenador_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						
+						clase_id.add(resultSet.getInt("id"));
+						
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return clase_id;
+		
+	}
+	
+	// Número de membresia_id que esten relacionandas al registro
+	public List<Integer> consultarMembresiaId(int clase_id) {
+
+		List<Integer> membresia_id = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from membresia where clase_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, clase_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						membresia_id.add(resultSet.getInt("id"));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return membresia_id;
 		
 	}
 	
