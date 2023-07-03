@@ -4,11 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.gym.model.Administrador;
-import com.gym.model.Fisico;
 
 public class AdministradorDAO {
 	Connection con;
@@ -130,10 +127,6 @@ public class AdministradorDAO {
 			throw new RuntimeException(e);
 		}
 		
-	}
-	
-	public boolean sesion(Administrador administrador) {
-		return true;
 	}
 
 	public int consultarId(String email) {

@@ -14,9 +14,9 @@ import com.gym.controller.AdministradorController;
 import com.gym.model.Administrador;
 
 public class RegistroPanel extends JPanel {
-	
 	private AdministradorController administradorController;
 
+	private static final long serialVersionUID = -4705635535839437717L;
     private RegistroFrame registroFrame;
     private JButton iniciarSesionButton;
     private JTextField textEmail;

@@ -1,11 +1,8 @@
 package com.gym.view;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import com.formdev.flatlaf.json.ParseException;
 import com.gym.controller.MembresiaController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
@@ -19,13 +16,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 

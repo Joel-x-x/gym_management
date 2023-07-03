@@ -10,7 +10,6 @@ import java.util.List;
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
-import com.gym.model.Usuario;
 
 public class MembresiaDAO {
 	Connection con;

@@ -9,7 +9,7 @@ public class FisicoController {
 	private FisicoDAO fisicoDAO;
 	
 	public FisicoController() {
-		fisicoDAO = new FisicoDAO(new ConnectionFactory().conectar());
+		fisicoDAO = new FisicoDAO(ConnectionFactory.conectar());
 	}
 
 	public Object[][] listar(int usuario_id) {

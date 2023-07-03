@@ -23,9 +23,6 @@ public class RegistroFrame extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public RegistroFrame() {
 		
         registroPanel = new RegistroPanel(this);

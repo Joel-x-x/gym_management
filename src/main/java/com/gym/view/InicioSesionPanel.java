@@ -39,13 +39,10 @@ public class InicioSesionPanel extends JPanel {
         iniciarSesionButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Administrador administrador = llenarAdministrador();
-        		System.out.println(textContra.getPassword());
         		if(administradorController.sesion(administrador)) {
 					
         			// Ya logeado asignaremos el id statico a la clase Administrador para que usuario tenga su referencia
         			new Administrador().setId(administradorController.consultarId(administrador.getEmail()));
-        			
-        			System.out.println(new Administrador().getId());
         			
 					JOptionPane.showMessageDialog(null, "Todo bien!");
 					// Abre la ventana del panel de administrador

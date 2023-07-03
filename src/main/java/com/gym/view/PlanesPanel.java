@@ -18,8 +18,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class PlanesPanel extends JPanel {
 	private int administrador_id;
@@ -83,6 +81,13 @@ public class PlanesPanel extends JPanel {
     
     // Plan 
     
+	public void listarPlan() {
+		String[] cabeceras = {"Id","Nombre","Precio","Descripcion","Duracion"};
+		
+		modelo = new DefaultTableModel(planController.consultar("", administrador_id),cabeceras);
+		tabla_planes.setModel(modelo);
+	}
+	
 	public void consultarPlan() {
 		String[] cabeceras = {"Id","Nombre","Precio","Descripcion","Duracion"};
 		
@@ -438,68 +443,68 @@ public class PlanesPanel extends JPanel {
         
         JLabel lblNewLabel = new JLabel("PLANES");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel.setBounds(21, 0, 137, 43);
+        lblNewLabel.setBounds(21, 28, 137, 43);
         add(lblNewLabel);
         
         JLabel lblNewLabel_1 = new JLabel("Nombre");
         lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1.setBounds(21, 38, 75, 14);
+        lblNewLabel_1.setBounds(21, 66, 75, 14);
         add(lblNewLabel_1);
         
         textNombrePlan = new JTextField();
-        textNombrePlan.setBounds(21, 54, 225, 25);
+        textNombrePlan.setBounds(21, 82, 225, 25);
         add(textNombrePlan);
         textNombrePlan.setColumns(10);
         
         JLabel lblNewLabel_2 = new JLabel("Descripción");
         lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2.setBounds(21, 84, 93, 14);
+        lblNewLabel_2.setBounds(21, 112, 93, 14);
         add(lblNewLabel_2);
         
         textDescripcionPlan = new JTextField();
-        textDescripcionPlan.setBounds(21, 98, 225, 68);
+        textDescripcionPlan.setBounds(21, 126, 225, 68);
         add(textDescripcionPlan);
         textDescripcionPlan.setColumns(10);
         
         JLabel lblNewLabel_3 = new JLabel("Buscar por nombre:");
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_3.setBounds(449, 0, 137, 14);
+        lblNewLabel_3.setBounds(449, 28, 137, 14);
         add(lblNewLabel_3);
         
         JLabel lblNewLabel_4 = new JLabel("Precio");
         lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_4.setBounds(267, 38, 62, 14);
+        lblNewLabel_4.setBounds(267, 66, 62, 14);
         add(lblNewLabel_4);
         
         JLabel lblNewLabel_5 = new JLabel("Duración");
         lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_5.setBounds(267, 84, 75, 14);
+        lblNewLabel_5.setBounds(267, 112, 75, 14);
         add(lblNewLabel_5);
         
         textBuscarPlan = new JTextField();
-        textBuscarPlan.setBounds(449, 15, 137, 25);
+        textBuscarPlan.setBounds(449, 43, 137, 25);
         add(textBuscarPlan);
         textBuscarPlan.setColumns(10);
         
         textPrecioPlan = new JTextField();
-        textPrecioPlan.setBounds(267, 54, 109, 25);
+        textPrecioPlan.setBounds(267, 82, 109, 25);
         add(textPrecioPlan);
         textPrecioPlan.setColumns(10);
         
         radioAnual = new JRadioButton("Anual");
         radioAnual.setBackground(new Color(255, 255, 255));
-        radioAnual.setBounds(267, 98, 75, 23);
+        radioAnual.setBounds(267, 126, 75, 23);
         
         add(radioAnual);
         
         radioDiario = new JRadioButton("Diario");
         radioDiario.setBackground(new Color(255, 255, 255));
-        radioDiario.setBounds(267, 118, 75, 23);
+        radioDiario.setBounds(267, 146, 75, 23);
         add(radioDiario);
         
         radioMensual = new JRadioButton("Mensual");
         radioMensual.setBackground(new Color(255, 255, 255));
-        radioMensual.setBounds(344, 98, 93, 23);
+        radioMensual.setBounds(344, 126, 93, 23);
         add(radioMensual);
         
         buttonGroupPlan.add(radioDiario);
@@ -514,7 +519,7 @@ public class PlanesPanel extends JPanel {
         		guadarPlan();
         	}
         });
-        btnAgregarPlan.setBounds(21, 177, 89, 30);
+        btnAgregarPlan.setBounds(21, 205, 89, 30);
         btnAgregarPlan.setBackground(new Color(46, 56, 64));
         btnAgregarPlan.setForeground(new Color(255, 255, 255));
         btnAgregarPlan.setBorder(null);
@@ -528,7 +533,7 @@ public class PlanesPanel extends JPanel {
         		modificarPlan();
         	}
         });
-        btnModificarPlan.setBounds(120, 177, 89, 30);
+        btnModificarPlan.setBounds(120, 205, 89, 30);
         btnModificarPlan.setBackground(new Color(46, 56, 64));
         btnModificarPlan.setForeground(new Color(255, 255, 255));
         btnModificarPlan.setBorder(null);
@@ -542,7 +547,7 @@ public class PlanesPanel extends JPanel {
         		eliminarPlan();
         	}
         });
-        btn_eliminar_planes.setBounds(219, 177, 89, 30);
+        btn_eliminar_planes.setBounds(219, 205, 89, 30);
         btn_eliminar_planes.setBackground(new Color(46, 56, 64));
         btn_eliminar_planes.setForeground(new Color(255, 255, 255));
         btn_eliminar_planes.setBorder(null);
@@ -550,70 +555,70 @@ public class PlanesPanel extends JPanel {
         
         JLabel lblEntrenador = new JLabel("ENTRENADOR");
         lblEntrenador.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblEntrenador.setBounds(21, 215, 160, 30);
+        lblEntrenador.setBounds(21, 243, 160, 30);
         add(lblEntrenador);
         
         JLabel lblNewLabel_3_1 = new JLabel("Buscar por cédula");
         lblNewLabel_3_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_3_1.setBounds(449, 211, 109, 14);
+        lblNewLabel_3_1.setBounds(449, 239, 109, 14);
         add(lblNewLabel_3_1);
         
         textBuscarEntrenador = new JTextField();
-        textBuscarEntrenador.setBounds(449, 225, 137, 25);
+        textBuscarEntrenador.setBounds(449, 253, 137, 25);
         add(textBuscarEntrenador);
         textBuscarEntrenador.setColumns(10);
         
         JLabel lblNewLabel_1_1 = new JLabel("Nombre");
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_1.setBounds(21, 246, 75, 14);
+        lblNewLabel_1_1.setBounds(21, 274, 75, 14);
         add(lblNewLabel_1_1);
         
         textNombreEntrenador = new JTextField();
-        textNombreEntrenador.setBounds(21, 261, 225, 25);
+        textNombreEntrenador.setBounds(21, 289, 225, 25);
         add(textNombreEntrenador);
         textNombreEntrenador.setColumns(10);
         
         JLabel lblNewLabel_6 = new JLabel("Teléfono");
-        lblNewLabel_6.setBounds(21, 297, 75, 14);
+        lblNewLabel_6.setBounds(21, 325, 75, 14);
         add(lblNewLabel_6);
         
         textTelefonoEntrenador = new JTextField();
-        textTelefonoEntrenador.setBounds(21, 312, 225, 25);
+        textTelefonoEntrenador.setBounds(21, 340, 225, 25);
         add(textTelefonoEntrenador);
         textTelefonoEntrenador.setColumns(10);
         
         JLabel lblNewLabel_7 = new JLabel("Correo Electrónico");
-        lblNewLabel_7.setBounds(21, 344, 160, 14);
+        lblNewLabel_7.setBounds(21, 372, 160, 14);
         add(lblNewLabel_7);
         
         textCorreoEntrenador = new JTextField();
-        textCorreoEntrenador.setBounds(21, 360, 225, 25);
+        textCorreoEntrenador.setBounds(21, 388, 225, 25);
         add(textCorreoEntrenador);
         textCorreoEntrenador.setColumns(10);
         
         JLabel lblNewLabel_8 = new JLabel("Apellido");
         lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_8.setBounds(267, 246, 69, 14);
+        lblNewLabel_8.setBounds(267, 274, 69, 14);
         add(lblNewLabel_8);
         
         textApellidoEntrenador = new JTextField();
-        textApellidoEntrenador.setBounds(267, 261, 214, 25);
+        textApellidoEntrenador.setBounds(267, 289, 214, 25);
         add(textApellidoEntrenador);
         textApellidoEntrenador.setColumns(10);
         
         JLabel lblNewLabel_9 = new JLabel("Sexo");
         lblNewLabel_9.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_9.setBounds(267, 344, 46, 14);
+        lblNewLabel_9.setBounds(267, 372, 46, 14);
         add(lblNewLabel_9);
         
         radioMasculino = new JRadioButton("Masculino");
         radioMasculino.setBackground(new Color(255, 255, 255));
-        radioMasculino.setBounds(267, 360, 93, 23);
+        radioMasculino.setBounds(267, 388, 93, 23);
         add(radioMasculino);
         
         radioFemenino = new JRadioButton("Femenino");
         radioFemenino.setBackground(new Color(255, 255, 255));
-        radioFemenino.setBounds(362, 361, 99, 23);
+        radioFemenino.setBounds(362, 389, 99, 23);
         add(radioFemenino);
         
         
@@ -622,41 +627,41 @@ public class PlanesPanel extends JPanel {
         
         JLabel lblClase = new JLabel("CLASE");
         lblClase.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblClase.setBounds(21, 437, 160, 20);
+        lblClase.setBounds(21, 465, 160, 20);
         add(lblClase);
         
         JLabel lblNewLabel_1_1_1 = new JLabel("Nombre");
         lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_1_1.setBounds(21, 468, 75, 14);
+        lblNewLabel_1_1_1.setBounds(21, 496, 75, 14);
         add(lblNewLabel_1_1_1);
         
         textClase = new JTextField();
-        textClase.setBounds(21, 482, 225, 25);
+        textClase.setBounds(21, 510, 225, 25);
         add(textClase);
         textClase.setColumns(10);
         
         JLabel lblNewLabel_2_1 = new JLabel("Descripción");
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_1.setBounds(21, 515, 93, 14);
+        lblNewLabel_2_1.setBounds(21, 543, 93, 14);
         add(lblNewLabel_2_1);
         
         textDescripcionClase = new JTextField();
-        textDescripcionClase.setBounds(21, 530, 225, 68);
+        textDescripcionClase.setBounds(21, 558, 225, 68);
         add(textDescripcionClase);
         textDescripcionClase.setColumns(10);
         
         JLabel lblNewLabel_1_1_2 = new JLabel("Entrenador");
         lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_1_2.setBounds(270, 543, 211, 14);
+        lblNewLabel_1_1_2.setBounds(270, 571, 211, 14);
         add(lblNewLabel_1_1_2);
         
         JLabel labelbuscarent = new JLabel("Buscar por clase");
         labelbuscarent.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        labelbuscarent.setBounds(449, 468, 99, 14);
+        labelbuscarent.setBounds(449, 496, 99, 14);
         add(labelbuscarent);
         
         textBuscarClase = new JTextField();
-        textBuscarClase.setBounds(449, 482, 137, 25);
+        textBuscarClase.setBounds(449, 510, 137, 25);
         add(textBuscarClase);
         textBuscarClase.setColumns(10);
         
@@ -668,7 +673,7 @@ public class PlanesPanel extends JPanel {
         		guardarClase();
         	}
         });
-        btnAgregarClase.setBounds(21, 614, 89, 30);
+        btnAgregarClase.setBounds(21, 642, 89, 30);
         btnAgregarClase.setBackground(new Color(46, 56, 64));
         btnAgregarClase.setForeground(new Color(255, 255, 255));
         btnAgregarClase.setBorder(null);
@@ -685,7 +690,7 @@ public class PlanesPanel extends JPanel {
         		limpiarFormularioClase();
         	}
         });
-        btnModificarClase.setBounds(120, 614, 89, 30);
+        btnModificarClase.setBounds(120, 642, 89, 30);
         btnModificarClase.setBackground(new Color(46, 56, 64));
         btnModificarClase.setForeground(new Color(255, 255, 255));
         btnModificarClase.setBorder(null);
@@ -699,14 +704,14 @@ public class PlanesPanel extends JPanel {
         		eliminarClase();
         	}
         });
-        btnEliminarClase.setBounds(219, 614, 89, 30);
+        btnEliminarClase.setBounds(219, 642, 89, 30);
         btnEliminarClase.setBackground(new Color(46, 56, 64));
         btnEliminarClase.setForeground(new Color(255, 255, 255));
         btnEliminarClase.setBorder(null);
         add(btnEliminarClase);
         
         scrollPane_planes = new JScrollPane();
-        scrollPane_planes.setBounds(590, 16, 465, 186);
+        scrollPane_planes.setBounds(590, 44, 465, 186);
         add(scrollPane_planes);
         //hhjgvh
         tabla_planes = new JTable();
@@ -722,7 +727,7 @@ public class PlanesPanel extends JPanel {
         scrollPane_planes.setViewportView(tabla_planes);
         
         scrollPane_entrenador = new JScrollPane();
-        scrollPane_entrenador.setBounds(590, 227, 465, 186);
+        scrollPane_entrenador.setBounds(590, 255, 465, 186);
         add(scrollPane_entrenador);
         
         tableEntrenador = new JTable();
@@ -737,7 +742,7 @@ public class PlanesPanel extends JPanel {
         scrollPane_entrenador.setViewportView(tableEntrenador);
         
         scrollPane_clases = new JScrollPane();
-        scrollPane_clases.setBounds(590, 484, 465, 186);
+        scrollPane_clases.setBounds(590, 512, 465, 186);
         add(scrollPane_clases);
         
         tableClase = new JTable();
@@ -762,7 +767,7 @@ public class PlanesPanel extends JPanel {
         btn_eliminar_planes_1.setForeground(new Color(255, 255, 255));
         btn_eliminar_planes_1.setBorder(null);
         btn_eliminar_planes_1.setBackground(new Color(46, 56, 64));
-        btn_eliminar_planes_1.setBounds(497, 45, 89, 30);
+        btn_eliminar_planes_1.setBounds(497, 73, 89, 30);
         add(btn_eliminar_planes_1);
 
         
@@ -777,7 +782,7 @@ public class PlanesPanel extends JPanel {
         btnBuscarEntrenador.setForeground(new Color(255, 255, 255));
         btnBuscarEntrenador.setBorder(null);
         btnBuscarEntrenador.setBackground(new Color(46, 56, 64));
-        btnBuscarEntrenador.setBounds(497, 255, 89, 30);
+        btnBuscarEntrenador.setBounds(497, 283, 89, 30);
         add(btnBuscarEntrenador);
         
         btnBuscarClase = new JButton("Buscar");
@@ -792,20 +797,20 @@ public class PlanesPanel extends JPanel {
         btnBuscarClase.setForeground(new Color(255, 255, 255));
         btnBuscarClase.setBorder(null);
         btnBuscarClase.setBackground(new Color(46, 56, 64));
-        btnBuscarClase.setBounds(497, 511, 89, 30);
+        btnBuscarClase.setBounds(497, 539, 89, 30);
         add(btnBuscarClase);
         
-        comboBoxEntrenador.setBounds(268, 557, 213, 25);
+        comboBoxEntrenador.setBounds(268, 585, 213, 25);
         add(comboBoxEntrenador);
         
         JLabel lblNewLabel_8_1 = new JLabel("Cédula");
         lblNewLabel_8_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_8_1.setBounds(267, 297, 69, 14);
+        lblNewLabel_8_1.setBounds(267, 325, 69, 14);
         add(lblNewLabel_8_1);
         
         textCedulaEntrenador = new JTextField();
         textCedulaEntrenador.setColumns(10);
-        textCedulaEntrenador.setBounds(267, 312, 214, 25);
+        textCedulaEntrenador.setBounds(267, 340, 214, 25);
         add(textCedulaEntrenador);
         
         btnAgregarEntrenador = new JButton("Agregar");
@@ -819,7 +824,7 @@ public class PlanesPanel extends JPanel {
         btnAgregarEntrenador.setFocusPainted(false);
         btnAgregarEntrenador.setBorder(null);
         btnAgregarEntrenador.setBackground(new Color(46, 56, 64));
-        btnAgregarEntrenador.setBounds(21, 396, 89, 30);
+        btnAgregarEntrenador.setBounds(21, 424, 89, 30);
         add(btnAgregarEntrenador);
         
         btnModificarEntrenador = new JButton("Modificar");
@@ -833,7 +838,7 @@ public class PlanesPanel extends JPanel {
         btnModificarEntrenador.setFocusPainted(false);
         btnModificarEntrenador.setBorder(null);
         btnModificarEntrenador.setBackground(new Color(46, 56, 64));
-        btnModificarEntrenador.setBounds(120, 396, 89, 30);
+        btnModificarEntrenador.setBounds(120, 424, 89, 30);
         add(btnModificarEntrenador);
         
         btnEliminarEntrenador = new JButton("Eliminar");
@@ -847,7 +852,7 @@ public class PlanesPanel extends JPanel {
         btnEliminarEntrenador.setFocusPainted(false);
         btnEliminarEntrenador.setBorder(null);
         btnEliminarEntrenador.setBackground(new Color(46, 56, 64));
-        btnEliminarEntrenador.setBounds(219, 396, 89, 30);
+        btnEliminarEntrenador.setBounds(219, 424, 89, 30);
         add(btnEliminarEntrenador);
         
         btn_eliminar_planes_3 = new JButton("Limpiar");
@@ -861,7 +866,7 @@ public class PlanesPanel extends JPanel {
         btn_eliminar_planes_3.setFocusPainted(false);
         btn_eliminar_planes_3.setBorder(null);
         btn_eliminar_planes_3.setBackground(new Color(46, 56, 64));
-        btn_eliminar_planes_3.setBounds(318, 177, 89, 30);
+        btn_eliminar_planes_3.setBounds(318, 205, 89, 30);
         add(btn_eliminar_planes_3);
         
         btnLimpiarEntrenador = new JButton("Limpiar");
@@ -876,7 +881,7 @@ public class PlanesPanel extends JPanel {
         btnLimpiarEntrenador.setFocusPainted(false);
         btnLimpiarEntrenador.setBorder(null);
         btnLimpiarEntrenador.setBackground(new Color(46, 56, 64));
-        btnLimpiarEntrenador.setBounds(318, 396, 89, 30);
+        btnLimpiarEntrenador.setBounds(318, 424, 89, 30);
         add(btnLimpiarEntrenador);
         
         btnLimpiarClase = new JButton("Limpiar");
@@ -891,8 +896,12 @@ public class PlanesPanel extends JPanel {
         btnLimpiarClase.setFocusPainted(false);
         btnLimpiarClase.setBorder(null);
         btnLimpiarClase.setBackground(new Color(46, 56, 64));
-        btnLimpiarClase.setBounds(318, 614, 89, 30);
+        btnLimpiarClase.setBounds(318, 642, 89, 30);
         add(btnLimpiarClase);
+        
+        listarPlan();
+        listarEntrenador();
+        listarClase();
         
         listarComboEntrenador();
         

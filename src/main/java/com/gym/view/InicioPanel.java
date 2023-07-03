@@ -132,7 +132,6 @@ public class InicioPanel extends JPanel {
         		//abotones();
         		idSeleccionadoUsuario = (int)tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
         		listarRegistros();
-        		
         		validarRegistros();
         		
         	}
@@ -148,7 +147,6 @@ public class InicioPanel extends JPanel {
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_2_1.setBounds(29, 93, 101, 14);
         add(lblNewLabel_2_1);
-        System.out.println("xdxd");
         
         JLabel lblInicio = new JLabel("INICIO");
 

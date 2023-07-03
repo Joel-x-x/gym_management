@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.gym.factory.ConnectionFactory;
 
 
@@ -28,6 +27,7 @@ public class BarraPanel extends JPanel {
     private JButton usuariosButton;
     private JButton membresiasButton;
     private JButton planesButton;
+    private JButton claveButton;
     int panelAncho = 1080, panelAlto = 750;
 
     public BarraPanel(AdminFrame frame) {
@@ -71,6 +71,15 @@ public class BarraPanel extends JPanel {
         planesButton.setBorder(null);
         planesButton.setFont(new Font("Candara", Font.PLAIN, 18));
         planesButton.setBounds(0, 350, 200, 40);
+        claveButton = new JButton("     Clave");
+        claveButton.setHorizontalAlignment(SwingConstants.LEFT);
+        claveButton.setFocusPainted(false);
+        claveButton.setFocusTraversalKeysEnabled(false);
+        claveButton.setBackground(new Color(46, 56, 64));
+        claveButton.setForeground(new Color(163, 175, 175));
+        claveButton.setBorder(null);
+        claveButton.setFont(new Font("Candara", Font.PLAIN, 18));
+        claveButton.setBounds(0, 400, 200, 40);
 
         inicioButton.addActionListener(new ActionListener() {
             @Override
@@ -101,11 +110,19 @@ public class BarraPanel extends JPanel {
             }
         });
         
+        claveButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		adminFrame.cambiarPanel(new ClavePanel(panelAncho, panelAlto));
+        	}
+        });
+        
         setLayout(null);
         add(inicioButton);
         add(usuariosButton);
         add(membresiasButton);
         add(planesButton);
+        add(claveButton);
         
         CircularPanel logoEmpresa = new CircularPanel();
         add(logoEmpresa); 

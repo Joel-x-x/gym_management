@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gym.model.Fisico;
-import com.gym.model.Usuario;
 
 public class FisicoDAO {
 	Connection con;

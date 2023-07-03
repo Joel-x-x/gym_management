@@ -8,7 +8,7 @@ public class AdministradorController {
 	AdministradorDAO administradorDAO;
 	
 	public AdministradorController() {
-		administradorDAO = new AdministradorDAO(new ConnectionFactory().conectar());
+		administradorDAO = new AdministradorDAO(ConnectionFactory.conectar());
 	}
 	
 	public boolean registrar(Administrador administrador) {
