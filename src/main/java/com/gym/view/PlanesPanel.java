@@ -696,19 +696,7 @@ public class PlanesPanel extends JPanel {
         btnEliminarClase.setFocusPainted(false);
         btnEliminarClase.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		
-        		Clase clase_llenado= llenarRegistro_ID_clase();
-        		if(claseController.eliminar(clase_llenado)) {
-        			JOptionPane.showMessageDialog(null, "Eliminacion exitosa");
-        		}else {
-        			JOptionPane.showMessageDialog(null, "Ha ocurrido un error");
-        		}
-        		
-        		
-        		limpiar_clase();
-        		llenarTabla_clase();
-        		llenarTabla_clase();
-        		llenar_modelo_box();
+        		eliminarClase();
         	}
         });
         btnEliminarClase.setBounds(219, 614, 89, 30);
@@ -757,8 +745,8 @@ public class PlanesPanel extends JPanel {
         	@Override
         	public void mouseClicked(MouseEvent e) {
         		idSeleccionadoClase =(int )tableClase.getValueAt(tableClase.getSelectedRow(), 0);
-        		
         		llenarFormularioClase();
+        		activarBotonesClase();
         	}
         });
         scrollPane_clases.setViewportView(tableClase);
@@ -892,6 +880,12 @@ public class PlanesPanel extends JPanel {
         add(btnLimpiarEntrenador);
         
         btnLimpiarClase = new JButton("Limpiar");
+        btnLimpiarClase.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		limpiarFormularioClase();
+        		bloquearBotonesClase();
+        	}
+        });
         btnLimpiarClase.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnLimpiarClase.setForeground(new Color(255, 255, 255));
         btnLimpiarClase.setFocusPainted(false);

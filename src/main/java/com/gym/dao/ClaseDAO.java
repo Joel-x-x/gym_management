@@ -79,6 +79,7 @@ public class ClaseDAO {
 			String sentencia = "delete from clase where id = ?";
 					
 			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
 			try(statement){
 				
 				statement.setInt(1, id);
