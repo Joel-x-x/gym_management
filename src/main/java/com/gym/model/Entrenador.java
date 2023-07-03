@@ -9,8 +9,9 @@ public class Entrenador {
     String telefono;
     String cedula;
     int administrador_id;
-
-    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula,  int administrador_id) {
+    
+    // Consultar
+    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -18,8 +19,20 @@ public class Entrenador {
         this.correo = correo;
         this.telefono = telefono;
         this.cedula = cedula;
-        this.administrador_id=administrador_id;
     }
+    
+    // Guardar
+    public Entrenador(int id, String nombre, String apellido, String sexo, String correo, String telefono, String cedula, int administrador_id) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.sexo = sexo;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.cedula = cedula;
+        this.administrador_id = administrador_id;
+    }
+    
     public Entrenador(String nombre) {
     	this.nombre=nombre;
     }

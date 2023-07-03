@@ -382,11 +382,6 @@ public class MembresiasPanel extends JPanel {
         textBuscar.setColumns(10);
         
         JScrollPane scrollPane_membresias_membresias = new JScrollPane();
-        scrollPane_membresias_membresias.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        	}
-        });
         scrollPane_membresias_membresias.setBounds(279, 41, 765, 263);
         add(scrollPane_membresias_membresias);
         

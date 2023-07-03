@@ -8,10 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gym.model.Fisico;
 import com.gym.model.Plan;
-import com.gym.model.Registro;
-import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
 
 public class PlanesDAO {

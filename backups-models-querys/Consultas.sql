@@ -37,6 +37,9 @@ select * from administrador;
 select * from usuario;
 select * from registro;
 
+select * from plan;
+select * from administrador;
+
 delete from registro where usuario_id = 11;
 
 SELECT r.id, u.id, u.nombre, r.fecha_entrada, r.fecha_salida, p.nombre, c.clase, m.* 

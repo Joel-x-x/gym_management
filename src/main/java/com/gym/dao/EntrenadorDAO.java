@@ -4,204 +4,179 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gym.model.Entrenador;
+import com.gym.utilidades.Utilidades;
 
 public class EntrenadorDAO {
-Connection con;
-	
-	public EntrenadorDAO(Connection con) {
-		this.con = con;
-	}
-public boolean agregar(Entrenador entrenador) {
-	try {
-		String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id) "
-				+ " values(?,?,?,?,?,?,?);";
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
-			statement.setString(1, entrenador.getNombre());
-			statement.setString(2, entrenador.getApellido());
-			statement.setString(3, entrenador.getSexo());
-			statement.setString(4, entrenador.getCorreo());
-			statement.setString(5, entrenador.getTelefono());
-			statement.setString(6, entrenador.getCedula());
-			statement.setInt(7, entrenador.getAdministrador_id());
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
+	Connection con;
+		
+		public EntrenadorDAO(Connection con) {
+			this.con = con;
 		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
-	
-}
-public boolean modificar(Entrenador entrenador) {
-	try {
-		String sentencia = "UPDATE entrenador SET  nombre= ?, apellido = ?, sexo = ?, correo= ?, telefono =?, cedula = ?  WHERE id = ?";
+	public boolean guardar(Entrenador entrenador) {
+		
+		int item = 0;
+		
+		try {
+			String sentencia = "insert into entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id) "
+					+ " values(?,?,?,?,?,?,?);";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
 				
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
-			statement.setString(1, entrenador.getNombre());
-			statement.setString(2, entrenador.getApellido());
-			statement.setString(3, entrenador.getSexo());
-			statement.setString(4, entrenador.getCorreo());
-			statement.setString(5, entrenador.getTelefono());
-			statement.setString(6, entrenador.getCedula());
-			statement.setString(7, String.valueOf(entrenador.getId()));
-			
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
-			}
-		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
-	
-}
-public boolean eliminar(Entrenador entrenador) {
-	try {
-		String sentencia = "DELETE FROM entrenador WHERE id = ?";
+				statement.setString(1, entrenador.getNombre());
+				statement.setString(2, entrenador.getApellido());
+				statement.setString(3, entrenador.getSexo());
+				statement.setString(4, entrenador.getCorreo());
+				statement.setString(5, entrenador.getTelefono());
+				statement.setString(6, entrenador.getCedula());
+				statement.setInt(7, entrenador.getAdministrador_id());
 				
-		final PreparedStatement statement = con.prepareStatement(sentencia);
-		try(statement){
-			
-			statement.setString(1, String.valueOf(entrenador.getId()));
-			int i = statement.executeUpdate();
-			if(i>0) {
-				return true;
-			}else {
-				return false;
+				item = statement.executeUpdate();
+				
 			}
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-	}catch(SQLException e) {
-		throw new RuntimeException(e);
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	public boolean modificar(Entrenador entrenador) {
+		int item = 0;
+		
+		try {
+			String sentencia = "update entrenador set nombre = ?, apellido = ?, sexo = ?, correo = ?, telefono = ?, cedula = ?  WHERE id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
+				
+				statement.setString(1, entrenador.getNombre());
+				statement.setString(2, entrenador.getApellido());
+				statement.setString(3, entrenador.getSexo());
+				statement.setString(4, entrenador.getCorreo());
+				statement.setString(5, entrenador.getTelefono());
+				statement.setString(6, entrenador.getCedula());
+				statement.setInt(7, entrenador.getId());
+				
+				item = statement.executeUpdate();
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	public boolean eliminar(int id) {
+		int item = 0;
+		
+		try {
+			String sentencia = "delete from entrenador where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			try(statement){
+				
+				statement.setInt(1, id);
+				
+				item = statement.executeUpdate();
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
 	}
 	
-}
-public Object[][] consultar(Entrenador entrenador) {
-	Object obj[][]= null;
-	String sentencia="";
-
-	try {
-		if(entrenador.getNombre().equals("")) {
-			sentencia = "SELECT * FROM entrenador ";
-			
-		}else {
-			sentencia = "SELECT * FROM entrenador where nombre = '"+entrenador.getNombre()+"'";
-			}
-	    
-	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	    
-	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-	    	resultSet.last();
-	    	int nf=resultSet.getRow();
-			obj =new Object[nf][7];
-			resultSet.beforeFirst();
-			int f=0;
-	        while (resultSet.next()) {
-	            obj[f][0] = resultSet.getObject(1);
-	            obj[f][1] = resultSet.getObject(2);
-	            obj[f][2] = resultSet.getObject(3);
-	            obj[f][3] = resultSet.getObject(4);
-	            obj[f][4] = resultSet.getObject(5);
-	            obj[f][5] = resultSet.getObject(6);
-	            obj[f][6] = resultSet.getObject(7);
-	            
-	            System.out.println("JHJKUH " + obj[0][1]);
-	            System.out.println(obj[0][0]);
-	            f++;
-	        }
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-
-	return obj;
-
-		
-		
-}
-public String[][] consulta_id_nombres_entrenador(Entrenador entrenador) {
-	String obj[][]= null;
-	String sentencia="";
-
-	try {
-		
-			sentencia = "SELECT * FROM entrenador ";
-			
-		
-	    
-	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	    
-	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-	    	resultSet.last();
-	    	int nf=resultSet.getRow();
-			obj =new String[nf][2];
-			resultSet.beforeFirst();
-			int f=0;
-	        while (resultSet.next()) {
-	            obj[f][0] = resultSet.getObject(1).toString();
-	            obj[f][1] = resultSet.getObject(2).toString();
-	            
-	            
-	            System.out.println("JHJKUH " + obj[0][1]);
-	            System.out.println(obj[0][0]);
-	            f++;
-	        }
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-
-	return obj;
-
-		
-		
-}
-public String[] consultar_(Entrenador entrenador) {
-	String obj[]= new String[6];
-	String sentencia="";
+	public List<Entrenador> consultar(String cedula, int administrador_id) {
 	
-	try {
-			sentencia = "SELECT * FROM entrenador where id =  "+entrenador.getId();
-	    final Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	    try (ResultSet resultSet = statement.executeQuery(sentencia)) {
-	    	
-		if(resultSet.next()) {
-			obj[0] = resultSet.getObject(2).toString();
-            obj[1] = resultSet.getObject(3).toString();
-            obj[2] = resultSet.getObject(4).toString();
-            obj[3]=resultSet.getObject(5).toString();
-            obj[4]=resultSet.getObject(6).toString();
-            obj[5]=resultSet.getObject(7).toString();
-          
-            
-            
-            System.out.println("JHJKUH " + obj[0]);
-            System.out.println(obj[1]);
-            
-		}else {
-			System.out.println("no se ecndfg");
+		List<Entrenador> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from entrenador where administrador_id = ?";
+			
+			if(!cedula.equals("")) {
+				sentencia = "select * from entrenador where administrador_id = ? and nombre = ?";
+			}
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				
+				if(!cedula.equals("")) {
+					statement.setString(2, cedula);
+				}
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						
+						resultado.add(new Entrenador(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getString("sexo"),
+								resultSet.getString("correo"),
+								resultSet.getString("telefono"),
+								resultSet.getString("cedula")));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
 		}
-	        
-	            
-	        
-	    }
-	} catch (SQLException e) {
-	    e.printStackTrace();
+		
+		return resultado;
+			
 	}
+	
+	public Entrenador consulta(int id) {
 
-	return obj;
-
+		Entrenador entrenador = null;
 		
+		try {
+			
+			String sentencia = "select * from entrenador where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+						entrenador = new Entrenador(
+							resultSet.getInt("id"),
+							resultSet.getString("nombre"),
+							resultSet.getString("apellido"),
+							resultSet.getString("sexo"),
+							resultSet.getString("correo"),
+							resultSet.getString("telefono"),
+							resultSet.getString("cedula"));
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
-}
+		return entrenador;
+		
+	}
 
 }

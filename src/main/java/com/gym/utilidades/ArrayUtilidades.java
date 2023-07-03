@@ -2,6 +2,8 @@ package com.gym.utilidades;
 
 import java.util.List;
 
+import com.gym.model.Clase;
+import com.gym.model.Entrenador;
 import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
@@ -60,6 +62,37 @@ public class ArrayUtilidades {
     		contador++;
     	}
     	return matrizPlan;
+	}
+	
+	public Object[][] toMatrizClase(List<Clase> lista) {
+		int contador = 0;
+		Object[][] matrizClase =  new Object[lista.size()][4];
+    	
+    	for(Clase clase : lista) {
+    		matrizClase[contador][0] = clase.getId();
+    		matrizClase[contador][1] = clase.getClase();
+    		matrizClase[contador][2] = clase.getDescripcion();
+    		matrizClase[contador][3] = clase.getNombreEntrenador();
+
+    		contador++;
+    	}
+    	return matrizClase;
+	}
+	
+	public Object[][] toMatrizEntrenador(List<Entrenador> lista) {
+		int contador = 0;
+		Object[][] matrizEntrenador =  new Object[lista.size()][5];
+    	
+    	for(Entrenador entrenador : lista) {
+    		matrizEntrenador[contador][0] = entrenador.getId();
+    		matrizEntrenador[contador][1] = entrenador.getNombre();
+    		matrizEntrenador[contador][2] = entrenador.getCorreo();
+    		matrizEntrenador[contador][3] = entrenador.getTelefono();
+    		matrizEntrenador[contador][4] = entrenador.getCedula();
+
+    		contador++;
+    	}
+    	return matrizEntrenador;
 	}
 	
 	public Object[][] toMatrizMembresia(List<Membresia> lista) {

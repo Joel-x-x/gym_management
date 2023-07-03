@@ -7,14 +7,40 @@ public class Clase {
     String descripcion;
     int entrenador_id;
     int administrador_id;
-
+    String nombreEntrenador;
+    
+    // Guardar
 	public Clase(int id, String clase, String descripcion, int entrenador_id, int administrador_id) {
-        this.id = id;
+		this.id = id;
         this.clase = clase;
         this.descripcion = descripcion;
         this.entrenador_id = entrenador_id;
         this.administrador_id= administrador_id;
     }
+	
+	// Consulta
+	public Clase(int id, String clase, String descripcion, int entrenador_id) {
+        this.clase = clase;
+        this.descripcion = descripcion;
+        this.entrenador_id = entrenador_id;
+    }
+	
+	// Consultar
+	public Clase(int id, String clase, String descripcion, String nombreEntrenador) {
+        this.id = id;
+        this.clase = clase;
+        this.descripcion = descripcion;
+        this.nombreEntrenador = nombreEntrenador;
+    }
+	
+	public String getNombreEntrenador() {
+		return nombreEntrenador;
+	}
+
+	public void setNombreEntrenador(String nombreEntrenador) {
+		this.nombreEntrenador = nombreEntrenador;
+	}
+
 	public Clase(String nombre) {
 		this.clase = nombre;
 	}
