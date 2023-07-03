@@ -26,7 +26,7 @@ public class AdminPanel extends JPanel {
 	private DefaultTableModel modelo;
 	
 	public void listar() {
-		String[] cabeceras = {"Id","Nombre","Apellido","Email", "Cedula"};
+		String[] cabeceras = {"Id","Nombre","Apellido","Email", "Cedula	"};
 		
 		modelo = new DefaultTableModel(administradorController.listar(), cabeceras);
 		
