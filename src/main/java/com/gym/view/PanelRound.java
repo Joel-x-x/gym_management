@@ -1,125 +1,40 @@
 package com.gym.view;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import javax.swing.JPanel;
 
-public class PanelRound extends JPanel {
-
-	private static final long serialVersionUID = 3644804670305640569L;
-
-	public int getRoundTopLeft() {
-        return roundTopLeft;
+public class PanelRound {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Ejemplo de Panel Redondeado");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+        
+        Pan panel = new Pan();
+        panel.setLayout(new BorderLayout());
+        panel.setBackground(Color.RED);
+        
+        JLabel label = new JLabel("Etiqueta Redondeada");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setOpaque(false);  // Hacer que el fondo del JLabel sea transparente
+        panel.add(label, BorderLayout.CENTER);
+        
+        frame.add(panel);
+        frame.setVisible(true);
     }
+}
 
-    public void setRoundTopLeft(int roundTopLeft) {
-        this.roundTopLeft = roundTopLeft;
-        repaint();
-    }
-
-    public int getRoundTopRight() {
-        return roundTopRight;
-    }
-
-    public void setRoundTopRight(int roundTopRight) {
-        this.roundTopRight = roundTopRight;
-        repaint();
-    }
-
-    public int getRoundBottomLeft() {
-        return roundBottomLeft;
-    }
-
-    public void setRoundBottomLeft(int roundBottomLeft) {
-        this.roundBottomLeft = roundBottomLeft;
-        repaint();
-    }
-
-    public int getRoundBottomRight() {
-        return roundBottomRight;
-    }
-
-    public void setRoundBottomRight(int roundBottomRight) {
-        this.roundBottomRight = roundBottomRight;
-        repaint();
-    }
-
-    private int roundTopLeft = 50;
-    private int roundTopRight = 50;
-    private int roundBottomLeft = 50;
-    private int roundBottomRight = 50;
-
-    public PanelRound() {
-        setOpaque(false);
-        setLayout(null);
-    }
-
+class Pan extends JPanel {
     @Override
-    protected void paintComponent(Graphics grphcs) {
-        Graphics2D g2 = (Graphics2D) grphcs.create();
+    protected void paintComponent(Graphics g) {
+        // Redondear el borde del panel
+        Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(getBackground());
-        Area area = new Area(createRoundTopLeft());
-        if (roundTopRight > 0) {
-            area.intersect(new Area(createRoundTopRight()));
-        }
-        if (roundBottomLeft > 0) {
-            area.intersect(new Area(createRoundBottomLeft()));
-        }
-        if (roundBottomRight > 0) {
-            area.intersect(new Area(createRoundBottomRight()));
-        }
-        g2.fill(area);
-        g2.dispose();
-        super.paintComponent(grphcs);
-    }
-
-    private Shape createRoundTopLeft() {
-        int width = getWidth();
-        int height = getHeight();
-        int roundX = Math.min(width, roundTopLeft);
-        int roundY = Math.min(height, roundTopLeft);
-        Area area = new Area(new RoundRectangle2D.Double(0, 0, width, height, roundX, roundY));
-        area.add(new Area(new Rectangle2D.Double(roundX / 2, 0, width - roundX / 2, height)));
-        area.add(new Area(new Rectangle2D.Double(0, roundY / 2, width, height - roundY / 2)));
-        return area;
-    }
-
-    private Shape createRoundTopRight() {
-        int width = getWidth();
-        int height = getHeight();
-        int roundX = Math.min(width, roundTopRight);
-        int roundY = Math.min(height, roundTopRight);
-        Area area = new Area(new RoundRectangle2D.Double(0, 0, width, height, roundX, roundY));
-        area.add(new Area(new Rectangle2D.Double(0, 0, width - roundX / 2, height)));
-        area.add(new Area(new Rectangle2D.Double(0, roundY / 2, width, height - roundY / 2)));
-        return area;
-    }
-
-    private Shape createRoundBottomLeft() {
-        int width = getWidth();
-        int height = getHeight();
-        int roundX = Math.min(width, roundBottomLeft);
-        int roundY = Math.min(height, roundBottomLeft);
-        Area area = new Area(new RoundRectangle2D.Double(0, 0, width, height, roundX, roundY));
-        area.add(new Area(new Rectangle2D.Double(roundX / 2, 0, width - roundX / 2, height)));
-        area.add(new Area(new Rectangle2D.Double(0, 0, width, height - roundY / 2)));
-        return area;
-    }
-
-    private Shape createRoundBottomRight() {
-        int width = getWidth();
-        int height = getHeight();
-        int roundX = Math.min(width, roundBottomRight);
-        int roundY = Math.min(height, roundBottomRight);
-        Area area = new Area(new RoundRectangle2D.Double(0, 0, width, height, roundX, roundY));
-        area.add(new Area(new Rectangle2D.Double(0, 0, width - roundX / 2, height)));
-        area.add(new Area(new Rectangle2D.Double(0, 0, width, height - roundY / 2)));
-        return area;
+        Shape roundedRect = new RoundRectangle2D.Double(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        g2.setColor(Color.GRAY);
+        g2.fill(roundedRect);
+        super.paintComponent(g);
     }
 }

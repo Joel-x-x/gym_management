@@ -1,20 +1,16 @@
 package com.gym.view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import javax.imageio.ImageIO;
+
+import com.gym.utilidades.*;
 
 import com.gym.controller.AdministradorController;
 import com.gym.factory.ConnectionFactory;
@@ -139,8 +135,8 @@ public class BarraPanel extends JPanel {
         	add(adminButton);
         }
         
-        CircularPanel logoEmpresa = new CircularPanel();
-        add(logoEmpresa); 
+//        CircularPanel logoEmpresa = new CircularPanel();
+//        add(logoEmpresa); 
         
         JButton btnCerrarSesion = new JButton("     Cerrar Sesión");
         btnCerrarSesion.addActionListener(new ActionListener() {
@@ -172,65 +168,33 @@ public class BarraPanel extends JPanel {
         lblNewLabel.setFont(new Font("Candara", Font.BOLD, 18));
         lblNewLabel.setBounds(0, 137, 200, 22);
         add(lblNewLabel);
-    }
-
-    public class CircularPanel extends JPanel {
-
-		private static final long serialVersionUID = -7560565167117132164L;
-		private Image image;
-
-        public CircularPanel() {
-            try {
-                // Carga la imagen desde un archivo o recurso
-                URL imageUrl = getClass().getResource("sapo8.jpg");
-                image = ImageIO.read(imageUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            setBounds(48, 32, 100, 100);
-            //setBounds(58, 32, 175, 175);
+        
+        CircularLabel lblNewLabel_1 = new CircularLabel();
+        lblNewLabel_1.setText("Icono");
+        lblNewLabel_1.setSize(new Dimension(90, 90));
+        
+        // Crear una instancia de la imagen para poder redondearla
+        BufferedImage image = null;
+        
+        try {
+            URL imageUrl = BarraPanel.class.getResource("/com/gym/view/popeye.jpg");
+            image = ImageIO.read(imageUrl);
+            
+            // Operaciones con la imagen...
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-        	super.paintComponent(g);
-
-            Graphics2D g2d = (Graphics2D) g.create();
-
-            // Establece el color de fondo del panel a transparente
-            setBackground(new Color(0, 0, 0, 0));
-
-            // Habilita el suavizado de dibujado para una apariencia más suave            
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-            // Dibuja el círculo
-            g2d.setColor(new Color(46, 56, 64));
-            g2d.setStroke(new BasicStroke(10.0f)); // Trazo de grosor 2
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            Shape circle = new Ellipse2D.Double(0, 0, getWidth() - 1, getHeight() - 1);
-            g2d.fill(circle);
-
-            // Guarda el área de recorte actual
-            Shape previousClip = g2d.getClip();
-
-            // Establece el área de recorte al círculo
-            g2d.setClip(circle);
-
-            // Calcula las coordenadas y dimensiones para ajustar la imagen al tamaño del panel
-            int imageSize = Math.min(getWidth(), getHeight());
-            int x = (getWidth() - imageSize) / 2;
-            int y = (getHeight() - imageSize) / 2;
-
-            // Dibuja la imagen ajustada al tamaño del panel dentro del área de recorte
-            g2d.drawImage(image, x, y, imageSize, imageSize, null);
-
-            // Restaura el área de recorte anterior
-            g2d.setClip(previousClip);
-
-            // Libera los recursos del objeto Graphics2D
-            g2d.dispose();
-        }
+        
+        // Recibe una imagen tipo BufferedImagen
+        lblNewLabel_1.setImage(image);
+        lblNewLabel_1.setZoom(20);
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_1.setForeground(new Color(50, 50, 50));
+        lblNewLabel_1.setBackground(new Color(217, 217, 217));
+        lblNewLabel_1.setBounds(52, 41, 90, 90);
+        add(lblNewLabel_1);
     }
     
+   
 }

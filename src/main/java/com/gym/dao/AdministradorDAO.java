@@ -41,7 +41,7 @@ public class AdministradorDAO {
 		}
 	}
 	
-	private boolean eliminarClave(String clave) {
+	public boolean eliminarClave(String clave) {
 		try {
 			String sentencia = "update administrador set clave = null where clave = ?";
 			
@@ -222,5 +222,32 @@ public class AdministradorDAO {
 		}
 		
 		return resultado;
+	}
+
+	public boolean modificarClave(String clave, int id) {
+
+		int item = 0;
+		
+		try {
+			
+			String sentencia = "update administrador set clave = ? where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setString(1, clave);
+				statement.setInt(2, id);
+				
+				item = statement.executeUpdate();
+				
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new Utilidades().toBoolean(item);
+	
 	}
 }

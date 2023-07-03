@@ -36,4 +36,12 @@ public class AdministradorController {
 		return new ArrayUtilidades().toMatrizAdministrador(listarAdministradores);
 	}
 
+	public boolean modificarClave(String clave, int administrador_id) {
+		return administradorDAO.modificarClave(clave, administrador_id);
+	}
+
+	public boolean eliminarClave(String clave) {
+		return administradorDAO.eliminarClave(clave);
+	}
+
 }

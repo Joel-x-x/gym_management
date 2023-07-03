@@ -26,7 +26,7 @@ public class InicioPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
     private JTable tableUsuarios;
     private JTextField txt_cedula;
-    private int idSeleccionadoUsuario;
+    private int idSeleccionadoUsuario = 0;
     private int idUltimoRegistro;
   
     public static DefaultTableModel modelo;
@@ -57,6 +57,11 @@ public class InicioPanel extends JPanel {
 	}
 	
 	public void registrar() {
+		
+		if(idSeleccionadoUsuario == 0) {
+			JOptionPane.showMessageDialog(null, "Selecciona un usuario");
+			return;
+		}
 		
 		if(!membresiaController.consultaActivo(idSeleccionadoUsuario)) {
 			JOptionPane.showMessageDialog(null, "La membresia de este usuario a caducado o no tiene membresias");

@@ -1,5 +1,7 @@
 package com.gym.model;
 
+import java.util.Random;
+
 public class Administrador {
     static int id;
     private int administrador_id;
@@ -48,6 +50,24 @@ public class Administrador {
         this.email = email;
         this.cedula = cedula;
 	}
+    
+    public String generarClave() {
+    	Random random = new Random();
+    	
+    	StringBuilder string = new StringBuilder();
+    	
+    	for(int i = 1; i <= 16; i++) {
+    		int digito = random.nextInt(10);
+    		
+    		string.append(digito);
+    		
+    		if(i % 4 == 0 && i != 16) {
+    			string.append("-");
+    		}
+    	}
+    	
+    	return string.toString();
+    }
 
 	public int getAdministrador_id() {
 		return administrador_id;
