@@ -2,6 +2,7 @@ package com.gym.utilidades;
 
 import java.util.List;
 
+import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Entrenador;
 import com.gym.model.Fisico;
@@ -11,6 +12,22 @@ import com.gym.model.Registro;
 import com.gym.model.Usuario;
 
 public class ArrayUtilidades {
+	
+	public Object[][] toMatrizAdministrador(List<Administrador> lista) {
+		int contador = 0;
+		Object[][] matrizAdministrador =  new Object[lista.size()][5];
+    	
+    	for(Administrador administrador : lista) {
+    		matrizAdministrador[contador][0] = administrador.getAdministrador_id();
+    		matrizAdministrador[contador][1] = administrador.getNombre();
+    		matrizAdministrador[contador][2] = administrador.getApellido();
+    		matrizAdministrador[contador][3] = administrador.getEmail();
+    		matrizAdministrador[contador][4] = administrador.getCedula();
+    				
+    		contador++;
+    	}
+    	return matrizAdministrador;
+	}
 
 	public Object[][] toMatrizUsuario(List<Usuario> lista) {
 		int contador = 0;

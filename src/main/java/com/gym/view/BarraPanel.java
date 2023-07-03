@@ -16,10 +16,14 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
+import com.gym.controller.AdministradorController;
 import com.gym.factory.ConnectionFactory;
+import com.gym.model.Administrador;
 
 
 public class BarraPanel extends JPanel {
+	private AdministradorController administradorController;
+	private int administrador_id;
 	
 	private static final long serialVersionUID = -5747117121149449033L;
 	private AdminFrame adminFrame;
@@ -27,11 +31,14 @@ public class BarraPanel extends JPanel {
     private JButton usuariosButton;
     private JButton membresiasButton;
     private JButton planesButton;
-    private JButton claveButton;
+    private JButton adminButton;
     int panelAncho = 1080, panelAlto = 750;
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
+        administradorController = new AdministradorController();
+        administrador_id = new Administrador().getId();
+        
         setPreferredSize(new Dimension(200, 750));
         setBackground(new Color(46, 56, 64));
         
@@ -71,15 +78,18 @@ public class BarraPanel extends JPanel {
         planesButton.setBorder(null);
         planesButton.setFont(new Font("Candara", Font.PLAIN, 18));
         planesButton.setBounds(0, 350, 200, 40);
-        claveButton = new JButton("     Clave");
-        claveButton.setHorizontalAlignment(SwingConstants.LEFT);
-        claveButton.setFocusPainted(false);
-        claveButton.setFocusTraversalKeysEnabled(false);
-        claveButton.setBackground(new Color(46, 56, 64));
-        claveButton.setForeground(new Color(163, 175, 175));
-        claveButton.setBorder(null);
-        claveButton.setFont(new Font("Candara", Font.PLAIN, 18));
-        claveButton.setBounds(0, 400, 200, 40);
+        
+        if(administradorController.superUsuario(administrador_id)) {
+            adminButton = new JButton("     Admin");
+            adminButton.setHorizontalAlignment(SwingConstants.LEFT);
+            adminButton.setFocusPainted(false);
+            adminButton.setFocusTraversalKeysEnabled(false);
+            adminButton.setBackground(new Color(46, 56, 64));
+            adminButton.setForeground(new Color(163, 175, 175));
+            adminButton.setBorder(null);
+            adminButton.setFont(new Font("Candara", Font.PLAIN, 18));
+            adminButton.setBounds(0, 400, 200, 40);
+        }
 
         inicioButton.addActionListener(new ActionListener() {
             @Override
@@ -110,19 +120,24 @@ public class BarraPanel extends JPanel {
             }
         });
         
-        claveButton.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		adminFrame.cambiarPanel(new ClavePanel(panelAncho, panelAlto));
-        	}
-        });
+        if(administradorController.superUsuario(administrador_id)) {
+        	adminButton.addActionListener(new ActionListener() {
+        		@Override
+        		public void actionPerformed(ActionEvent e) {
+        			adminFrame.cambiarPanel(new AdminPanel(panelAncho, panelAlto));
+        		}
+        	});
+        }
         
         setLayout(null);
         add(inicioButton);
         add(usuariosButton);
         add(membresiasButton);
         add(planesButton);
-        add(claveButton);
+        
+        if(administradorController.superUsuario(administrador_id)) {
+        	add(adminButton);
+        }
         
         CircularPanel logoEmpresa = new CircularPanel();
         add(logoEmpresa); 

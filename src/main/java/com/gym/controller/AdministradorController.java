@@ -3,6 +3,7 @@ package com.gym.controller;
 import com.gym.dao.AdministradorDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Administrador;
+import com.gym.utilidades.ArrayUtilidades;
 
 public class AdministradorController {
 	AdministradorDAO administradorDAO;
@@ -23,6 +24,16 @@ public class AdministradorController {
 	
 	public int consultarId(String email) {
 		return administradorDAO.consultarId(email);
+	}
+
+	public boolean superUsuario(int administrador_id) {
+		return administradorDAO.superUsuario(administrador_id);
+	}
+
+	public Object[][] listar() {
+		var listarAdministradores = administradorDAO.listar();
+		
+		return new ArrayUtilidades().toMatrizAdministrador(listarAdministradores);
 	}
 
 }

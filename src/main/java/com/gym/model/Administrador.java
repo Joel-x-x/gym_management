@@ -2,13 +2,22 @@ package com.gym.model;
 
 public class Administrador {
     static int id;
-    String nombre;
-    String apellido; 
-    String email;
-    String password;
-    int sesion_iniciada;
-    int super_admin;
-    String clave;
+    private int administrador_id;
+    private String nombre;
+    private String apellido; 
+    private String email;
+    private String cedula;
+    public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+	private String password;
+    private int sesion_iniciada;
+    private int super_admin;
+    private String clave;
     public Administrador(int id, String nombre, String apellido, String email, String password, int sesion_iniciada,
             int super_admin, String clave) {
         Administrador.id = id;
@@ -30,11 +39,29 @@ public class Administrador {
         this.clave = clave;
     }
     
-    public Administrador() {
-    	
-    }
+    public Administrador() {}
     
-    public int getId() {
+    public Administrador(int administrador_id, String nombre, String apellido, String email, String cedula) {
+    	this.administrador_id = administrador_id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.cedula = cedula;
+	}
+
+	public int getAdministrador_id() {
+		return administrador_id;
+	}
+
+	public void setAdministrador_id(int administrador_id) {
+		this.administrador_id = administrador_id;
+	}
+
+	public int getSuper_admin() {
+		return super_admin;
+	}
+
+	public int getId() {
         return id;
     }
     public void setId(int id) {

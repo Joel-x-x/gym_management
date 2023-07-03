@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gym.model.Administrador;
+import com.gym.utilidades.Utilidades;
 
 public class AdministradorDAO {
 	Connection con;
@@ -130,6 +133,7 @@ public class AdministradorDAO {
 	}
 
 	public int consultarId(String email) {
+		
 		try {
 			String sentencia = "select id from administrador where email = ?";
 			
@@ -151,5 +155,72 @@ public class AdministradorDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
+		
+	}
+
+	public boolean superUsuario(int administrador_id) {
+		int super_admin = 0;
+		
+		try {
+			
+			String sentencia = "select super_admin from administrador where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				
+				statement.execute();
+				
+				final ResultSet resultSet = statement.getResultSet();
+				
+				try(resultSet) {
+					resultSet.next();
+					
+					super_admin = resultSet.getInt("super_admin");
+				}
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new Utilidades().toBoolean(super_admin);
+	}
+
+	public List<Administrador> listar() {
+		List<Administrador> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select id, nombre, apellido, email, cedula from administrador where super_admin <> 1";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.execute();
+				
+				final ResultSet resultSet = statement.getResultSet();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Administrador(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula")));
+					}
+				}
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return resultado;
 	}
 }
