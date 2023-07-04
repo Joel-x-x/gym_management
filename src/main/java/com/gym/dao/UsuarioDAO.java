@@ -245,13 +245,13 @@ public class UsuarioDAO {
 		
 	}
 	
-	public List<Usuario> consultar(int administrador_id, String cedula) {
+	public List<Usuario> consultar(int administrador_id, String nombre) {
 		
 		try {
 			String sentencia = "";
 			
-			if(!cedula.equals("")) {
-				sentencia = "select * from usuario where administrador_id = ? and cedula = ?";
+			if(!nombre.equals("")) {
+				sentencia = "select * from usuario where administrador_id = ? and nombre like ?";
 			} else {
 				sentencia = "select * from usuario where administrador_id = ?";
 			}
@@ -261,9 +261,9 @@ public class UsuarioDAO {
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
-				if(!cedula.equals("")) {
+				if(!nombre.equals("")) {
 					statement.setInt(1, administrador_id);
-					statement.setString(2, cedula);
+					statement.setString(2, nombre + "%");
 				} else {
 					statement.setInt(1, administrador_id);
 				}

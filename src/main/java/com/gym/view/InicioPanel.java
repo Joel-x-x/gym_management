@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class InicioPanel extends JPanel {
 	UsuarioController usuarioController;
@@ -144,11 +146,16 @@ public class InicioPanel extends JPanel {
         scrollPane.setViewportView(tableUsuarios);
         
         txt_cedula = new JTextField();
+        txt_cedula.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		consultarUsuario();
+        	}
+        });
         txt_cedula.setColumns(10);
         txt_cedula.setBounds(129, 88, 194, 25);
         add(txt_cedula);
         
-        JLabel lblNewLabel_2_1 = new JLabel("Buscar por cédula");
+        JLabel lblNewLabel_2_1 = new JLabel("Buscar por nombre");
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_2_1.setBounds(29, 93, 101, 14);
         add(lblNewLabel_2_1);

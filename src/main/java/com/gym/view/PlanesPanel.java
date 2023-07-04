@@ -18,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class PlanesPanel extends JPanel {
 	private int administrador_id;
@@ -206,7 +208,7 @@ public class PlanesPanel extends JPanel {
 	public void consultarEntrenador() {
 		String[] cabeceras = {"Id", "Nombre", "Correo", "Telefono", "Cédula"};
 		
-		modelo = new DefaultTableModel(entrenadorController.consultar(textCedulaEntrenador.getText(), administrador_id),cabeceras);
+		modelo = new DefaultTableModel(entrenadorController.consultar(textBuscarEntrenador.getText(), administrador_id),cabeceras);
 		tableEntrenador.setModel(modelo);
 	}
 	
@@ -482,6 +484,11 @@ public class PlanesPanel extends JPanel {
         add(lblNewLabel_5);
         
         textBuscarPlan = new JTextField();
+        textBuscarPlan.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		consultarPlan();
+        	}
+        });
         textBuscarPlan.setBounds(449, 43, 137, 25);
         add(textBuscarPlan);
         textBuscarPlan.setColumns(10);
@@ -564,6 +571,11 @@ public class PlanesPanel extends JPanel {
         add(lblNewLabel_3_1);
         
         textBuscarEntrenador = new JTextField();
+        textBuscarEntrenador.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		consultarEntrenador();
+        	}
+        });
         textBuscarEntrenador.setBounds(449, 253, 137, 25);
         add(textBuscarEntrenador);
         textBuscarEntrenador.setColumns(10);
@@ -661,6 +673,11 @@ public class PlanesPanel extends JPanel {
         add(labelbuscarent);
         
         textBuscarClase = new JTextField();
+        textBuscarClase.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		consultarClase();
+        	}
+        });
         textBuscarClase.setBounds(449, 510, 137, 25);
         add(textBuscarClase);
         textBuscarClase.setColumns(10);

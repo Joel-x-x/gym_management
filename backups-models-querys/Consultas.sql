@@ -36,9 +36,13 @@ select * from administrador;
 
 select * from usuario;
 select * from registro;
+select * from entrenador;
+select * from clase where clase like "c%";
 
 select * from plan;
 select * from administrador;
+
+select id, nombre, apellido, email from administrador where super_admin <> 1;
 
 delete from registro where usuario_id = 11;
 

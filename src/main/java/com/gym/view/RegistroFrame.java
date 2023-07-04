@@ -2,6 +2,7 @@ package com.gym.view;
 
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class RegistroFrame extends JFrame {
@@ -28,7 +29,8 @@ public class RegistroFrame extends JFrame {
         registroPanel = new RegistroPanel(this);
         inicioSesionPanel = new InicioSesionPanel(this);
 		
-		setTitle("Gym Management");
+        setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
+		setTitle("Gym");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 800);
 		setResizable(false);

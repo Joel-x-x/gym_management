@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class UsuariosPanel extends JPanel {
 	private int administrador_id;
@@ -132,9 +134,9 @@ public class UsuariosPanel extends JPanel {
 	public void consultar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
-		String cedula = textBuscar.getText();
+		String nombre = textBuscar.getText();
 		
-		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, cedula), cabeceras);
+		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, nombre), cabeceras);
 		tableUsuarios.setModel(modelo);
 	}
 	
@@ -470,11 +472,16 @@ public class UsuariosPanel extends JPanel {
         scrollPane_1.setViewportView(tableFisico);
         
         textBuscar = new JTextField();
+        textBuscar.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		consultar();
+        	}
+        });
         textBuscar.setColumns(10);
         textBuscar.setBounds(139, 394, 137, 25);
         add(textBuscar);
         
-        JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por cédula:");
+        JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");
         lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_4_2.setBounds(30, 400, 99, 14);
         add(lblNewLabel_1_4_2);

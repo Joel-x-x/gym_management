@@ -27,7 +27,12 @@ public class PanelRound {
 }
 
 class Pan extends JPanel {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6821559526514929996L;
+
+	@Override
     protected void paintComponent(Graphics g) {
         // Redondear el borde del panel
         Graphics2D g2 = (Graphics2D) g;

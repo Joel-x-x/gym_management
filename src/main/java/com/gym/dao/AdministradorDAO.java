@@ -189,16 +189,25 @@ public class AdministradorDAO {
 		return new Utilidades().toBoolean(super_admin);
 	}
 
-	public List<Administrador> listar() {
+	public List<Administrador> listar(String nombre) {
 		List<Administrador> resultado = new ArrayList<>();
 		
 		try {
 			
 			String sentencia = "select id, nombre, apellido, email, cedula from administrador where super_admin <> 1";
 			
+			if(!nombre.equals("")) {
+				sentencia += " and nombre like ?";
+			}
+			
+			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
+				
+				if(!nombre.equals("")) {
+					statement.setString(1, nombre + "%");
+				}
 				
 				statement.execute();
 				

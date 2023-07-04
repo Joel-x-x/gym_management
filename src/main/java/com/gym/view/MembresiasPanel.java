@@ -46,6 +46,7 @@ public class MembresiasPanel extends JPanel {
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JSpinner spinnerAnticipacion;
+	private JButton btnLimpiar;
 	
 	private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
@@ -266,6 +267,7 @@ public class MembresiasPanel extends JPanel {
 		textValorExtra.setText("");
 		comboBoxClase.setSelectedIndex(0);
 		comboBoxPlan.setSelectedIndex(0);
+		spinnerAnticipacion.setValue(0);
 	}
 	
     public MembresiasPanel(int panelAncho, int panelAlto) {
@@ -420,7 +422,7 @@ public class MembresiasPanel extends JPanel {
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setBorder(null);
         btnBuscar.setBackground(new Color(46, 56, 64));
-        btnBuscar.setBounds(370, 388, 150, 25);
+        btnBuscar.setBounds(370, 388, 116, 25);
         add(btnBuscar);
         
         JLabel lblNewLabel_5_1 = new JLabel("¡ Selecciona un usuario !");
@@ -433,9 +435,25 @@ public class MembresiasPanel extends JPanel {
         lblNewLabel_2_1.setBounds(30, 175, 218, 14);
         add(lblNewLabel_2_1);
         
-        spinnerAnticipacion = new JSpinner();
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, 365, 1);
+        
+        spinnerAnticipacion = new JSpinner(spinnerModel);
         spinnerAnticipacion.setBounds(30, 191, 218, 25);
         add(spinnerAnticipacion);
+        
+        btnLimpiar = new JButton("Limpiar");
+        btnLimpiar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		limpiarFormulario();
+        	}
+        });
+        btnLimpiar.setForeground(Color.WHITE);
+        btnLimpiar.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnLimpiar.setFocusPainted(false);
+        btnLimpiar.setBorder(null);
+        btnLimpiar.setBackground(new Color(46, 56, 64));
+        btnLimpiar.setBounds(610, 330, 100, 30);
+        add(btnLimpiar);
         
         // Listar Usuarios
         listarUsuarios();

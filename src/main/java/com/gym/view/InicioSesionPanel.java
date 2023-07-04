@@ -15,17 +15,40 @@ import com.gym.model.Administrador;
 
 import java.awt.Font;
 import javax.swing.JPasswordField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 public class InicioSesionPanel extends JPanel {
 	
 	private static final long serialVersionUID = -8083841348236094297L;
 	private RegistroFrame registroFrame;
-    private JButton registrarButton;
-    private JButton iniciarSesionButton;
     private JTextField textUsuario;
     private AdministradorController administradorController;
     private JPasswordField textContra;
+    private JLabel lblRegistro;
+    private JLabel lblRegistrarse;
     
+    public void iniciarSesion() {
+		Administrador administrador = llenarAdministrador();
+		
+		if(administradorController.sesion(administrador)) {
+			
+			// Ya logeado asignaremos el id statico a la clase Administrador para que usuario tenga su referencia
+			new Administrador().setId(administradorController.consultarId(administrador.getEmail()));
+			
+			// Abre la ventana del panel de administrador
+    		AdminFrame adminFrame = new AdminFrame();
+    		adminFrame.setVisible(true);
+
+    		registroFrame.dispose(); 
+
+		} else {
+			JOptionPane.showMessageDialog(null, "Datos incorrectos, vuelve a intentarlo");
+		}
+    }
     
     public InicioSesionPanel(RegistroFrame frame) {
         registroFrame = frame;
@@ -33,73 +56,82 @@ public class InicioSesionPanel extends JPanel {
         setBackground(Color.white);
         
         administradorController = new AdministradorController();
-        
-        iniciarSesionButton = new JButton("Iniciar Sesion");
-        iniciarSesionButton.setBounds(473, 220, 95, 23);
-        iniciarSesionButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		Administrador administrador = llenarAdministrador();
-        		if(administradorController.sesion(administrador)) {
-					
-        			// Ya logeado asignaremos el id statico a la clase Administrador para que usuario tenga su referencia
-        			new Administrador().setId(administradorController.consultarId(administrador.getEmail()));
-        			
-					JOptionPane.showMessageDialog(null, "Todo bien!");
-					// Abre la ventana del panel de administrador
-	        		AdminFrame adminFrame = new AdminFrame();
-	        		adminFrame.setVisible(true);
-	        		
-	        		registroFrame.dispose(); 
-	        		 // Cierra el frame de registro
-				} else {
-					JOptionPane.showMessageDialog(null, "Intruso");
-				}
-        		// Realizar las operaciones de inicio de sesión
-        		
-        		
-        		// Abre la ventana del panel de administrador
-        		
-        		// Cierra el frame de registro
-        	}
-        });
-        
-        registrarButton = new JButton("Registrarse");
-        registrarButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        registrarButton.setBounds(592, 221, 95, 21);
-        registrarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	registroFrame.mostrarPanelRegistro();
-            }
-        });
         setLayout(null);
         
-
-        
-        add(registrarButton);
-        add(iniciarSesionButton);
-        
-        JLabel lblIniciarSesion = new JLabel("INICIAR SESION");
-        lblIniciarSesion.setBounds(535, 71, 95, 14);
-        add(lblIniciarSesion);
-        
         textUsuario = new JTextField();
-        textUsuario.setText("wacho@gmai.com");
+        textUsuario.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textUsuario.setText("wacho@gmail.com");
         textUsuario.setColumns(10);
-        textUsuario.setBounds(438, 111, 289, 35);
+        textUsuario.setBounds(465, 258, 350, 40);
         add(textUsuario);
         
         JLabel lblCorreo = new JLabel("Email");
-        lblCorreo.setBounds(438, 96, 63, 14);
+        lblCorreo.setForeground(new Color(163, 175, 175));
+        lblCorreo.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lblCorreo.setBounds(465, 228, 73, 30);
         add(lblCorreo);
         
         JLabel lblContrasea = new JLabel("Contraseña");
-        lblContrasea.setBounds(438, 157, 63, 14);
+        lblContrasea.setForeground(new Color(163, 175, 175));
+        lblContrasea.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lblContrasea.setBounds(465, 319, 176, 30);
         add(lblContrasea);
         
         textContra = new JPasswordField();
+        textContra.setFont(new Font("Dialog", Font.PLAIN, 12));
         textContra.setText("1234");
-        textContra.setBounds(438, 174, 290, 35);
+        textContra.setBounds(465, 349, 350, 40);
         add(textContra);
+        
+        lblRegistro = new JLabel("Bienvenido");
+        lblRegistro.setHorizontalAlignment(SwingConstants.CENTER);
+        lblRegistro.setForeground(new Color(163, 175, 175));
+        lblRegistro.setFont(new Font("Dialog", Font.BOLD, 35));
+        lblRegistro.setBounds(465, 130, 350, 50);
+        add(lblRegistro);
+        
+        JButton btnIniciarSesion = new JButton("¡A entrenar!");
+        btnIniciarSesion.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		iniciarSesion();
+        	}
+        });
+        btnIniciarSesion.setForeground(Color.BLACK);
+        btnIniciarSesion.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnIniciarSesion.setFocusPainted(false);
+        btnIniciarSesion.setBorderPainted(false);
+        btnIniciarSesion.setBorder(new EmptyBorder(0, 0, 0, 0));
+        btnIniciarSesion.setBackground(new Color(163, 175, 175));
+        btnIniciarSesion.setBounds(543, 462, 200, 40);
+        add(btnIniciarSesion);
+        
+        lblRegistrarse = new JLabel("Registrarse");
+        lblRegistrarse.setForeground(new Color(163, 175, 175));
+        lblRegistrarse.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblRegistrarse.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		registroFrame.mostrarPanelRegistro();
+        	}
+        });
+        lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
+        lblRegistrarse.setBounds(700, 404, 115, 23);
+        add(lblRegistrarse);
+        
+        JLabel lblNewLabel = new JLabel("");
+        lblNewLabel.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/pesaLogo.png")));
+        lblNewLabel.setBounds(587, 29, 100, 100);
+        add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("");
+        lblNewLabel_1.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/poseGrande.png")));
+        lblNewLabel_1.setBounds(33, 290, 500, 500);
+        add(lblNewLabel_1);
+        
+        JLabel lblNewLabel_2 = new JLabel("");
+        lblNewLabel_2.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/pose.png")));
+        lblNewLabel_2.setBounds(1070, 445, 200, 275);
+        add(lblNewLabel_2);
     }
     public Administrador llenarAdministrador() {
     	return new Administrador(

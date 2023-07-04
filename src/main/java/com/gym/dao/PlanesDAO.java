@@ -104,7 +104,7 @@ public class PlanesDAO {
 				String sentencia = "select * from plan where administrador_id = ?";
 				
 				if(!plan.equals("")) {
-					sentencia = "select * from plan where nombre = ? and administrador_id = ?";
+					sentencia = "select * from plan where nombre like ? and administrador_id = ?";
 				}
 				
 				
@@ -114,7 +114,7 @@ public class PlanesDAO {
 					statement.setInt(1, administrador_id);
 					
 					if(!plan.equals("")) {
-						statement.setString(1, plan);
+						statement.setString(1, plan + "%");
 						statement.setInt(2, administrador_id);
 					}
 					

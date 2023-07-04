@@ -251,7 +251,7 @@ public class EntrenadorDAO {
 		
 	}
 	
-	public List<Entrenador> consultar(String cedula, int administrador_id) {
+	public List<Entrenador> consultar(String nombre, int administrador_id) {
 	
 		List<Entrenador> resultado = new ArrayList<>();
 		
@@ -259,8 +259,8 @@ public class EntrenadorDAO {
 			
 			String sentencia = "select * from entrenador where administrador_id = ?";
 			
-			if(!cedula.equals("")) {
-				sentencia = "select * from entrenador where administrador_id = ? and nombre = ?";
+			if(!nombre.equals("")) {
+				sentencia = "select * from entrenador where administrador_id = ? and nombre like ?";
 			}
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
@@ -268,8 +268,8 @@ public class EntrenadorDAO {
 			try(statement) {
 				statement.setInt(1, administrador_id);
 				
-				if(!cedula.equals("")) {
-					statement.setString(2, cedula);
+				if(!nombre.equals("")) {
+					statement.setString(2, nombre + "%");
 				}
 				
 				final ResultSet resultSet = statement.executeQuery();

@@ -14,6 +14,8 @@ public class AdminFrame extends JFrame implements ActionListener{
     private int panelAncho = 1080, panelAlto = 750;
     
     public AdminFrame() {
+    	setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
+    	setTitle("Gym");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 800);
         setResizable(false);

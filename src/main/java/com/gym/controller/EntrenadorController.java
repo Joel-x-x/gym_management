@@ -21,8 +21,8 @@ public class EntrenadorController {
 		return entrenadorDAO.modificar(entrenador);
 	}
 	
-	public Object[][] consultar(String cedula, int administrador_id) {
-		var listaEntrenadores =  entrenadorDAO.consultar(cedula, administrador_id);
+	public Object[][] consultar(String nombre, int administrador_id) {
+		var listaEntrenadores =  entrenadorDAO.consultar(nombre, administrador_id);
 		
 		return new ArrayUtilidades().toMatrizEntrenador(listaEntrenadores);
 	}

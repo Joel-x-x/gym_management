@@ -30,8 +30,8 @@ public class AdministradorController {
 		return administradorDAO.superUsuario(administrador_id);
 	}
 
-	public Object[][] listar() {
-		var listarAdministradores = administradorDAO.listar();
+	public Object[][] listar(String nombre) {
+		var listarAdministradores = administradorDAO.listar(nombre);
 		
 		return new ArrayUtilidades().toMatrizAdministrador(listarAdministradores);
 	}

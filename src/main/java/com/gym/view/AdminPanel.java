@@ -20,6 +20,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class AdminPanel extends JPanel {
 	private int administrador_id = new Administrador().getId();
@@ -35,7 +37,15 @@ public class AdminPanel extends JPanel {
 	public void listar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Email", "Cedula	"};
 		
-		modelo = new DefaultTableModel(administradorController.listar(), cabeceras);
+		modelo = new DefaultTableModel(administradorController.listar(""), cabeceras);
+		
+		tableAdministradores.setModel(modelo);
+	}
+	
+	public void consultar() {
+		String[] cabeceras = {"Id","Nombre","Apellido","Email", "Cedula	"};
+		
+		modelo = new DefaultTableModel(administradorController.listar(textBuscar.getText()), cabeceras);
 		
 		tableAdministradores.setModel(modelo);
 	}
@@ -77,12 +87,17 @@ public class AdminPanel extends JPanel {
 		
 		administradorController = new AdministradorController();
 		
-		JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por cédula:");
+		JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");
 		lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_1_4_2.setBounds(30, 80, 99, 14);
 		add(lblNewLabel_1_4_2);
 		
 		textBuscar = new JTextField();
+		textBuscar.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				consultar();
+			}
+		});
 		textBuscar.setColumns(10);
 		textBuscar.setBounds(139, 74, 137, 25);
 		add(textBuscar);
@@ -162,5 +177,18 @@ public class AdminPanel extends JPanel {
 		
 		listar();
 		btnCopiar.setEnabled(false);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnBuscar.setForeground(Color.WHITE);
+		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnBuscar.setBorder(null);
+		btnBuscar.setBackground(new Color(46, 56, 64));
+		btnBuscar.setBounds(286, 72, 89, 30);
+		add(btnBuscar);
 	}
 }
