@@ -69,6 +69,11 @@ public class UsuariosPanel extends JPanel {
 	private void guardar() {
 		Usuario usuario = llenarUsuario();
 		
+		if(this.getRadioButton().equals("")) {
+			JOptionPane.showMessageDialog(null, "Campo sexo vacio, selecciona un sexo");
+			return;
+		}
+		
 		if(usuarioController.guardar(usuario)) {
 			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
 			listar();
