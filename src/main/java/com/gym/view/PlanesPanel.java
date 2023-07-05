@@ -238,6 +238,7 @@ public class PlanesPanel extends JPanel {
 		listarEntrenador();
 		limpiarFormularioEntrenador();
 		listarComboEntrenador();
+		bloquearBotonesEntrenador();
 	}
 	
 	public void eliminarEntrenador() {
@@ -250,6 +251,7 @@ public class PlanesPanel extends JPanel {
 		listarEntrenador();
 		limpiarFormularioEntrenador();
 		listarComboEntrenador();
+		bloquearBotonesEntrenador();
 	}
 	
     public Entrenador llenarEntrenador() {

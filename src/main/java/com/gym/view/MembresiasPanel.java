@@ -288,7 +288,7 @@ public class MembresiasPanel extends JPanel {
         comboBoxClase.setBounds(30, 136, 218, 25);
         add(comboBoxClase);
         
-        JLabel lblNewLabel = new JLabel("MEMBRESIAS");
+        JLabel lblNewLabel = new JLabel("MEMBRESÍAS");
         lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
         lblNewLabel.setBounds(30, 30, 150, 33);
         add(lblNewLabel);

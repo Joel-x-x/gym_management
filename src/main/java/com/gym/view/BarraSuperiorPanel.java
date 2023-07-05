@@ -3,21 +3,28 @@ package com.gym.view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.gym.model.Administrador;
 import com.gym.utilidades.CircularLabel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BarraSuperiorPanel extends JPanel {
+	private AdminFrame adminFrame;
+	private int administrador_id;
+	int panelAncho = 1080, panelAlto = 750;
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -1014488060944978809L;
 
-	public BarraSuperiorPanel() {
+	public BarraSuperiorPanel(AdminFrame frame) {
+		adminFrame = frame;
+		
+		administrador_id = new Administrador().getId();
+		
         setPreferredSize(new Dimension(1280, 80));
         setBackground(new Color(230, 230, 230));
         setLayout(null);
@@ -36,6 +43,12 @@ public class BarraSuperiorPanel extends JPanel {
         add(lblNewLabel_1);
         
         JLabel lblNewLabel_1_1 = new JLabel("");
+        lblNewLabel_1_1.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		adminFrame.cambiarPanel(new ConfiguracionPanel(panelAlto, panelAncho));
+        	}
+        });
         lblNewLabel_1_1.setIcon(new ImageIcon(BarraSuperiorPanel.class.getResource("/com/gym/resources/config.png")));
         lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel_1_1.setBounds(1210, 8, 35, 35);

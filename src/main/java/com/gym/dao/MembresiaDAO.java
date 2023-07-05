@@ -10,6 +10,7 @@ import java.util.List;
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
+import com.gym.utilidades.Utilidades;
 
 public class MembresiaDAO {
 	Connection con;
@@ -300,6 +301,10 @@ public class MembresiaDAO {
 	}
 
 	public boolean eliminar(int id) {
+		
+		if(!this.eliminarRegistro(id)) {
+			System.out.println("No se encontraron registros");
+		}
 
 		try {
 			String sentencia = "delete from membresia where id = ?";
@@ -316,6 +321,30 @@ public class MembresiaDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
+		
+	}
+	
+	public boolean eliminarRegistro(int membresia_id) {
+		
+		int item = 0;
+		
+		try {
+			String sentencia = "delete from registro where membresia_id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, membresia_id);
+				
+				item = statement.executeUpdate();
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
 		
 	}
 

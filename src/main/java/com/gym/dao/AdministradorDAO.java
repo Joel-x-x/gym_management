@@ -259,4 +259,81 @@ public class AdministradorDAO {
 		return new Utilidades().toBoolean(item);
 	
 	}
+
+	public int getId() {
+		
+		int item = 0;
+		
+		try {
+			
+			String sentencia = "select * from administrador"
+					+ " order by id desc"
+					+ " limit 1";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					resultSet.next();
+					
+					item = resultSet.getInt("id");
+				}
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return item;
+	}
+	
+	public boolean crearCuenta(int id) {
+		int item = 0;
+		
+		try {
+			
+			String sentencia = "insert into cuenta(administrador_id) values(?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				item = statement.executeUpdate();
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	
+	public boolean crearRecuperacionCuenta(int id) {
+		int item = 0;
+		
+		try {
+			
+			String sentencia = "insert into recuperacion_cuenta(administrador_id) values(?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, id);
+				
+				item = statement.executeUpdate();
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
+	
 }

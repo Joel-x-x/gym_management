@@ -43,5 +43,17 @@ public class AdministradorController {
 	public boolean eliminarClave(String clave) {
 		return administradorDAO.eliminarClave(clave);
 	}
+	
+	public int getId() {
+		return administradorDAO.getId();
+	}
+
+	public boolean crearCuenta(int id) {
+		return administradorDAO.crearCuenta(id);
+	}
+	
+	public boolean crearRecuperacionCuenta(int id) {
+		return administradorDAO.crearRecuperacionCuenta(id);
+	}
 
 }

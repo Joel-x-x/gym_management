@@ -131,6 +131,18 @@ public class UsuariosPanel extends JPanel {
 		}
 	}
 	
+	public void modificarFisico() {
+		Fisico fisico = llenarFisico();
+		
+		if(fisicoController.modificar(fisico)) {
+			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
+			listarFisico();
+			LimpiarFormularioFisico();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo modificar");
+		}
+	}
+	
 	public void consultar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
@@ -358,6 +370,7 @@ public class UsuariosPanel extends JPanel {
         add(textAltura);
         
         btnAgregarUsuario = new JButton("Agregar");
+        btnAgregarUsuario.setFocusPainted(false);
         btnAgregarUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnAgregarUsuario.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -371,6 +384,7 @@ public class UsuariosPanel extends JPanel {
         add(btnAgregarUsuario);
         
         btnModificarUsuario = new JButton("Modificar");
+        btnModificarUsuario.setFocusPainted(false);
         btnModificarUsuario.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		modificar();
@@ -384,6 +398,7 @@ public class UsuariosPanel extends JPanel {
         add(btnModificarUsuario);
         
         btnEliminarUsuario = new JButton("Eliminar");
+        btnEliminarUsuario.setFocusPainted(false);
         btnEliminarUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminarUsuario.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -397,6 +412,7 @@ public class UsuariosPanel extends JPanel {
         add(btnEliminarUsuario);
         
         btnAgregarFisico = new JButton("Agregar");
+        btnAgregarFisico.setFocusPainted(false);
         btnAgregarFisico.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
@@ -411,6 +427,12 @@ public class UsuariosPanel extends JPanel {
         add(btnAgregarFisico);
         
         btnModificarFisico = new JButton("Modificar");
+        btnModificarFisico.setFocusPainted(false);
+        btnModificarFisico.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		modificarFisico();
+        	}
+        });
         btnModificarFisico.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnModificarFisico.setForeground(new Color(255, 255, 255));
         btnModificarFisico.setBorder(null);
@@ -419,6 +441,7 @@ public class UsuariosPanel extends JPanel {
         add(btnModificarFisico);
         
         btnEliminarFisico = new JButton("Eliminar");
+        btnEliminarFisico.setFocusPainted(false);
         btnEliminarFisico.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminarFisico.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -505,6 +528,7 @@ public class UsuariosPanel extends JPanel {
         add(textEmail);
         
         JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.setFocusPainted(false);
         btnBuscar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		consultar();
@@ -518,6 +542,7 @@ public class UsuariosPanel extends JPanel {
         add(btnBuscar);
         
         JButton btnLimpiar = new JButton("Limpiar");
+        btnLimpiar.setFocusPainted(false);
         btnLimpiar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		limpiarFormularioUsuario();

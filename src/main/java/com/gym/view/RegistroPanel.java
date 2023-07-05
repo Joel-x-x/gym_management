@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 
 public class RegistroPanel extends JPanel {
 	private AdministradorController administradorController;
+	private int administrador_id;
 
 	private static final long serialVersionUID = -4705635535839437717L;
     private RegistroFrame registroFrame;
@@ -36,7 +37,13 @@ public class RegistroPanel extends JPanel {
 		Administrador administrador = llenarAdministrador();
 		
 		if(administradorController.registrar(administrador)) {
+			if(!administradorController.crearCuenta(administrador_id) && !administradorController.crearRecuperacionCuenta(administrador_id)) {
+				JOptionPane.showMessageDialog(null, "No se creo correctamente la cuenta");
+			}
 			JOptionPane.showMessageDialog(null, "Registrado con exito");
+			administrador_id = administradorController.getId();
+			
+			
 			limpiarFormulario();
 			registroFrame.mostrarPanelInicioSesion();
 		} else {

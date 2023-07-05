@@ -22,7 +22,7 @@ public class AdminFrame extends JFrame implements ActionListener{
         setLocationRelativeTo(null);
         
         // BarraSuperiorPanel
-        barraSuperiorPanel = new BarraSuperiorPanel();
+        barraSuperiorPanel = new BarraSuperiorPanel(this);
         barraSuperiorPanel.setPreferredSize(new Dimension(1280, 50));
 
         // BarraPanel

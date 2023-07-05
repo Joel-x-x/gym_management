@@ -56,7 +56,7 @@ public class BarraPanel extends JPanel {
         usuariosButton.setBorder(null);
         usuariosButton.setFont(new Font("Candara", Font.PLAIN, 18));
         usuariosButton.setBounds(0, 248, 200, 40);
-        membresiasButton = new JButton("     Membresias");
+        membresiasButton = new JButton("     Membresías");
         membresiasButton.setHorizontalAlignment(SwingConstants.LEFT);
         membresiasButton.setFocusPainted(false);
         membresiasButton.setFocusTraversalKeysEnabled(false);
