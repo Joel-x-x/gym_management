@@ -317,7 +317,7 @@ public class AdministradorDAO {
 		int item = 0;
 		
 		try {
-			
+			System.out.println("Creando recuperacion " + id);
 			String sentencia = "insert into recuperacion_cuenta(administrador_id) values(?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
@@ -334,6 +334,31 @@ public class AdministradorDAO {
 		
 		return new Utilidades().toBoolean(item);
 		
+	}
+	
+	public boolean cambiarPassword(String password, int id) {
+		int item = 0;
+		
+		try {
+			
+			String sentencia = "update administrador set password = ? where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setString(1, password);
+				statement.setInt(2, id);
+				
+				item = statement.executeUpdate();
+				
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return new Utilidades().toBoolean(item);
 	}
 	
 }

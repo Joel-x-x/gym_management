@@ -7,16 +7,32 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import com.gym.controller.AdministradorController;
+import com.gym.controller.CuentaController;
+import com.gym.controller.RecuperacionCuentaController;
+import com.gym.model.Administrador;
+import com.gym.model.Cuenta;
+import com.gym.model.RecuperacionCuenta;
+
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class ConfiguracionPanel extends JPanel {
+	private int administrador_id;
+	private CuentaController cuentaController;
+	private RecuperacionCuentaController recuperacionCuentaController;
+	private AdministradorController administradorController;
+	
 	private JButton examinarButtonLogo;
 	private JButton examinarButtonPerfil;
 	private byte[] logo;
@@ -27,9 +43,35 @@ public class ConfiguracionPanel extends JPanel {
 	private JTextField textNombreAmigo;
 	private JTextField textNombreMascota;
 	private JTextField textColor;
-	private JTextField textCedula;
-	private JTextField textPassword;
-	private JTextField textPasswordConfirmar;
+	private JPasswordField textPassword;
+	private JPasswordField textPasswordConfirmar;
+	
+	public void modificarGimnasio() {
+		Cuenta cuenta = llenarCuenta();
+		
+		if(cuentaController.modificarEmpresa(cuenta)) {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			textNombreGym.setText("");
+		} else {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+		}
+	}
+	
+	public Cuenta llenarCuenta() {
+		return new Cuenta(
+				textNombreGym.getText(),
+				logo,
+				administrador_id);
+	}
+	
+	
+	public void actualizarPerfil() {
+		if(cuentaController.modificarPerfil(perfil, administrador_id)) {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+		} else {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+		}
+	}
 	
 	public byte[] prepararImagen() {
 	    byte[] imageData = null;
@@ -61,8 +103,55 @@ public class ConfiguracionPanel extends JPanel {
 
 	    return imageData;
 	}
+	
+	// Datos recuperacion cuenta
+	
+	private void actualizarRecuperacionCuenta() {
+		RecuperacionCuenta recuperacionCuenta = llenarRecuperacionCuenta();
+		
+		if(recuperacionCuentaController.modificar(recuperacionCuenta)) {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			limpiarFormularioRecuperacion();
+		} else {
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+		}
+	}
+	
+	public RecuperacionCuenta llenarRecuperacionCuenta() {
+		return new RecuperacionCuenta(
+				textNombreAmigo.getText(),
+				textNombreMascota.getText(),
+				textColor.getText(),
+				administrador_id);
+	}
+	
+	public void limpiarFormularioRecuperacion() {
+		textNombreAmigo.setText("");
+		textNombreMascota.setText("");
+		textColor.setText("");
+	}
+	
+	// Cambiar Contraseña
+	
+	private void cambiarPassword() {
+		if(administradorController.cambiarPassword(String.valueOf(textPassword.getPassword()), administrador_id)) {
+			JOptionPane.showMessageDialog(null, "Haz cambiado tu contraseña");
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo cambiar la contraseña");
+		}
+	}
+	
+	public void limpiarFormularioPassword() {
+		textPassword.setText("");
+		textPasswordConfirmar.setText("");
+	}
 
 	public ConfiguracionPanel(int panelAncho, int panelAlto) {
+		administrador_id = new Administrador().getId();
+		cuentaController = new CuentaController();
+		recuperacionCuentaController = new RecuperacionCuentaController();
+		administradorController = new AdministradorController();
+		
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		
@@ -103,7 +192,12 @@ public class ConfiguracionPanel extends JPanel {
         });
         add(examinarButtonLogo);
         
-        JButton btnGuardarGym = new JButton("Guardar");
+        JButton btnGuardarGym = new JButton("Actualizar");
+        btnGuardarGym.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		modificarGimnasio();
+        	}
+        });
         btnGuardarGym.setForeground(Color.WHITE);
         btnGuardarGym.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnGuardarGym.setFocusPainted(false);
@@ -122,7 +216,12 @@ public class ConfiguracionPanel extends JPanel {
         lblNewLabel_1_1_1.setBounds(542, 156, 103, 14);
         add(lblNewLabel_1_1_1);
         
-        JButton btnGuardarPerfil = new JButton("Guardar");
+        JButton btnGuardarPerfil = new JButton("Actualizar");
+        btnGuardarPerfil.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		actualizarPerfil();
+        	}
+        });
         btnGuardarPerfil.setForeground(Color.WHITE);
         btnGuardarPerfil.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnGuardarPerfil.setFocusPainted(false);
@@ -176,19 +275,10 @@ public class ConfiguracionPanel extends JPanel {
         textColor.setBounds(30, 403, 225, 25);
         add(textColor);
         
-        JLabel lblNewLabel_1_2_3 = new JLabel("Cédula");
-        lblNewLabel_1_2_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_2_3.setBounds(268, 387, 184, 14);
-        add(lblNewLabel_1_2_3);
-        
-        textCedula = new JTextField();
-        textCedula.setColumns(10);
-        textCedula.setBounds(268, 403, 225, 25);
-        add(textCedula);
-        
-        JButton btnGuardarRecuperar = new JButton("Guardar");
+        JButton btnGuardarRecuperar = new JButton("Actualizar");
         btnGuardarRecuperar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		actualizarRecuperacionCuenta();
         	}
         });
         btnGuardarRecuperar.setForeground(Color.WHITE);
@@ -204,27 +294,22 @@ public class ConfiguracionPanel extends JPanel {
         lblCambiarContrasea.setBounds(30, 500, 361, 37);
         add(lblCambiarContrasea);
         
-        JLabel lblNewLabel_1_2_4 = new JLabel("Contraseña");
+        JLabel lblNewLabel_1_2_4 = new JLabel("Nueva contraseña");
         lblNewLabel_1_2_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_2_4.setBounds(30, 548, 137, 14);
         add(lblNewLabel_1_2_4);
-        
-        textPassword = new JTextField();
-        textPassword.setColumns(10);
-        textPassword.setBounds(30, 564, 225, 25);
-        add(textPassword);
         
         JLabel lblNewLabel_1_2_2_1 = new JLabel("Confirma tu contraseña");
         lblNewLabel_1_2_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_2_2_1.setBounds(30, 600, 184, 14);
         add(lblNewLabel_1_2_2_1);
         
-        textPasswordConfirmar = new JTextField();
-        textPasswordConfirmar.setColumns(10);
-        textPasswordConfirmar.setBounds(30, 616, 225, 25);
-        add(textPasswordConfirmar);
-        
         JButton btnGuardar_2_1 = new JButton("Confirmar");
+        btnGuardar_2_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		cambiarPassword();
+        	}
+        });
         btnGuardar_2_1.setForeground(Color.WHITE);
         btnGuardar_2_1.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnGuardar_2_1.setFocusPainted(false);
@@ -232,5 +317,13 @@ public class ConfiguracionPanel extends JPanel {
         btnGuardar_2_1.setBackground(new Color(46, 56, 64));
         btnGuardar_2_1.setBounds(30, 652, 150, 30);
         add(btnGuardar_2_1);
+        
+        textPassword = new JPasswordField();
+        textPassword.setBounds(30, 564, 225, 25);
+        add(textPassword);
+        
+        textPasswordConfirmar = new JPasswordField();
+        textPasswordConfirmar.setBounds(30, 616, 225, 25);
+        add(textPasswordConfirmar);
 	}
 }

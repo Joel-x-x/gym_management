@@ -5,17 +5,13 @@ public class RecuperacionCuenta {
 	private String nombre_amigo;
 	private String nombre_mascota;
 	private String color_favorito;
-	private String cedula;
 	private int administrador_id;
 	
-	public RecuperacionCuenta(int id, String nombre_amigo, String nombre_mascota, String color_favorito, String cedula,
+	public RecuperacionCuenta(String nombre_amigo, String nombre_mascota, String color_favorito,
 			int administrador_id) {
-		super();
-		this.id = id;
 		this.nombre_amigo = nombre_amigo;
 		this.nombre_mascota = nombre_mascota;
 		this.color_favorito = color_favorito;
-		this.cedula = cedula;
 		this.administrador_id = administrador_id;
 	}
 	
@@ -42,12 +38,6 @@ public class RecuperacionCuenta {
 	}
 	public void setColor_favorito(String color_favorito) {
 		this.color_favorito = color_favorito;
-	}
-	public String getCedula() {
-		return cedula;
-	}
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
 	}
 	public int getAdministrador_id() {
 		return administrador_id;

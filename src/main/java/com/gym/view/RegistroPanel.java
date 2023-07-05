@@ -37,11 +37,17 @@ public class RegistroPanel extends JPanel {
 		Administrador administrador = llenarAdministrador();
 		
 		if(administradorController.registrar(administrador)) {
-			if(!administradorController.crearCuenta(administrador_id) && !administradorController.crearRecuperacionCuenta(administrador_id)) {
+			administrador_id = administradorController.getId();
+			
+			if(!administradorController.crearCuenta(administrador_id)) {
 				JOptionPane.showMessageDialog(null, "No se creo correctamente la cuenta");
 			}
+			
+			if( !administradorController.crearRecuperacionCuenta(administrador_id)) {
+				JOptionPane.showMessageDialog(null, "No se creo correctamente recuperacion usuario");
+			}
+			
 			JOptionPane.showMessageDialog(null, "Registrado con exito");
-			administrador_id = administradorController.getId();
 			
 			
 			limpiarFormulario();

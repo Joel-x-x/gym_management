@@ -27,6 +27,10 @@ public class MembresiaController {
 	public Object[][] listar(int usuario_id) {
 		var listaMembresia = membresiaDAO.listar(usuario_id);
 		
+		for(Membresia membresia : listaMembresia) {
+			membresia.cambiarActivoMembresia();
+		}
+		
 		return new ArrayUtilidades().toMatrizMembresia(listaMembresia);
 	}
 

@@ -55,5 +55,9 @@ public class AdministradorController {
 	public boolean crearRecuperacionCuenta(int id) {
 		return administradorDAO.crearRecuperacionCuenta(id);
 	}
+	
+	public boolean cambiarPassword(String password, int id) {
+		return administradorDAO.cambiarPassword(password, id);
+	}
 
 }

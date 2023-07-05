@@ -7,6 +7,10 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Utilidades {
 	public boolean toBoolean(int numero) {
@@ -36,5 +40,15 @@ public class Utilidades {
 	    g2.dispose();
 
 	    return resizedImage;
+	}
+	
+	public static BufferedImage obtenerBufferedImage(byte[] imageData) {
+	    try {
+	        ByteArrayInputStream inputStream = new ByteArrayInputStream(imageData);
+	        return ImageIO.read(inputStream);
+	    } catch (IOException ex) {
+	        ex.printStackTrace();
+	        return null;
+	    }
 	}
 }

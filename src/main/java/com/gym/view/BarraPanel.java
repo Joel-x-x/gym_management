@@ -9,16 +9,19 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 
 import com.gym.utilidades.*;
 
 import com.gym.controller.AdministradorController;
+import com.gym.controller.CuentaController;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Administrador;
 
 
 public class BarraPanel extends JPanel {
 	private AdministradorController administradorController;
+	private CuentaController cuentaController;
 	private int administrador_id;
 	
 	private static final long serialVersionUID = -5747117121149449033L;
@@ -33,6 +36,7 @@ public class BarraPanel extends JPanel {
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
         administradorController = new AdministradorController();
+        cuentaController = new CuentaController();
         administrador_id = new Administrador().getId();
         
         setPreferredSize(new Dimension(200, 750));
@@ -170,24 +174,33 @@ public class BarraPanel extends JPanel {
         add(lblNewLabel);
         
         CircularLabel lblNewLabel_1 = new CircularLabel();
-        lblNewLabel_1.setText("Icono");
         lblNewLabel_1.setSize(new Dimension(90, 90));
         
+        byte[] logoEmpresa = cuentaController.getLogo(administrador_id);
+        //byte[] logoEmpresa = null;
         // Crear una instancia de la imagen para poder redondearla
         BufferedImage image = null;
         
-        try {
-            URL imageUrl = BarraPanel.class.getResource("/com/gym/view/popeye.jpg");
-            image = ImageIO.read(imageUrl);
+        if(logoEmpresa == null) {
             
-            // Operaciones con la imagen...
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                URL imageUrl = BarraPanel.class.getResource("/com/gym/resources/logoDefecto.jpg");
+                image = ImageIO.read(imageUrl);
+                
+                // Operaciones con la imagen...
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+        } else {
+        	image =  Utilidades.obtenerBufferedImage(logoEmpresa);
+            System.out.println(logoEmpresa);
         }
         
         // Recibe una imagen tipo BufferedImagen
+        //lblNewLabel_1.setImage(new Utilidades().resizeImage(image, 80, 80));
         lblNewLabel_1.setImage(image);
-        lblNewLabel_1.setZoom(20);
+        lblNewLabel_1.setZoom(0);
         lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel_1.setForeground(new Color(50, 50, 50));
@@ -196,5 +209,4 @@ public class BarraPanel extends JPanel {
         add(lblNewLabel_1);
     }
     
-   
 }

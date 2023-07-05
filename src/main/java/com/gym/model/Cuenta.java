@@ -15,6 +15,13 @@ public class Cuenta {
 		this.imagen_perfil = imagen_perfil;
 		this.administrador_id = administrador_id;
 	}
+	
+	public Cuenta(String nombre_empresa, byte[] logo_empresa, int administrador_id) {
+		super();
+		this.nombre_empresa = nombre_empresa;
+		this.logo_empresa = logo_empresa;
+		this.administrador_id = administrador_id;
+	}
 
 	public int getId() {
 		return id;
