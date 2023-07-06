@@ -35,7 +35,7 @@ public class UsuarioController {
 		return usuarioDAO.consultaMembresia(usuario_id);
 	}
 
-	public boolean eliminar(int idSeleccionado) {
+	public int eliminar(int idSeleccionado) {
 		return usuarioDAO.eliminar(idSeleccionado);
 	}
 

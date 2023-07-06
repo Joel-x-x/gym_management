@@ -166,7 +166,7 @@ public class BarraPanel extends JPanel {
         btnCerrarSesion.setBounds(0, 646, 200, 40);
         add(btnCerrarSesion);
         
-        JLabel lblNewLabel = new JLabel("Gym");
+        JLabel lblNewLabel = new JLabel("Xtream");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setForeground(new Color(163, 175, 175));
         lblNewLabel.setFont(new Font("Candara", Font.BOLD, 18));

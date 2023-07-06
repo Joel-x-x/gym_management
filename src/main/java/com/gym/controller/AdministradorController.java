@@ -60,4 +60,8 @@ public class AdministradorController {
 		return administradorDAO.cambiarPassword(password, id);
 	}
 
+	public String getNombreUsuario(int administrador_id) {
+		return administradorDAO.getNombreUsuario(administrador_id);
+	}
+
 }

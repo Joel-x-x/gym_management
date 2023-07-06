@@ -59,7 +59,7 @@ public class MembresiaController {
 		return membresiaDAO.modificarActivo(id, activo);
 	}
 
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		return membresiaDAO.eliminar(id);
 	}
 

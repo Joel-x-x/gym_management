@@ -361,4 +361,34 @@ public class AdministradorDAO {
 		return new Utilidades().toBoolean(item);
 	}
 	
+	public String getNombreUsuario(int id) {
+		String nombre = "";
+		
+		try {
+			
+			String sentencia = "select nombre from administrador where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					resultSet.next();
+					
+					nombre = resultSet.getString("nombre");
+				}
+				
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return nombre;
+	}
+	
 }

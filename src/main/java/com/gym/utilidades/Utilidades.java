@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class Utilidades {
 	public boolean toBoolean(int numero) {
@@ -50,5 +51,20 @@ public class Utilidades {
 	        ex.printStackTrace();
 	        return null;
 	    }
+	}
+	
+	public static String codigoToMensajeEliminar(int error, String mensajeRestriccion) {
+		
+		switch (error) {
+		case 0:
+			return "No se puedo eliminar";
+		case 1:
+			return "Eliminado con exito!";
+		case 1451:
+			return mensajeRestriccion;
+		default:
+			return "No se puedo eliminar";
+		}
+
 	}
 }

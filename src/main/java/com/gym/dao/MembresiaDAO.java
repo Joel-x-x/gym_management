@@ -300,11 +300,13 @@ public class MembresiaDAO {
 		
 	}
 
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		
-		if(!this.eliminarRegistro(id)) {
-			System.out.println("No se encontraron registros");
-		}
+//		if(!this.eliminarRegistro(id)) {
+//			System.out.println("No se encontraron registros");
+//		}
+		
+		int item = 0;
 
 		try {
 			String sentencia = "delete from membresia where id = ?";
@@ -315,12 +317,14 @@ public class MembresiaDAO {
 				
 				statement.setInt(1, id);
 				
-				return toBoolean(statement.executeUpdate());
+				item = statement.executeUpdate();
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			item = e.getErrorCode();
 		}
+		
+		return item;
 		
 	}
 	

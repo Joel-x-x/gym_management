@@ -10,6 +10,7 @@ import com.gym.model.Clase;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
 import com.gym.utilidades.FechasUtilidades;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -118,13 +119,9 @@ public class MembresiasPanel extends JPanel {
 	}
  	
 	private void eliminar() {
-		if(membresiaController.eliminar(idSeleccionadoMembresia)) {
-			JOptionPane.showMessageDialog(null, "Eliminado con Exito!");
-			listarMembresias();
-			limpiarFormulario();
-		} else {
-			JOptionPane.showMessageDialog(null, "No se pudo eliminar");
-		}
+		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(membresiaController.eliminar(idSeleccionadoMembresia),
+				"No se pudo eliminar, parece que tienes registros que dependen de esta membresia, "
+				+ "solo puedes modificar la membresia"));
 	}
 	
 	private void calcularPrecioTotal() {
@@ -396,7 +393,7 @@ public class MembresiasPanel extends JPanel {
         scrollPane_membresias_membresias.setViewportView(tableMembresias);
         
         JScrollPane scrollPane_usuarios_membresias = new JScrollPane();
-        scrollPane_usuarios_membresias.setBounds(30, 424, 1014, 292);
+        scrollPane_usuarios_membresias.setBounds(30, 424, 1014, 263);
         add(scrollPane_usuarios_membresias);
         
         tableUsuarios = new JTable();

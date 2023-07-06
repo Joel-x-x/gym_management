@@ -8,6 +8,7 @@ import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Fisico;
 import com.gym.model.Usuario;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -113,12 +114,10 @@ public class UsuariosPanel extends JPanel {
 		int respuesta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar");
 		if(respuesta == 0) {
 			
-			if(usuarioController.eliminar(idSeleccionadoUsuario)) {
-				JOptionPane.showMessageDialog(null, "Registro eliminado!");
-				listar();
-			} else {
-				JOptionPane.showMessageDialog(null, "No se puedo eliminar el registro");
-			}
+			JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(usuarioController.eliminar(idSeleccionadoUsuario),
+					"No se pudo eliminar, parece que tienes registros y membresias que dependen de este usuario, "
+					+ "unicamente puedes modificarlo"));
+			listar();
 		}
 		
 	}

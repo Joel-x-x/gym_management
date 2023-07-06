@@ -90,11 +90,13 @@ public class UsuarioDAO {
 		
 	}
 
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		
-		eliminarFisico(id);
-		eliminarRegistro(id);
-		eliminarMembresia(id);
+//		eliminarFisico(id);
+//		eliminarRegistro(id);
+//		eliminarMembresia(id);
+		
+		int item = 0;
 		
 		try {
 			String sentencia = "delete from usuario where id = ?";
@@ -104,12 +106,14 @@ public class UsuarioDAO {
 			try(statement) {
 				statement.setInt(1, id);
 				
-				return toBoolean(statement.executeUpdate());
+				item = statement.executeUpdate();
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			item = e.getErrorCode();
 		}
+		
+		return item;
 		
 	}
 

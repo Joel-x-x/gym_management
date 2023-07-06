@@ -24,7 +24,7 @@ public class ClaseController {
 		return new ArrayUtilidades().toMatrizClase(listaConsultas);
 	}
 	
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		return claseDAO.eliminar(id);
 	}
 	public Clase consulta(int id) {

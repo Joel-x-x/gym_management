@@ -69,7 +69,7 @@ public class ClaseDAO {
 		
 	}
 	
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		
 		int item = 0;
 		
@@ -85,10 +85,10 @@ public class ClaseDAO {
 				item = statement.executeUpdate();
 			}
 		}catch(SQLException e) {
-			throw new RuntimeException(e);
+			item = e.getErrorCode();
 		}
 		
-		return new Utilidades().toBoolean(item);
+		return item;
 		
 	}
 	

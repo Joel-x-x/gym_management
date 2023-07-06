@@ -36,7 +36,7 @@ public class EntrenadorController {
 		return entrenadores;
 	}
 	
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		return entrenadorDAO.eliminar(id);
 	}
 	

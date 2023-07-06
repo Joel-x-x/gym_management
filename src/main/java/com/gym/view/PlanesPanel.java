@@ -10,6 +10,7 @@ import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Entrenador;
 import com.gym.model.Plan;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -242,11 +243,10 @@ public class PlanesPanel extends JPanel {
 	}
 	
 	public void eliminarEntrenador() {
-		if(entrenadorController.eliminar(idSeleccionadoEntrenador)) {
-			JOptionPane.showMessageDialog(null, "Eliminado con exito!");
-		} else {
-			JOptionPane.showMessageDialog(null, "No se puedo eliminar");
-		}
+		
+		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(entrenadorController.eliminar(idSeleccionadoEntrenador),
+				"No se pudo eliminar, parece que tienes clases que dependen de este entrenador, "
+				+ "eliminas sus clases primero o tambien modificar este entrenador"));
 		
 		listarEntrenador();
 		limpiarFormularioEntrenador();
@@ -353,11 +353,9 @@ public class PlanesPanel extends JPanel {
 	}
 	
 	public void eliminarClase() {
-		if(claseController.eliminar(idSeleccionadoClase)) {
-			JOptionPane.showMessageDialog(null, "Eliminado con Exito!");
-		}else {
-			JOptionPane.showMessageDialog(null, "No se pudo eliminar");
-		}
+		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(claseController.eliminar(idSeleccionadoClase),
+				"No se pudo eliminar, parece que tienes membresías que dependen de esta clase, "
+				+ "eliminas estas membresías primero o tambien modificar la clase"));
 		
 		limpiarFormularioClase();
 		listarClase();

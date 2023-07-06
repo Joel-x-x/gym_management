@@ -3,6 +3,7 @@ package com.gym.view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.gym.controller.AdministradorController;
 import com.gym.model.Administrador;
 import com.gym.utilidades.CircularLabel;
 
@@ -15,6 +16,7 @@ import java.awt.event.MouseEvent;
 
 public class BarraSuperiorPanel extends JPanel {
 	private AdminFrame adminFrame;
+	private AdministradorController administradorController;
 	private int administrador_id;
 	int panelAncho = 1080, panelAlto = 750;
 
@@ -24,6 +26,7 @@ public class BarraSuperiorPanel extends JPanel {
 		adminFrame = frame;
 		
 		administrador_id = new Administrador().getId();
+		administradorController = new AdministradorController();
 		
         setPreferredSize(new Dimension(1280, 80));
         setBackground(new Color(230, 230, 230));
@@ -73,11 +76,16 @@ public class BarraSuperiorPanel extends JPanel {
         labelUsuario.setBounds(1085, 8, 40, 33);
         add(labelUsuario);
         
-        JLabel lblUsuario = new JLabel("Usuario");
+        JLabel lblUsuario = new JLabel();
+        
+        String nombre = administradorController.getNombreUsuario(administrador_id).trim();
+        
+        lblUsuario.setText(nombre);
+        
         lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
         lblUsuario.setForeground(Color.BLACK);
         lblUsuario.setFont(new Font("Candara", Font.BOLD, 16));
-        lblUsuario.setBounds(1125, 16, 66, 22);
+        lblUsuario.setBounds(1125, 16, 85, 22);
         add(lblUsuario);
     }
 }

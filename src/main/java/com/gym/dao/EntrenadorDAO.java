@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import com.gym.model.Entrenador;
 import com.gym.utilidades.Utilidades;
 
@@ -73,29 +75,28 @@ public class EntrenadorDAO {
 		
 	}
 	
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		int item = 0;
 		
-		if(!this.eliminarClase(id)) {
-			System.out.println("No se puedo eliminar las clases");
-		}
+//		if(!this.eliminarClase(id)) {
+//			System.out.println("No se puedo eliminar las clases");
+//		}
 		
 		try {
 			String sentencia = "delete from entrenador where id = ?";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			try(statement){
-				
 				statement.setInt(1, id);
 				
 				item = statement.executeUpdate();
 				
 			}
 		}catch(SQLException e) {
-			e.printStackTrace();
+			item = e.getErrorCode();
 		}
 		
-		return new Utilidades().toBoolean(item);
+		return item;
 		
 	}
 	
