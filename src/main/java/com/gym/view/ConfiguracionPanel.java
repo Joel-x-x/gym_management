@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
 public class ConfiguracionPanel extends JPanel {
+	private AdminFrame adminFrame;
 	private int administrador_id;
 	private CuentaController cuentaController;
 	private RecuperacionCuentaController recuperacionCuentaController;
@@ -49,6 +50,16 @@ public class ConfiguracionPanel extends JPanel {
 	public void modificarGimnasio() {
 		Cuenta cuenta = llenarCuenta();
 		
+		if(cuenta.getNombre_empresa().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre gym no puede ir vacio");
+			return;
+		}
+		
+		if(cuenta.getLogo_empresa() == null) {
+			JOptionPane.showMessageDialog(null, "No has seleccionado ninguna imagen");
+			return;
+		}
+		
 		if(cuentaController.modificarEmpresa(cuenta)) {
 			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
 			textNombreGym.setText("");
@@ -66,6 +77,12 @@ public class ConfiguracionPanel extends JPanel {
 	
 	
 	public void actualizarPerfil() {
+		
+		if(perfil == null) {
+			JOptionPane.showMessageDialog(null, "No has seleccionado ninguna imagen");
+			return;
+		}
+		
 		if(cuentaController.modificarPerfil(perfil, administrador_id)) {
 			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
 		} else {
@@ -76,22 +93,16 @@ public class ConfiguracionPanel extends JPanel {
 	public byte[] prepararImagen() {
 	    byte[] imageData = null;
 	    
-	    // Crear un objeto JFileChooser
 	    JFileChooser fileChooser = new JFileChooser();
 
-	    // Mostrar el cuadro de diálogo de selección de archivo
 	    int result = fileChooser.showOpenDialog(this);
 
-	    // Verificar si se seleccionó un archivo
 	    if (result == JFileChooser.APPROVE_OPTION) {
-	        // Obtener el archivo seleccionado
 	        File selectedFile = fileChooser.getSelectedFile();
 
 	        try {
-	            // Leer la imagen como BufferedImage
 	            BufferedImage image = ImageIO.read(selectedFile);
 
-	            // Convertir la imagen a un arreglo de bytes
 	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	            ImageIO.write(image, "jpg", baos);
 	            imageData = baos.toByteArray();
@@ -146,7 +157,8 @@ public class ConfiguracionPanel extends JPanel {
 		textPasswordConfirmar.setText("");
 	}
 
-	public ConfiguracionPanel(int panelAncho, int panelAlto) {
+	public ConfiguracionPanel(int panelAncho, int panelAlto, AdminFrame adminFrame) {
+		this.adminFrame = adminFrame; 
 		administrador_id = new Administrador().getId();
 		cuentaController = new CuentaController();
 		recuperacionCuentaController = new RecuperacionCuentaController();
@@ -236,7 +248,6 @@ public class ConfiguracionPanel extends JPanel {
         // Configurar el evento de clic del botón
         examinarButtonPerfil.addActionListener(e -> {
         	perfil = prepararImagen();
-        	System.out.println(perfil + " perfil");
         });
         add(examinarButtonPerfil);
         

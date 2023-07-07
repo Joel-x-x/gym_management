@@ -26,4 +26,8 @@ public class CuentaController {
 	public String getNombreEmpresa(int administrador_id) {
 		return cuentaDAO.getNombreEmpresa(administrador_id);
 	}
+	
+	public byte[] getPerfil(int administrador_id) {
+		return cuentaDAO.getPerfil(administrador_id);
+	}
 }

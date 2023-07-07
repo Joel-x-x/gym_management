@@ -31,7 +31,9 @@ public class BarraPanel extends JPanel {
     private JButton membresiasButton;
     private JButton planesButton;
     private JButton adminButton;
+    private JLabel labelNombreGimnasio;
     int panelAncho = 1080, panelAlto = 750;
+    private CircularLabel labelLogo;
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
@@ -166,47 +168,53 @@ public class BarraPanel extends JPanel {
         btnCerrarSesion.setBounds(0, 646, 200, 40);
         add(btnCerrarSesion);
         
-        JLabel lblNewLabel = new JLabel("Xtream");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setForeground(new Color(163, 175, 175));
-        lblNewLabel.setFont(new Font("Candara", Font.BOLD, 18));
-        lblNewLabel.setBounds(0, 137, 200, 22);
-        add(lblNewLabel);
+        labelNombreGimnasio = new JLabel();
         
-        CircularLabel lblNewLabel_1 = new CircularLabel();
-        lblNewLabel_1.setSize(new Dimension(90, 90));
+        agregarNombreGym();
         
+        
+        labelNombreGimnasio.setHorizontalAlignment(SwingConstants.CENTER);
+        labelNombreGimnasio.setForeground(new Color(163, 175, 175));
+        labelNombreGimnasio.setFont(new Font("Candara", Font.BOLD, 18));
+        labelNombreGimnasio.setBounds(0, 137, 200, 22);
+        add(labelNombreGimnasio);
+        
+        labelLogo = new CircularLabel();
+        labelLogo.setSize(new Dimension(90, 90));
+        
+        agregarLogoGym();
+        
+        labelLogo.setZoom(0);
+        labelLogo.setFont(new Font("Tahoma", Font.BOLD, 14));
+        labelLogo.setHorizontalAlignment(SwingConstants.CENTER);
+        labelLogo.setForeground(new Color(50, 50, 50));
+        labelLogo.setBackground(new Color(217, 217, 217));
+        labelLogo.setBounds(52, 41, 90, 90);
+        add(labelLogo);
+    }
+    
+    public void agregarNombreGym() {
+        String nombreGimnasio = cuentaController.getNombreEmpresa(administrador_id);
+        
+        if(nombreGimnasio.equals("")) {
+        	nombreGimnasio = "Gym";
+        }
+        labelNombreGimnasio.setText(nombreGimnasio);
+    }
+    
+    public void agregarLogoGym() {
         byte[] logoEmpresa = cuentaController.getLogo(administrador_id);
         //byte[] logoEmpresa = null;
         // Crear una instancia de la imagen para poder redondearla
-        BufferedImage image = null;
+        BufferedImage image = Utilidades.obtenerBufferedImage(logoEmpresa);
         
-        if(logoEmpresa == null) {
-            
-            try {
-                URL imageUrl = BarraPanel.class.getResource("/com/gym/resources/logoDefecto.jpg");
-                image = ImageIO.read(imageUrl);
-                
-                // Operaciones con la imagen...
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if(image != null) {
+            // Recibe una imagen tipo BufferedImagen
+            labelLogo.setImage(new Utilidades().resizeImage(image, 80, 80));
             
         } else {
-        	image =  Utilidades.obtenerBufferedImage(logoEmpresa);
-            System.out.println(logoEmpresa);
+        	System.out.println("Ocurrio un error");
         }
-        
-        // Recibe una imagen tipo BufferedImagen
-        //lblNewLabel_1.setImage(new Utilidades().resizeImage(image, 80, 80));
-        lblNewLabel_1.setImage(image);
-        lblNewLabel_1.setZoom(0);
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_1.setForeground(new Color(50, 50, 50));
-        lblNewLabel_1.setBackground(new Color(217, 217, 217));
-        lblNewLabel_1.setBounds(52, 41, 90, 90);
-        add(lblNewLabel_1);
     }
     
 }

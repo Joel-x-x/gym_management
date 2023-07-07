@@ -52,7 +52,7 @@ public class AdminFrame extends JFrame implements ActionListener{
         panelPrincipal.revalidate();
         panelPrincipal.repaint();
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();

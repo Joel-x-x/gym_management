@@ -9,6 +9,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -45,10 +46,15 @@ public class Utilidades {
 	
 	public static BufferedImage obtenerBufferedImage(byte[] imageData) {
 	    try {
-	        ByteArrayInputStream inputStream = new ByteArrayInputStream(imageData);
-	        return ImageIO.read(inputStream);
-	    } catch (IOException ex) {
-	        ex.printStackTrace();
+	        // ByteArrayInputStream inputStream = new ByteArrayInputStream(imageData);
+	    	BufferedImage bufferedImage = null;
+	    	InputStream inputStream = new ByteArrayInputStream(imageData);
+	    	
+	    	bufferedImage = ImageIO.read(inputStream);
+	    	
+	    	return bufferedImage;
+	    	
+	    } catch (Exception e) {
 	        return null;
 	    }
 	}

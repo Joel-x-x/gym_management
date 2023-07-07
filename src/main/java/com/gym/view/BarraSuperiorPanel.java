@@ -4,8 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.gym.controller.AdministradorController;
+import com.gym.controller.CuentaController;
 import com.gym.model.Administrador;
 import com.gym.utilidades.CircularLabel;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,16 +19,19 @@ import java.awt.event.MouseEvent;
 public class BarraSuperiorPanel extends JPanel {
 	private AdminFrame adminFrame;
 	private AdministradorController administradorController;
+	private CuentaController cuentaController;
 	private int administrador_id;
 	int panelAncho = 1080, panelAlto = 750;
 
 	private static final long serialVersionUID = -1014488060944978809L;
+	private CircularLabel labelPerfil;
 
 	public BarraSuperiorPanel(AdminFrame frame) {
 		adminFrame = frame;
 		
 		administrador_id = new Administrador().getId();
 		administradorController = new AdministradorController();
+		cuentaController = new CuentaController();
 		
         setPreferredSize(new Dimension(1280, 80));
         setBackground(new Color(230, 230, 230));
@@ -49,7 +54,7 @@ public class BarraSuperiorPanel extends JPanel {
         lblNewLabel_1_1.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		adminFrame.cambiarPanel(new ConfiguracionPanel(panelAlto, panelAncho));
+        		adminFrame.cambiarPanel(new ConfiguracionPanel(panelAlto, panelAncho, adminFrame));
         	}
         });
         lblNewLabel_1_1.setIcon(new ImageIcon(BarraSuperiorPanel.class.getResource("/com/gym/resources/config.png")));
@@ -57,24 +62,13 @@ public class BarraSuperiorPanel extends JPanel {
         lblNewLabel_1_1.setBounds(1210, 8, 35, 35);
         add(lblNewLabel_1_1);
         
-        // Crear una instancia de la imagen para poder redondearla
-        BufferedImage image = null;
+        labelPerfil = new CircularLabel();
         
-        try {
-            URL imageUrl = BarraPanel.class.getResource("/com/gym/resources/user.png");
-            image = ImageIO.read(imageUrl);
-            
-            // Operaciones con la imagen...
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        agregarImagenPerfil();
         
-        CircularLabel labelUsuario = new CircularLabel();
-        labelUsuario.setImage(image);
-        labelUsuario.setZoom(5);
-        labelUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-        labelUsuario.setBounds(1085, 8, 40, 33);
-        add(labelUsuario);
+        labelPerfil.setHorizontalAlignment(SwingConstants.CENTER);
+        labelPerfil.setBounds(1085, 8, 40, 33);
+        add(labelPerfil);
         
         JLabel lblUsuario = new JLabel();
         
@@ -87,5 +81,30 @@ public class BarraSuperiorPanel extends JPanel {
         lblUsuario.setFont(new Font("Candara", Font.BOLD, 16));
         lblUsuario.setBounds(1125, 16, 85, 22);
         add(lblUsuario);
+    }
+	
+    public void agregarImagenPerfil() {
+        byte[] imagenPerfil = cuentaController.getPerfil(administrador_id);
+        //byte[] logoEmpresa = null;
+        // Crear una instancia de la imagen para poder redondearla
+        BufferedImage image = Utilidades.obtenerBufferedImage(imagenPerfil);
+        
+        if(image != null) {
+            // Recibe una imagen tipo BufferedImagen
+            labelPerfil.setImage(image);
+            labelPerfil.setZoom(0);
+        } else {
+        	
+        	System.out.println("Ocurrio un error Imagen perfil");
+            try {
+                URL imageUrl = BarraPanel.class.getResource("/com/gym/resources/user.png");
+                image = ImageIO.read(imageUrl);
+                
+                labelPerfil.setImage(image);
+                labelPerfil.setZoom(5);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
