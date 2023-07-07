@@ -420,5 +420,37 @@ public class MembresiaDAO {
 		}
 		
 	}
+
+	public List<Integer> consultarClases(int usuario_id) {
+		
+		List<Integer> clasesActivas = new ArrayList<>();
+		
+		try {
+			String sentencia = "select clase_id from membresia"
+					+ " where usuario_id = ? and activo = 1";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						clasesActivas.add(resultSet.getInt("clase_id"));
+					}
+					
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return clasesActivas;
+	}
 	
 }

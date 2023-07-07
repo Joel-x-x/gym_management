@@ -66,4 +66,8 @@ public class MembresiaController {
 	public boolean existeMembresia(int usuario_id) {
 		return membresiaDAO.existeMembresia(usuario_id);
 	}
+
+	public List<Integer> consultarClases(int usuario_id) {
+		return membresiaDAO.consultarClases(usuario_id);
+	}
 }

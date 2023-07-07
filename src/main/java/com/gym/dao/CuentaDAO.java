@@ -108,6 +108,7 @@ public class CuentaDAO {
 					
 					String nombreGym = resultSet.getString("nombre_empresa");
 					
+					// Si aun no a agregado un nombre al gym enviar un nombre por defecto
 					if(nombreGym == null) {
 						return "Gym";
 					}

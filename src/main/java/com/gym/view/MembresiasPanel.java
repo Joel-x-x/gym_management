@@ -83,19 +83,27 @@ public class MembresiasPanel extends JPanel {
 	
 	private void guardar() {
 		
+		Membresia membresia = llenarMembresia();
 		// Verificar si existe membresia
 		if(membresiaController.existeMembresia(idSeleccionado)) {
 			// Verificar caducidad
 			Membresia membresiaVerificar = membresiaController.consultaUltimaMembresia(idSeleccionado);
 			membresiaVerificar.cambiarActivoMembresia();
 			
-			if(membresiaController.consultaActivo(idSeleccionado)) {
-				JOptionPane.showMessageDialog(null, "Ya existe una membresia activa, eliminala o espera a que caduque");
-				return;
+			if(membresiaController.consultarClases(idSeleccionado).size() != 0) {
+				for(int claseId : membresiaController.consultarClases(idSeleccionado)) {
+					
+					if(claseId == membresia.getClase_id()) {
+						JOptionPane.showMessageDialog(null, "Ya tienes creada una membresia con esta clase, espera a que caduque o puedes modificarla");
+						return;
+					}
+					
+				}
 			}
+
+			
 		}
 		
-		Membresia membresia = llenarMembresia();
 		
 		if(membresiaController.guardar(membresia)) {
 			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
@@ -122,6 +130,8 @@ public class MembresiasPanel extends JPanel {
 		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(membresiaController.eliminar(idSeleccionadoMembresia),
 				"No se pudo eliminar, parece que tienes registros que dependen de esta membresia, "
 				+ "solo puedes modificar la membresia"));
+		listarMembresias();
+		limpiarFormulario();
 	}
 	
 	private void calcularPrecioTotal() {
@@ -452,6 +462,20 @@ public class MembresiasPanel extends JPanel {
         btnLimpiar.setBounds(610, 330, 100, 30);
         add(btnLimpiar);
         
+        JButton btnGenerarReporte = new JButton("Generar Reporte");
+        btnGenerarReporte.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        	}
+        });
+        btnGenerarReporte.setForeground(Color.WHITE);
+        btnGenerarReporte.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnGenerarReporte.setFocusPainted(false);
+        btnGenerarReporte.setBorder(null);
+        btnGenerarReporte.setBackground(new Color(46, 56, 64));
+        btnGenerarReporte.setBounds(499, 389, 130, 25);
+        add(btnGenerarReporte);
+        
         // Listar Usuarios
         listarUsuarios();
         
@@ -459,4 +483,5 @@ public class MembresiasPanel extends JPanel {
         listarClase();
         bloquearBotones();
     }
+    
 }

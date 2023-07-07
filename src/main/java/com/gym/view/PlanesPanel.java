@@ -246,7 +246,7 @@ public class PlanesPanel extends JPanel {
 		
 		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(entrenadorController.eliminar(idSeleccionadoEntrenador),
 				"No se pudo eliminar, parece que tienes clases que dependen de este entrenador, "
-				+ "eliminas sus clases primero o tambien modificar este entrenador"));
+				+ "eliminas sus clases primero o tambien puedes modificar este entrenador"));
 		
 		listarEntrenador();
 		limpiarFormularioEntrenador();
