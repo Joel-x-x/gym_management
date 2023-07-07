@@ -49,7 +49,6 @@ public class MembresiasPanel extends JPanel {
 	private JButton btnEliminar;
 	private JSpinner spinnerAnticipacion;
 	private JButton btnLimpiar;
-	private Reporte reporte;
 	
 	private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
@@ -291,6 +290,8 @@ public class MembresiasPanel extends JPanel {
 		administrador_id = new Administrador().getId();
 		usuarioController = new UsuarioController();
 		membresiaController = new MembresiaController();
+		
+		idSeleccionado = 0;
 		        
         comboBoxPlan.setBounds(30, 85, 218, 25);
         add(comboBoxPlan);
@@ -467,6 +468,10 @@ public class MembresiasPanel extends JPanel {
         JButton btnGenerarReporte = new JButton("Generar Reporte");
         btnGenerarReporte.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		if(idSeleccionado == 0) {
+        			JOptionPane.showMessageDialog(null, "Selecciona un usuario");
+        			return;
+        		}
         		ReporteFrame reporteframe = new ReporteFrame(idSeleccionado);
         		reporteframe.setVisible(true);
         	}

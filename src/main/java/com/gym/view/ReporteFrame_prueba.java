@@ -14,7 +14,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 
 public class ReporteFrame_prueba extends JFrame {
-
+	
+	private static final long serialVersionUID = 6155253689774896665L;
 	private JPanel contentPane;
 	private JLabel lbl_reporte_nombre_usuario;
 	private JLabel lbl_reporte_apellido_usuario;
@@ -28,11 +29,6 @@ public class ReporteFrame_prueba extends JFrame {
 	private JLabel lbl_reporte_total_suma_de_membresias;
 	private JPanel panel_reporte_membresias;
 	
-	// Membresias
-	private JLabel lbl_fecha_inicio;
-	private JLabel lbl_fecha_fin;
-	private JLabel lbl_fecha_fi3n;
-	private JLabel lbl_fecha_fi4n;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

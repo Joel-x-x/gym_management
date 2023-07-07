@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.Color;
 
 public class ReporteFrame extends JFrame {
 
@@ -38,7 +39,7 @@ public class ReporteFrame extends JFrame {
 			System.out.println(value);
 			sumatotalvalor = sumatotalvalor+ (float) value;
 		}
-		lbl_reporte_precio_total.setText(String.valueOf(sumatotalvalor));
+		lbl_reporte_precio_total.setText("$ " + String.valueOf(sumatotalvalor));
 	}
 
 	public ReporteFrame(int usuario_id) {
@@ -53,18 +54,19 @@ public class ReporteFrame extends JFrame {
 		});
 		
 		reporteController = new ReporteController();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 801, 601);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTotalAPagar = new JLabel("TOTAL A PAGAR:");
+		JLabel lblTotalAPagar = new JLabel("Total a pagar");
 		lblTotalAPagar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTotalAPagar.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblTotalAPagar.setBounds(42, 419, 301, 37);
+		lblTotalAPagar.setBounds(10, 386, 765, 37);
 		contentPane.add(lblTotalAPagar);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -72,12 +74,19 @@ public class ReporteFrame extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(table);
 		
 		lbl_reporte_precio_total = new JLabel("0.0");
 		lbl_reporte_precio_total.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_reporte_precio_total.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lbl_reporte_precio_total.setBounds(348, 419, 301, 37);
+		lbl_reporte_precio_total.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lbl_reporte_precio_total.setBounds(10, 434, 765, 59);
 		contentPane.add(lbl_reporte_precio_total);
+		
+		JLabel lblReporteMembresias = new JLabel("Reporte Membresias");
+		lblReporteMembresias.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReporteMembresias.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblReporteMembresias.setBounds(10, 11, 765, 37);
+		contentPane.add(lblReporteMembresias);
 	}
 }
