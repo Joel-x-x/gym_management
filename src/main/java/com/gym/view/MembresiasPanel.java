@@ -9,7 +9,6 @@ import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
-import com.gym.model.Reporte;
 import com.gym.utilidades.FechasUtilidades;
 import com.gym.utilidades.Utilidades;
 

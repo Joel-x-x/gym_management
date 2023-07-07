@@ -22,6 +22,10 @@ public class AdministradorController {
 		return administradorDAO.iniciarSesion(administrador);
 	}
 	
+	public boolean validarPassword(int id, String password) {
+		return administradorDAO.validarPassword(id, password);
+	}
+	
 	public int consultarId(String email) {
 		return administradorDAO.consultarId(email);
 	}

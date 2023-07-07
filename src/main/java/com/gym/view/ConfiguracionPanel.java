@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public class ConfiguracionPanel extends JPanel {
 	private AdminFrame adminFrame;
@@ -117,7 +119,7 @@ public class ConfiguracionPanel extends JPanel {
 	
 	// Datos recuperacion cuenta
 	
-	private void actualizarRecuperacionCuenta() {
+	public void actualizarRecuperacionCuenta() {		
 		RecuperacionCuenta recuperacionCuenta = llenarRecuperacionCuenta();
 		
 		if(recuperacionCuentaController.modificar(recuperacionCuenta)) {
@@ -126,6 +128,10 @@ public class ConfiguracionPanel extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
 		}
+	}
+	
+	public void validarLoginActualizar() {
+		new LoginValidacionFrame(administrador_id, this, "actualizarRecuperacionCuenta");
 	}
 	
 	public RecuperacionCuenta llenarRecuperacionCuenta() {
@@ -144,12 +150,17 @@ public class ConfiguracionPanel extends JPanel {
 	
 	// Cambiar Contraseña
 	
-	private void cambiarPassword() {
+	public void cambiarPassword() {
 		if(administradorController.cambiarPassword(String.valueOf(textPassword.getPassword()), administrador_id)) {
 			JOptionPane.showMessageDialog(null, "Haz cambiado tu contraseña");
+			limpiarFormularioPassword();
 		} else {
 			JOptionPane.showMessageDialog(null, "No se pudo cambiar la contraseña");
 		}
+	}
+	
+	public void validarCambiarPassword() {
+		new LoginValidacionFrame(administrador_id, this, "cambiarPassword");
 	}
 	
 	public void limpiarFormularioPassword() {
@@ -195,6 +206,10 @@ public class ConfiguracionPanel extends JPanel {
 
         // Crear el botón
 		examinarButtonLogo = new JButton("Seleccionar Imagen");
+		examinarButtonLogo.setBorderPainted(false);
+		examinarButtonLogo.setFocusPainted(false);
+		examinarButtonLogo.setBackground(new Color(192, 192, 192));
+		examinarButtonLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		examinarButtonLogo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		examinarButtonLogo.setBounds(143, 186, 225, 25);
         // Configurar el evento de clic del botón
@@ -243,6 +258,10 @@ public class ConfiguracionPanel extends JPanel {
         add(btnGuardarPerfil);
         
         examinarButtonPerfil = new JButton("Seleccionar Imagen");
+        examinarButtonPerfil.setBorderPainted(false);
+        examinarButtonPerfil.setFocusPainted(false);
+        examinarButtonPerfil.setBackground(new Color(192, 192, 192));
+        examinarButtonPerfil.setBorder(new LineBorder(new Color(0, 0, 0)));
         examinarButtonPerfil.setFont(new Font("Tahoma", Font.BOLD, 11));
         examinarButtonPerfil.setBounds(654, 151, 225, 25);
         // Configurar el evento de clic del botón
@@ -289,7 +308,7 @@ public class ConfiguracionPanel extends JPanel {
         JButton btnGuardarRecuperar = new JButton("Actualizar");
         btnGuardarRecuperar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		actualizarRecuperacionCuenta();
+        		validarLoginActualizar();
         	}
         });
         btnGuardarRecuperar.setForeground(Color.WHITE);
@@ -318,7 +337,7 @@ public class ConfiguracionPanel extends JPanel {
         JButton btnGuardar_2_1 = new JButton("Confirmar");
         btnGuardar_2_1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		cambiarPassword();
+        		validarCambiarPassword();
         	}
         });
         btnGuardar_2_1.setForeground(Color.WHITE);

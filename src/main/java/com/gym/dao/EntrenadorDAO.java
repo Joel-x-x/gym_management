@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import com.gym.model.Entrenador;
 import com.gym.utilidades.Utilidades;
 

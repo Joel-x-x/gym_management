@@ -73,7 +73,7 @@ public class AdministradorDAO {
 
 		try {
 			
-			String sentencia = "SELECT * FROM administrador where email = ? and password = ? ";
+			String sentencia = "select * from administrador where email = ? and password = ? ";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -97,6 +97,35 @@ public class AdministradorDAO {
 		}
 		
 	}
+	
+	public boolean validarPassword(int id, String password) {
+
+		try {
+			
+			String sentencia = "select * from administrador where password = ? and id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, password);
+				statement.setInt(2, id);
+				
+				statement.execute();
+				
+				
+				final ResultSet resultSet = statement.getResultSet();
+				
+				try(resultSet) {
+					return resultSet.next();
+				}
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
 	public boolean registrar(Administrador administrador) {
 
 		if(!validarClave(administrador.getClave())) {
@@ -390,5 +419,7 @@ public class AdministradorDAO {
 		
 		return nombre;
 	}
+	
+	
 	
 }
