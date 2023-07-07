@@ -24,12 +24,21 @@ public class ReporteFrame extends JFrame {
 	private DefaultTableModel modelo;
 	private ReporteController reporteController;
 	private int usuario_id;
+	private float sumatotalvalor=0;
 	
 	private void listarMembresias() {
 		String[] cabeceras = {"Fecha de Inicio","Fecha de Fin", "Plan", "Clase", "Membresia", "Valor Total"};
 
 		modelo = new DefaultTableModel(reporteController.listar_reporte(usuario_id), cabeceras);
 		table.setModel(modelo);
+	}
+	private void sumatotal() {
+		for(int i=0; i<table.getRowCount();i++) {
+			Object value = table.getValueAt(i, 5);
+			System.out.println(value);
+			sumatotalvalor = sumatotalvalor+ (float) value;
+		}
+		lbl_reporte_precio_total.setText(String.valueOf(sumatotalvalor));
 	}
 
 	public ReporteFrame(int usuario_id) {
@@ -39,6 +48,7 @@ public class ReporteFrame extends JFrame {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				listarMembresias();
+				sumatotal();
 			}
 		});
 		
