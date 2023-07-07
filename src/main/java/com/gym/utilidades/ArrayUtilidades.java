@@ -9,6 +9,7 @@ import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
 import com.gym.model.Registro;
+import com.gym.model.Reporte;
 import com.gym.model.Usuario;
 
 public class ArrayUtilidades {
@@ -149,6 +150,23 @@ public class ArrayUtilidades {
     	}
     	return matrizMembresia;
 	}
+	public Object[][] toMatrizMembresiaReporte(List<Reporte> lista_reporte) {
+		int contador = 0;
+		Object[][] matrizMembresia =  new Object[lista_reporte.size()][6];
+    	
+    	for(Reporte membresia : lista_reporte) {
+    		matrizMembresia[contador][0] = membresia.getNombreUsuario();
+    		matrizMembresia[contador][1] = membresia.getFecha_entrada();
+    		matrizMembresia[contador][2] = membresia.getFecha_salida();
+    		matrizMembresia[contador][3] = membresia.getPlan();
+    		matrizMembresia[contador][4] = membresia.getClase();
+    		matrizMembresia[contador][5] = membresia.getValor_total();
+
+    		contador++;
+    	}
+    	return matrizMembresia;
+	}
+	
 
 	public Object[][] toMatrizRegistro(List<Registro> lista) {
 		int contador = 0;
@@ -170,5 +188,7 @@ public class ArrayUtilidades {
     	
     	return matrizRegistro;
 	}
+	
+	
 	
 }
