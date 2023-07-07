@@ -91,8 +91,6 @@ public class CuentaDAO {
 	}
 	
 	public String getNombreEmpresa(int administrador_id) {
-		String nombre = "";		
-		
 		try {
 			String sentencia = "select nombre_empresa from cuenta where administrador_id = ?";
 			
@@ -105,17 +103,23 @@ public class CuentaDAO {
 				final ResultSet resultSet = statement.executeQuery();
 				
 				try(resultSet) {
+					
 					resultSet.next();
 					
-					nombre = resultSet.getString("nombre_empresa");
+					String nombreGym = resultSet.getString("nombre_empresa");
+					
+					if(nombreGym == null) {
+						return "Gym";
+					}
+							
+					return nombreGym;
 				}
 			}
 			
-		} catch(SQLException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
+			return "Gym";
 		}
-		
-		return nombre;
 	}
 	
 	public byte[] getPerfil(int administrador_id) {

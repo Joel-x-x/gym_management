@@ -172,7 +172,6 @@ public class BarraPanel extends JPanel {
         
         agregarNombreGym();
         
-        
         labelNombreGimnasio.setHorizontalAlignment(SwingConstants.CENTER);
         labelNombreGimnasio.setForeground(new Color(163, 175, 175));
         labelNombreGimnasio.setFont(new Font("Candara", Font.BOLD, 18));
@@ -195,10 +194,7 @@ public class BarraPanel extends JPanel {
     
     public void agregarNombreGym() {
         String nombreGimnasio = cuentaController.getNombreEmpresa(administrador_id);
-        
-        if(nombreGimnasio.equals("")) {
-        	nombreGimnasio = "Gym";
-        }
+        System.out.println(nombreGimnasio + "dsaf");
         labelNombreGimnasio.setText(nombreGimnasio);
     }
     
