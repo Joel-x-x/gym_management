@@ -1,10 +1,6 @@
 package com.gym.model;
 
-
-import com.gym.controller.ReporteController;
-
 public class Reporte extends Membresia{
-		private ReporteController reporteController;
 	 	private int id;
 	    private String fecha_inicio;
 	    private String fecha_fin;
@@ -23,6 +19,16 @@ public class Reporte extends Membresia{
 	    private String fecha_entrada;
 	    private String fecha_salida;
 	    private int membresia_id;
+	    
+		public Reporte(String fecha_inicio, String fecha_fin, float valor_total, String plan, String clase, int activo) {
+			this.fecha_inicio = fecha_inicio;
+			this.fecha_fin = fecha_fin;
+			this.valor_total = valor_total;
+			this.plan = plan;
+			this.clase = clase;
+			this.activo = activo;
+		}
+	    
 		public Reporte(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
 				float valor_extra, float valor_total, int administrador_id, String plan, String clase, int activo,
 				int anticipacion, String nombreUsuario, String fecha_entrada, String fecha_salida, int membresia_id) {
@@ -168,16 +174,5 @@ public class Reporte extends Membresia{
 		public void setMembresia_id(int membresia_id) {
 			this.membresia_id = membresia_id;
 		}
-		@Override
-		public boolean validarMembresia() {
-			// TODO Auto-generated method stub
-			return super.validarMembresia();
-		}
-		@Override
-		public void cambiarActivoMembresia() {
-			// TODO Auto-generated method stub
-			super.cambiarActivoMembresia();
-		}
-		
 	    
 }

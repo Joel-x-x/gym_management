@@ -1,14 +1,11 @@
 package com.gym.view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.ReporteController;
-import com.gym.model.Usuario;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -20,6 +17,7 @@ import java.awt.event.ComponentEvent;
 
 public class ReporteFrame extends JFrame {
 
+	private static final long serialVersionUID = 3784835300009942490L;
 	private JPanel contentPane;
 	private JTable table;
 	private JLabel lbl_reporte_precio_total;
@@ -30,39 +28,21 @@ public class ReporteFrame extends JFrame {
 	private void listarMembresias() {
 		String[] cabeceras = {"Fecha de Inicio","Fecha de Fin", "Plan", "Clase", "Membresia", "Valor Total"};
 
-		ReporteController reporteController = new ReporteController();
 		modelo = new DefaultTableModel(reporteController.listar_reporte(usuario_id), cabeceras);
 		table.setModel(modelo);
 	}
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ReporteFrame frame = new ReporteFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public ReporteFrame() {
+	public ReporteFrame(int usuario_id) {
+		this.usuario_id = usuario_id;
+		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				
 				listarMembresias();
-				System.out.println("xd");
 			}
 		});
+		
+		reporteController = new ReporteController();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 801, 601);
 		contentPane = new JPanel();

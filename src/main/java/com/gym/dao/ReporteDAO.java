@@ -23,7 +23,7 @@ public class ReporteDAO extends MembresiaDAO{
 			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
 					+ " join plan p on p.id = m.plan_id"
 					+ " join clase c on c.id = m.clase_id"
-					+ " where usuario_id = ?";
+					+ " where usuario_id = ? and activo <> 0";
 			
 			List<Reporte> resultado = new ArrayList<>();
 			
@@ -38,19 +38,12 @@ public class ReporteDAO extends MembresiaDAO{
 					
 					while(resultSet.next()) {
 						resultado.add(new Reporte(
-								resultSet.getInt("m.id"),
 								resultSet.getString("m.fecha_inicio"),
 								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
 								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
 								resultSet.getString("p.nombre"),
 								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
+								resultSet.getInt("m.activo")
 								));
 					}
 					

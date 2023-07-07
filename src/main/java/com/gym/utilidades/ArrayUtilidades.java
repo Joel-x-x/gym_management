@@ -155,11 +155,11 @@ public class ArrayUtilidades {
 		Object[][] matrizMembresia =  new Object[lista_reporte.size()][6];
     	
     	for(Reporte membresia : lista_reporte) {
-    		matrizMembresia[contador][0] = membresia.getNombreUsuario();
-    		matrizMembresia[contador][1] = membresia.getFecha_entrada();
-    		matrizMembresia[contador][2] = membresia.getFecha_salida();
-    		matrizMembresia[contador][3] = membresia.getPlan();
-    		matrizMembresia[contador][4] = membresia.getClase();
+    		matrizMembresia[contador][0] = membresia.getFecha_inicio();
+    		matrizMembresia[contador][1] = membresia.getFecha_fin();
+    		matrizMembresia[contador][2] = membresia.getPlan();
+    		matrizMembresia[contador][3] = membresia.getClase();
+    		matrizMembresia[contador][4] = membresia.mensajeMembresia();
     		matrizMembresia[contador][5] = membresia.getValor_total();
 
     		contador++;

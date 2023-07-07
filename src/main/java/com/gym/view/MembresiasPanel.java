@@ -415,8 +415,6 @@ public class MembresiasPanel extends JPanel {
         	public void mouseClicked(MouseEvent e) {
         		idSeleccionado = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
         		listarMembresias();
-        		Reporte reporte = new Reporte(idSeleccionado);
-        		reporte.setId(idSeleccionado);
         		btnAgregar.setEnabled(true);
         	}
         });
@@ -469,7 +467,7 @@ public class MembresiasPanel extends JPanel {
         JButton btnGenerarReporte = new JButton("Generar Reporte");
         btnGenerarReporte.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		ReporteFrame reporteframe = new ReporteFrame();
+        		ReporteFrame reporteframe = new ReporteFrame(idSeleccionado);
         		reporteframe.setVisible(true);
         	}
         });
