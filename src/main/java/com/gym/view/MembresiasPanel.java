@@ -9,6 +9,7 @@ import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
 import com.gym.model.Plan;
+import com.gym.model.Reporte;
 import com.gym.utilidades.FechasUtilidades;
 import com.gym.utilidades.Utilidades;
 
@@ -48,6 +49,7 @@ public class MembresiasPanel extends JPanel {
 	private JButton btnEliminar;
 	private JSpinner spinnerAnticipacion;
 	private JButton btnLimpiar;
+	private Reporte reporte;
 	
 	private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
@@ -278,6 +280,7 @@ public class MembresiasPanel extends JPanel {
 	}
 	
     public MembresiasPanel(int panelAncho, int panelAlto) {
+    	
     	setFocusTraversalKeysEnabled(false);
     	
     	setPreferredSize(new Dimension(1080, 800));
@@ -412,7 +415,8 @@ public class MembresiasPanel extends JPanel {
         	public void mouseClicked(MouseEvent e) {
         		idSeleccionado = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
         		listarMembresias();
-        		
+        		Reporte reporte = new Reporte(idSeleccionado);
+        		reporte.setId(idSeleccionado);
         		btnAgregar.setEnabled(true);
         	}
         });
@@ -465,7 +469,8 @@ public class MembresiasPanel extends JPanel {
         JButton btnGenerarReporte = new JButton("Generar Reporte");
         btnGenerarReporte.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		
+        		ReporteFrame reporteframe = new ReporteFrame();
+        		reporteframe.setVisible(true);
         	}
         });
         btnGenerarReporte.setForeground(Color.WHITE);
