@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -25,10 +27,13 @@ public class ReporteFrame extends JFrame {
 	private JLabel lbl_reporte_altura_usuario;
 	private JLabel lbl_reporte_total_suma_de_membresias;
 	private JPanel panel_reporte_membresias;
+	
+	// Membresias
+	private JLabel lbl_fecha_inicio;
+	private JLabel lbl_fecha_fin;
+	private JLabel lbl_fecha_fi3n;
+	private JLabel lbl_fecha_fi4n;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -97,6 +102,7 @@ public class ReporteFrame extends JFrame {
 		
 		panel_reporte_membresias = new JPanel();
 		scrollPane.setViewportView(panel_reporte_membresias);
+		panel_reporte_membresias.setPreferredSize(new Dimension(600, 1000));
 		panel_reporte_membresias.setBackground(new Color(255, 255, 255));
 		
 		JLabel lblNewLabel = new JLabel("Apellido:");
