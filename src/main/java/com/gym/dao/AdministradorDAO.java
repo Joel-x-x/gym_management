@@ -108,7 +108,6 @@ public class AdministradorDAO {
 			
 			try(statement) {
 				statement.setString(1, password);
-				statement.setInt(2, id);
 				
 				statement.execute();
 				

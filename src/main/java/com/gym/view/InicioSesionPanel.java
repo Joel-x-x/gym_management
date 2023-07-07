@@ -114,7 +114,7 @@ public class InicioSesionPanel extends JPanel {
         		registroFrame.mostrarPanelRegistro();
         	}
         });
-        lblRegistrarse.setHorizontalAlignment(SwingConstants.CENTER);
+        lblRegistrarse.setHorizontalAlignment(SwingConstants.RIGHT);
         lblRegistrarse.setBounds(700, 404, 115, 23);
         add(lblRegistrarse);
         
@@ -123,15 +123,28 @@ public class InicioSesionPanel extends JPanel {
         lblNewLabel.setBounds(587, 29, 100, 100);
         add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("");
-        lblNewLabel_1.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/poseGrande.png")));
-        lblNewLabel_1.setBounds(33, 290, 500, 500);
-        add(lblNewLabel_1);
-        
         JLabel lblNewLabel_2 = new JLabel("");
         lblNewLabel_2.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/pose.png")));
         lblNewLabel_2.setBounds(1070, 445, 200, 275);
         add(lblNewLabel_2);
+        
+        JLabel labelOlvidaste = new JLabel("¿Olvidaste tu contraseña?");
+        labelOlvidaste.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		registroFrame.mostrarPanelRecuperarCuenta();
+        	}
+        });
+        labelOlvidaste.setHorizontalAlignment(SwingConstants.LEFT);
+        labelOlvidaste.setForeground(new Color(163, 175, 175));
+        labelOlvidaste.setFont(new Font("Dialog", Font.PLAIN, 15));
+        labelOlvidaste.setBounds(465, 404, 225, 23);
+        add(labelOlvidaste);
+        
+        JLabel lblNewLabel_1 = new JLabel("");
+        lblNewLabel_1.setIcon(new ImageIcon(InicioSesionPanel.class.getResource("/com/gym/resources/poseGrande.png")));
+        lblNewLabel_1.setBounds(33, 290, 500, 500);
+        add(lblNewLabel_1);
     }
     public Administrador llenarAdministrador() {
     	return new Administrador(
