@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.gym.dao.MembresiaDAO;
@@ -47,8 +48,8 @@ public class MembresiaController {
 	}
 	
 	// Consulta si ese usuario ya tiene una membresia activa
-	public boolean consultaActivo(int usuario_id) {
-		return membresiaDAO.consultaActivo(usuario_id);
+	public boolean consultaActivo(int usuario_id, int id) {
+		return membresiaDAO.consultaActivo(usuario_id, id);
 	}
 
 	public boolean modificar(Membresia membresia) {
@@ -69,5 +70,17 @@ public class MembresiaController {
 
 	public List<Integer> consultarClases(int usuario_id) {
 		return membresiaDAO.consultarClases(usuario_id);
+	}
+
+	public List<Membresia> listarMembresias(int usuario_id) {
+		var listaMembresias = membresiaDAO.listarMembresias(usuario_id);
+		
+		listaMembresias.add(0, new Membresia(0, "-- Selecciona una Clase --"));
+		
+		return listaMembresias;
+	}
+	
+	public Membresia consultaMembresia(int usuario_id, int id) {
+		return membresiaDAO.consultaMembresia(usuario_id, id);
 	}
 }

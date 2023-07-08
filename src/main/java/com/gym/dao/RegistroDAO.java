@@ -18,11 +18,9 @@ public class RegistroDAO {
 			this.con  = con;
 		}
 	
-		public boolean registrar(int usuario_id) {
+		public boolean registrar(int usuario_id, int id) {
 			
-			var membresia = this.consultaMembresia(usuario_id);
-			
-			System.out.println(membresia.getId());
+			var membresia = this.consultaMembresia(usuario_id, id);
 			
 			try {
 				String sentencia = "insert into registro(usuario_id, membresia_id) values(?, ?)";
@@ -43,15 +41,16 @@ public class RegistroDAO {
 			
 		}
 		
-		public Membresia consultaMembresia(int usuario_id) {
+		public Membresia consultaMembresia(int usuario_id, int id) {
 
 			try {
-				String sentencia = "select * from membresia where usuario_id = ? and activo = 1";
+				String sentencia = "select * from membresia where usuario_id = ? and activo = 1 and id = ?";
 				
 				PreparedStatement statement = con.prepareStatement(sentencia);
 				
 				try(statement) {
 					statement.setInt(1, usuario_id);
+					statement.setInt(2, id);
 					
 					final ResultSet resultSet = statement.executeQuery();
 					

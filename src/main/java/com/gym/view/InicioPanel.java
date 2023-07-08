@@ -18,12 +18,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+import com.gym.model.Clase;
 
 public class InicioPanel extends JPanel {
 	UsuarioController usuarioController;
 	RegistroController registroController;
 	MembresiaController membresiaController;
 	private int administrador_id; 
+	private JComboBox<Membresia> comboBoxMembresia = new JComboBox<>();
+	private DefaultComboBoxModel<Membresia> comboBoxModelMembresia = new DefaultComboBoxModel<>();
 
 	private static final long serialVersionUID = 1L;
     private JTable tableUsuarios;
@@ -59,27 +62,44 @@ public class InicioPanel extends JPanel {
 	}
 	
 	public void registrar() {
-		
+
 		if(idSeleccionadoUsuario == 0) {
 			JOptionPane.showMessageDialog(null, "Selecciona un usuario");
 			return;
 		}
 		
-		if(!membresiaController.consultaActivo(idSeleccionadoUsuario)) {
+		if(getIdClaseComboBox() == 0) {
+			JOptionPane.showMessageDialog(null, "Selecciona una clase si no tiene, crea una nueva membresia");
+			return;
+		}
+		
+		if(!membresiaController.consultaActivo(idSeleccionadoUsuario, getIdClaseComboBox())) {
 			JOptionPane.showMessageDialog(null, "La membresia de este usuario a caducado o no tiene membresias");
 			return;
 		}
 		
-		Membresia membresia = usuarioController.consultaMembresia(idSeleccionadoUsuario);
+		Membresia membresia = membresiaController.consultaMembresia(idSeleccionadoUsuario, getIdClaseComboBox());
 		
+		System.out.println(membresia.notificarMembresia() + "membresia");
 		
 		if(membresia.notificarMembresia()) {
 			JOptionPane.showMessageDialog(null, "La membresia caducara en " + membresia.getAnticipacion() + " días");
 		}
 		
-		registroController.registrar(idSeleccionadoUsuario);
+		registroController.registrar(idSeleccionadoUsuario, getIdClaseComboBox());
 		listarRegistros();
 		validarRegistros();
+	}
+	
+	public int getIdClaseComboBox() {
+		return ((Membresia) comboBoxMembresia.getSelectedItem()).getId();
+	}
+	
+	private void listarClases() {
+		comboBoxModelMembresia.removeAllElements();
+		comboBoxModelMembresia.addAll(membresiaController.listarMembresias(idSeleccionadoUsuario));
+		comboBoxMembresia.setModel(comboBoxModelMembresia);
+		comboBoxMembresia.setSelectedIndex(0);
 	}
 	
 	public void validarRegistros() {
@@ -140,7 +160,7 @@ public class InicioPanel extends JPanel {
         		idSeleccionadoUsuario = (int)tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
         		listarRegistros();
         		validarRegistros();
-        		
+        		listarClases();
         	}
         });
         scrollPane.setViewportView(tableUsuarios);
@@ -217,13 +237,20 @@ public class InicioPanel extends JPanel {
         btn_buscar.setBounds(333, 88, 150, 25);
         add(btn_buscar);
         
-        JLabel lblNewLabel_5_1 = new JLabel("Selecciona un usuario");
+        JLabel lblNewLabel_5_1 = new JLabel("Selecciona un usuario y una clase");
         lblNewLabel_5_1.setForeground(Color.BLACK);
         lblNewLabel_5_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel_5_1.setBounds(153, 370, 182, 14);
+        lblNewLabel_5_1.setBounds(153, 370, 233, 14);
         add(lblNewLabel_5_1);
+        
+        comboBoxMembresia = new JComboBox<Membresia>();
+        comboBoxMembresia.setBounds(350, 409, 218, 30);
+        add(comboBoxMembresia);
+        
+        JLabel lblNewLabel_3 = new JLabel("Clase");
+        lblNewLabel_3.setBounds(350, 391, 76, 14);
+        add(lblNewLabel_3);
         
         listarUsuarios();
     }
-	
 }

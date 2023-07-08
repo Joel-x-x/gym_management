@@ -15,7 +15,8 @@ public class Membresia {
     private float valor_extra;
     private float valor_total;
     private int administrador_id;
-    private String plan;
+
+	private String plan;
     private String clase;
     private int activo;
     private int anticipacion;
@@ -30,6 +31,11 @@ public class Membresia {
     
     public Membresia() {
     	
+    }
+    
+    public Membresia(int id, String clase) {
+    	this.id = id;
+    	this.clase = clase;
     }
 
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
@@ -283,7 +289,7 @@ public class Membresia {
 	    Calendar calendar = new FechasUtilidades().stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, - this.getAnticipacion());
+	    calendar.add(Calendar.DAY_OF_MONTH, - this.getAnticipacion() - 1);
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();
@@ -319,6 +325,11 @@ public class Membresia {
 			return "Caducada";
 		}
 		
+	}
+	
+    @Override
+	public String toString() {
+		return this.clase;
 	}
 	
 }

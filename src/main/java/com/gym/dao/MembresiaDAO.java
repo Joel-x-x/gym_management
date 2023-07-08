@@ -373,16 +373,17 @@ public class MembresiaDAO {
 		
 	}
 
-	public boolean consultaActivo(int usuario_id) {
+	public boolean consultaActivo(int usuario_id, int id) {
 
 		try {
-			String sentencia = "select activo from membresia where usuario_id = ? and activo = 1";
+			String sentencia = "select activo from membresia where usuario_id = ? and activo = 1 and id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				
 				statement.setInt(1, usuario_id);
+				statement.setInt(2, id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				
@@ -451,6 +452,100 @@ public class MembresiaDAO {
 		}
 		
 		return clasesActivas;
+	}
+
+	public List<Membresia> listarMembresias(int usuario_id) {
+
+		try {
+			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
+					+ " join plan p on p.id = m.plan_id"
+					+ " join clase c on c.id = m.clase_id"
+					+ " where usuario_id = ? and activo <> 0";
+			
+			List<Membresia> resultado = new ArrayList<>();
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Membresia(
+								resultSet.getInt("m.id"),
+								resultSet.getString("m.fecha_inicio"),
+								resultSet.getString("m.fecha_fin"),
+								resultSet.getInt("m.usuario_id"),
+								resultSet.getInt("m.plan_id"),
+								resultSet.getInt("m.clase_id"),
+								resultSet.getFloat("m.valor_extra"),
+								resultSet.getFloat("m.valor_total"),
+								resultSet.getInt("m.administrador_id"),
+								resultSet.getString("p.nombre"),
+								resultSet.getString("c.clase"),
+								resultSet.getInt("m.activo"),
+								resultSet.getInt("m.anticipacion")
+								));
+					}
+					
+					return resultado;
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	public Membresia consultaMembresia(int usuario_id, int id) {
+		Membresia membresia = null;
+		
+		try {
+			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
+					+ " join plan p on p.id = m.plan_id"
+					+ " join clase c on c.id = m.clase_id"
+					+ " where usuario_id = ? and activo <> 0 and m.id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, usuario_id);
+				statement.setInt(2, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					membresia =  new Membresia(
+							resultSet.getInt("m.id"),
+							resultSet.getString("m.fecha_inicio"),
+							resultSet.getString("m.fecha_fin"),
+							resultSet.getInt("m.usuario_id"),
+							resultSet.getInt("m.plan_id"),
+							resultSet.getInt("m.clase_id"),
+							resultSet.getFloat("m.valor_extra"),
+							resultSet.getFloat("m.valor_total"),
+							resultSet.getInt("m.administrador_id"),
+							resultSet.getString("p.nombre"),
+							resultSet.getString("c.clase"),
+							resultSet.getInt("m.activo"),
+							resultSet.getInt("m.anticipacion")
+							);
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return membresia;
+		
 	}
 	
 }

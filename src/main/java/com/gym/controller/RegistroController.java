@@ -10,8 +10,8 @@ public class RegistroController {
 	public RegistroController() {
 		registroDAO = new RegistroDAO( ConnectionFactory.conectar());
 	}
-	public boolean registrar(int usuario_id) {
-		return registroDAO.registrar(usuario_id);
+	public boolean registrar(int usuario_id, int id) {
+		return registroDAO.registrar(usuario_id, id);
 	}
 	
 	public Object[][] consultar(int usuario_id) {

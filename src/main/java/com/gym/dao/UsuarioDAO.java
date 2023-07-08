@@ -301,7 +301,6 @@ public class UsuarioDAO {
 	}
 
 	public Membresia consultaMembresia(int usuario_id) {
-
 		try {
 			String sentencia = "select * from membresia where usuario_id = ? and activo = 1";
 			

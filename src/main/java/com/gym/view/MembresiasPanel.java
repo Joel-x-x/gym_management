@@ -83,6 +83,8 @@ public class MembresiasPanel extends JPanel {
 	
 	private void guardar() {
 		
+		validarFormulario();
+		
 		Membresia membresia = llenarMembresia();
 		// Verificar si existe membresia
 		if(membresiaController.existeMembresia(idSeleccionado)) {
@@ -114,7 +116,16 @@ public class MembresiasPanel extends JPanel {
 		}
 	}
 	
+	public void validarFormulario() {
+		if(textValorExtra.getText().equals("")) {
+			textValorExtra.setText("0.0");
+		}
+	}
+	
 	private void modificar() {
+		
+		validarFormulario();
+		
 		Membresia membresia = llenarMembresiaModificar();
 		
 		if(membresiaController.modificar(membresia)) {
@@ -271,7 +282,7 @@ public class MembresiasPanel extends JPanel {
 	
 	private void limpiarFormulario() {
 		labelTotal.setText("");
-		textValorExtra.setText("");
+		textValorExtra.setText("0.0");
 		comboBoxClase.setSelectedIndex(0);
 		comboBoxPlan.setSelectedIndex(0);
 		spinnerAnticipacion.setValue(0);
