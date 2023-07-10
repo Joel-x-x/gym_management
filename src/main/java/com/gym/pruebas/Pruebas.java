@@ -1,15 +1,13 @@
 package com.gym.pruebas;
 
-import com.gym.model.Membresia;
+import com.gym.utilidades.PasswordUtilidades;
 
 public class Pruebas {
 	public static void main(String[] args) {
-		var membresia = new Membresia();
 		
-		membresia.setFecha_fin("2023-07-10 03:51:31");
+		String passwordHash = PasswordUtilidades.hashearPassword("1234");
+		String hashSalt = PasswordUtilidades.getSaltHash();
 		
-		membresia.setAnticipacion(9);
-		
-		System.out.println(membresia.notificarMembresia());
+		System.out.println(PasswordUtilidades.validarPassword("1234", passwordHash, hashSalt));
 	}
 }
