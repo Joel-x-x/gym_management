@@ -1,6 +1,5 @@
 package com.gym.controller;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.gym.dao.MembresiaDAO;

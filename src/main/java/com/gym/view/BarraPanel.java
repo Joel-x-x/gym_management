@@ -190,7 +190,6 @@ public class BarraPanel extends JPanel {
     
     public void agregarNombreGym() {
         String nombreGimnasio = cuentaController.getNombreEmpresa(administrador_id);
-        System.out.println(nombreGimnasio + "dsaf");
         labelNombreGimnasio.setText(nombreGimnasio);
     }
     
@@ -205,7 +204,7 @@ public class BarraPanel extends JPanel {
             labelLogo.setImage(new Utilidades().resizeImage(image, 80, 80));
             
         } else {
-        	System.out.println("Ocurrio un error");
+        	System.out.println("No tiene logo");
         }
     }
     

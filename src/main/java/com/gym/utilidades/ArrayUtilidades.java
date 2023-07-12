@@ -120,7 +120,7 @@ public class ArrayUtilidades {
     	for(Membresia membresia : lista) {
     		
     		matrizMembresia[contador][0] = membresia.getId();
-    		matrizMembresia[contador][1] = membresia.getFecha_fin();
+    		matrizMembresia[contador][1] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_fin());
     		matrizMembresia[contador][2] = membresia.getPlan();
     		matrizMembresia[contador][3] = membresia.getClase();
     		matrizMembresia[contador][4] = membresia.mensajeMembresia();
@@ -140,8 +140,8 @@ public class ArrayUtilidades {
     		
     		matrizMembresia[contador][0] = membresia.getId();
     		matrizMembresia[contador][1] = membresia.getNombreUsuario();
-    		matrizMembresia[contador][2] = membresia.getFecha_entrada();
-    		matrizMembresia[contador][3] = membresia.getFecha_salida();
+    		matrizMembresia[contador][2] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_entrada());
+    		matrizMembresia[contador][3] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_salida());
     		matrizMembresia[contador][4] = membresia.getPlan();
     		matrizMembresia[contador][5] = membresia.getClase();
     		matrizMembresia[contador][6] = membresia.mensajeMembresia();

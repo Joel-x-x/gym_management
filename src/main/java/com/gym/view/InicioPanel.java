@@ -9,6 +9,8 @@ import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Membresia;
+import com.gym.utilidades.FechasUtilidades;
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -16,6 +18,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.util.Calendar;
+
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 import com.gym.model.Clase;
@@ -38,6 +43,11 @@ public class InicioPanel extends JPanel {
     private JTable table;
     private JButton btn_entrada;
     private JButton btn_salida;
+    private JDateChooser dateChooserFin;
+    private JDateChooser dateChooserInicio;
+    private Calendar fechaInicio;
+    private Calendar fechaFin;
+    private JButton btnBuscarFecha;
     
     private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
@@ -124,6 +134,31 @@ public class InicioPanel extends JPanel {
 		btn_entrada.setEnabled(false);
 		btn_salida.setEnabled(false);
 	}
+	
+	public void buscarRegistros() {
+		fechaInicio = dateChooserInicio.getCalendar();
+		fechaFin = dateChooserFin.getCalendar();
+		
+		if(fechaInicio == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
+			return;
+		}
+		
+		if(fechaFin == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
+			return;
+		}
+		
+		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
+		
+        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
+        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
+		
+		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Plan", "Clase", "Membresia"};
+		
+		modelo = new DefaultTableModel(registroController.consultarFecha(idSeleccionadoUsuario, fechaInicioSQL, fechaFinSQL ),cabeceras);
+		table.setModel(modelo);
+	}
     
 	public InicioPanel(int panelAncho, int panelAlto) {
 		
@@ -161,6 +196,7 @@ public class InicioPanel extends JPanel {
         		listarRegistros();
         		validarRegistros();
         		listarClases();
+        		btnBuscarFecha.setEnabled(true);
         	}
         });
         scrollPane.setViewportView(tableUsuarios);
@@ -175,7 +211,7 @@ public class InicioPanel extends JPanel {
         txt_cedula.setBounds(129, 88, 194, 25);
         add(txt_cedula);
         
-        JLabel lblNewLabel_2_1 = new JLabel("Buscar por nombre");
+        JLabel lblNewLabel_2_1 = new JLabel("Buscar por nombre:");
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_2_1.setBounds(29, 93, 101, 14);
         add(lblNewLabel_2_1);
@@ -251,6 +287,39 @@ public class InicioPanel extends JPanel {
         lblNewLabel_3.setBounds(350, 391, 76, 14);
         add(lblNewLabel_3);
         
+        dateChooserInicio = new JDateChooser();
+        dateChooserInicio.setBounds(608, 409, 138, 30);
+        add(dateChooserInicio);
+        
+        dateChooserFin = new JDateChooser();
+        dateChooserFin.setBounds(756, 409, 138, 30);
+        add(dateChooserFin);
+        
+        btnBuscarFecha = new JButton("Buscar");
+        btnBuscarFecha.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {	
+        		buscarRegistros();
+        	}
+        });
+        btnBuscarFecha.setForeground(Color.WHITE);
+        btnBuscarFecha.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnBuscarFecha.setFocusPainted(false);
+        btnBuscarFecha.setBorder(null);
+        btnBuscarFecha.setBackground(new Color(46, 56, 64));
+        btnBuscarFecha.setBounds(904, 409, 119, 30);
+        add(btnBuscarFecha);
+        
+        JLabel lblNewLabel_2_1_1 = new JLabel("Fecha inicio");
+        lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1.setBounds(608, 391, 131, 14);
+        add(lblNewLabel_2_1_1);
+        
+        JLabel lblNewLabel_2_1_1_1 = new JLabel("Fecha fin");
+        lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1_1.setBounds(756, 391, 131, 14);
+        add(lblNewLabel_2_1_1_1);
+        
         listarUsuarios();
+        btnBuscarFecha.setEnabled(false);
     }
 }

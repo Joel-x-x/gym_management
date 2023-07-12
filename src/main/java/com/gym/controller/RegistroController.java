@@ -1,4 +1,5 @@
 package com.gym.controller;
+import java.sql.Date;
 import java.util.List;
 
 import com.gym.dao.RegistroDAO;
@@ -26,6 +27,11 @@ public class RegistroController {
 	
 	public boolean registrarSalida(int id) {
 		return registroDAO.registrarSalida(id);
+	}
+	public Object[][] consultarFecha(int usuario_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		var listaRegistros = registroDAO.consultarFecha(usuario_id, fechaInicioSQL, fechaFinSQL);
+		
+		return new ArrayUtilidades().toMatrizMembresiaRegistro(listaRegistros);
 	}
 
 }

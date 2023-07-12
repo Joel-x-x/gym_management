@@ -128,6 +128,21 @@ public class MembresiasPanel extends JPanel {
 		
 		Membresia membresia = llenarMembresiaModificar();
 		
+		// Verificar caducidad
+		Membresia membresiaVerificar = membresiaController.consultaUltimaMembresia(idSeleccionado);
+		membresiaVerificar.cambiarActivoMembresia();
+		
+		if(membresiaController.consultarClases(idSeleccionado).size() != 0) {
+			for(int claseId : membresiaController.consultarClases(idSeleccionado)) {
+				
+				if(claseId == membresia.getClase_id()) {
+					JOptionPane.showMessageDialog(null, "Ya tienes creada una membresia con esta clase, espera a que caduque o puedes modificarla");
+					return;
+				}
+				
+			}
+		}
+				
 		if(membresiaController.modificar(membresia)) {
 			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
 			listarMembresias();
@@ -267,9 +282,7 @@ public class MembresiasPanel extends JPanel {
 			break;
 		}
 
-		// Formatea la fecha en el formato deseado
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String fechaFin = dateFormat.format(calendar.getTime());
+		String fechaFin = FechasUtilidades.calendarToString(calendar);
 		
 		return fechaFin;
 	}
