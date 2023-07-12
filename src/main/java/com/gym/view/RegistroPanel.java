@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 
 import com.gym.controller.AdministradorController;
 import com.gym.model.Administrador;
+import com.gym.utilidades.Utilidades;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -36,16 +38,30 @@ public class RegistroPanel extends JPanel {
     public void registrar() {
 		Administrador administrador = llenarAdministrador();
 		
+		// Validaciones
+		if(administrador.getNombre().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+			return;
+		}
+		
+		if(!Utilidades.validarEmail(textEmail.getText())) {
+			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+			return;
+		}
+		
+		if(administrador.getPassword().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");
+			return;
+		}
+		
+		if(!administrador.getPassword().equals(String.valueOf(textPasswordConfirm.getPassword()))) {
+			JOptionPane.showMessageDialog(null, "Las contraseñan no coinciden");
+			return;
+		}
+		
+		// Registrar
 		if(administradorController.registrar(administrador)) {
 			administrador_id = administradorController.getId();
-			
-			if(!administradorController.crearCuenta(administrador_id)) {
-				JOptionPane.showMessageDialog(null, "No se creo correctamente la cuenta");
-			}
-			
-			if( !administradorController.crearRecuperacionCuenta(administrador_id)) {
-				JOptionPane.showMessageDialog(null, "No se creo correctamente recuperacion usuario");
-			}
 			
 			JOptionPane.showMessageDialog(null, "Registrado con exito");
 			
@@ -53,7 +69,7 @@ public class RegistroPanel extends JPanel {
 			limpiarFormulario();
 			registroFrame.mostrarPanelInicioSesion();
 		} else {
-			JOptionPane.showMessageDialog(null, "No se puedo registrar");
+			JOptionPane.showMessageDialog(null, "No se pudo registrar verifica la clave");
 		}
 	}
     

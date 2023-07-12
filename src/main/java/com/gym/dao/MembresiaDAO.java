@@ -104,7 +104,8 @@ public class MembresiaDAO {
 			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
 					+ " join plan p on p.id = m.plan_id"
 					+ " join clase c on c.id = m.clase_id"
-					+ " where usuario_id = ?";
+					+ " where usuario_id = ?"
+					+ " order by m.activo desc";
 			
 			List<Membresia> resultado = new ArrayList<>();
 			

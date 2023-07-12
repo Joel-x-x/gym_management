@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 import com.gym.controller.AdministradorController;
 import com.gym.model.Administrador;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.Font;
 import javax.swing.JPasswordField;
@@ -19,13 +20,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.annotation.Documented;
+
 import javax.swing.ImageIcon;
 
 public class InicioSesionPanel extends JPanel {
 	
 	private static final long serialVersionUID = -8083841348236094297L;
 	private RegistroFrame registroFrame;
-    private JTextField textUsuario;
+    private JTextField textEmail;
     private AdministradorController administradorController;
     private JPasswordField textContra;
     private JLabel lblRegistro;
@@ -34,9 +37,23 @@ public class InicioSesionPanel extends JPanel {
     public void iniciarSesion() {
 		Administrador administrador = llenarAdministrador();
 		
+		// Validaciones
+		
+		if(!Utilidades.validarEmail(textEmail.getText())) {
+			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+			return;
+		}
+		
+		if(administrador.getPassword().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");
+			return;
+		}
+		
+		// Iniciar Sesión
+		
 		if(administradorController.sesion(administrador)) {
 			
-			// Ya logeado asignaremos el id statico a la clase Administrador para que usuario tenga su referencia
+			// Ya logeado asignaremos el id statico a la clase Administrador para las demás consultas
 			new Administrador().setId(administradorController.consultarId(administrador.getEmail()));
 			
 			// Abre la ventana del panel de administrador
@@ -58,12 +75,12 @@ public class InicioSesionPanel extends JPanel {
         administradorController = new AdministradorController();
         setLayout(null);
         
-        textUsuario = new JTextField();
-        textUsuario.setFont(new Font("Dialog", Font.PLAIN, 20));
-        textUsuario.setText("wacho@gmail.com");
-        textUsuario.setColumns(10);
-        textUsuario.setBounds(465, 258, 350, 40);
-        add(textUsuario);
+        textEmail = new JTextField();
+        textEmail.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textEmail.setText("wacho@gmail.com");
+        textEmail.setColumns(10);
+        textEmail.setBounds(465, 258, 350, 40);
+        add(textEmail);
         
         JLabel lblCorreo = new JLabel("Email");
         lblCorreo.setForeground(new Color(163, 175, 175));
@@ -149,7 +166,7 @@ public class InicioSesionPanel extends JPanel {
     public Administrador llenarAdministrador() {
     	return new Administrador(
     			"",
-    			textUsuario.getText(),
+    			textEmail.getText(),
     			String.valueOf(textContra.getPassword()),
     			0,
     			0,

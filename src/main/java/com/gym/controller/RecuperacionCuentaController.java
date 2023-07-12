@@ -14,5 +14,9 @@ public class RecuperacionCuentaController {
 	public boolean modificar(RecuperacionCuenta recuperacionCuenta) {
 		return recuperacionCuentaDAO.modificar(recuperacionCuenta);
 	}
+
+	public boolean validarDatos(RecuperacionCuenta recuperacionCuenta) {
+		return recuperacionCuentaDAO.validarDatos(recuperacionCuenta);
+	}
 	
 }

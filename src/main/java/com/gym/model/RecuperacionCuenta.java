@@ -2,6 +2,7 @@ package com.gym.model;
 
 public class RecuperacionCuenta {
 	private int id;
+	private String email;
 	private String nombre_amigo;
 	private String nombre_mascota;
 	private String color_favorito;
@@ -9,6 +10,15 @@ public class RecuperacionCuenta {
 	
 	public RecuperacionCuenta(String nombre_amigo, String nombre_mascota, String color_favorito,
 			int administrador_id) {
+		this.nombre_amigo = nombre_amigo;
+		this.nombre_mascota = nombre_mascota;
+		this.color_favorito = color_favorito;
+		this.administrador_id = administrador_id;
+	}
+	
+	public RecuperacionCuenta(String email, String nombre_amigo, String nombre_mascota, String color_favorito,
+			int administrador_id) {
+		this.email = email;
 		this.nombre_amigo = nombre_amigo;
 		this.nombre_mascota = nombre_mascota;
 		this.color_favorito = color_favorito;

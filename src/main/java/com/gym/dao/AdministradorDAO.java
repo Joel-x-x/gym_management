@@ -175,14 +175,18 @@ public class AdministradorDAO {
 				
 				try(resultSet) {
 					
-					resultSet.next();
+					if(resultSet.next()) {
+						return resultSet.getInt("id");
+					} else {
+						return 0;
+					}
 					
-					return resultSet.getInt("id");
 				}
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			return 0;
 		}
 		
 	}

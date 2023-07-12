@@ -2,24 +2,77 @@ package com.gym.view;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
+import com.gym.controller.AdministradorController;
+import com.gym.controller.RecuperacionCuentaController;
+import com.gym.model.Administrador;
+import com.gym.model.RecuperacionCuenta;
+import com.gym.utilidades.Utilidades;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class RecuperarCuentaPanel extends JPanel {
 	private RegistroFrame registroFrame;
+	private AdministradorController administradorController;
+	RecuperacionCuentaController recuperacionCuentaController;
 
 	private static final long serialVersionUID = 8077406384536139438L;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textEmail;
+	private JTextField textColor;
+	private JTextField textAmigo;
+	private JTextField textMascota;
+	private JButton btnVerificar;
 
+	public void validar() {
+		RecuperacionCuenta recuperacionCuenta = llenarClase();
+		
+		if(recuperacionCuenta.getAdministrador_id() == 0) {
+			JOptionPane.showMessageDialog(null, "El correo no existe");
+			return;
+		}
+		
+		if(recuperacionCuentaController.validarDatos(recuperacionCuenta)) {
+			registroFrame.mostrarCambiarPassword();
+			new Administrador().setId(recuperacionCuenta.getAdministrador_id()); // Se agrega el id después de llamar al metodo
+			limpiarFormulario();
+		} else {
+			JOptionPane.showMessageDialog(null, "Datos incorrectos");
+		}
+	}
+	
+	public void limpiarFormulario() {
+		textEmail.setText("");
+		textAmigo.setText("");
+		textMascota.setText("");
+		textColor.setText("");
+	}
+	
+	public RecuperacionCuenta llenarClase() {
+		return new RecuperacionCuenta(
+				textEmail.getText(),
+				textAmigo.getText(),
+				textMascota.getText(),
+				textColor.getText(),
+				administradorController.consultarId(textEmail.getText()));
+	}
+	
 	public RecuperarCuentaPanel(RegistroFrame frame) {
         this.registroFrame = frame;
+        administradorController = new AdministradorController();
+        recuperacionCuentaController = new RecuperacionCuentaController();
+        
         setSize(1280, 720);
         setBackground(Color.white);
         setLayout(null);
@@ -37,55 +90,76 @@ public class RecuperarCuentaPanel extends JPanel {
         lblCorreo.setBounds(465, 192, 73, 30);
         add(lblCorreo);
         
-        textField = new JTextField();
-        textField.setText("wacho@gmail.com");
-        textField.setFont(new Font("Dialog", Font.PLAIN, 20));
-        textField.setColumns(10);
-        textField.setBounds(465, 222, 350, 40);
-        add(textField);
+        textEmail = new JTextField();
+        textEmail.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textEmail.setColumns(10);
+        textEmail.setBounds(465, 222, 350, 40);
+        add(textEmail);
         
-        JButton btnIniciarSesion = new JButton("Verificar");
-        btnIniciarSesion.setForeground(Color.BLACK);
-        btnIniciarSesion.setFont(new Font("Dialog", Font.BOLD, 20));
-        btnIniciarSesion.setFocusPainted(false);
-        btnIniciarSesion.setBorderPainted(false);
-        btnIniciarSesion.setBorder(new EmptyBorder(0, 0, 0, 0));
-        btnIniciarSesion.setBackground(new Color(163, 175, 175));
-        btnIniciarSesion.setBounds(546, 498, 200, 40);
-        add(btnIniciarSesion);
+        btnVerificar = new JButton("Verificar");
+        btnVerificar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		validar();
+        	}
+        });
+        btnVerificar.setForeground(Color.BLACK);
+        btnVerificar.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnVerificar.setFocusPainted(false);
+        btnVerificar.setBorderPainted(false);
+        btnVerificar.setBorder(new EmptyBorder(0, 0, 0, 0));
+        btnVerificar.setBackground(new Color(163, 175, 175));
+        btnVerificar.setBounds(549, 550, 200, 40);
+        add(btnVerificar);
         
-        JLabel lblRegistrarse = new JLabel("IniciarSesion ");
-        lblRegistrarse.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblRegistrarse.setForeground(new Color(163, 175, 175));
-        lblRegistrarse.setFont(new Font("Dialog", Font.BOLD, 15));
-        lblRegistrarse.setBounds(700, 445, 115, 23);
-        add(lblRegistrarse);
+        JLabel labelIniciarSesion = new JLabel("IniciarSesion ");
+        labelIniciarSesion.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		registroFrame.mostrarPanelInicioSesion();
+        	}
+
+        });
+        labelIniciarSesion.setHorizontalAlignment(SwingConstants.RIGHT);
+        labelIniciarSesion.setForeground(new Color(163, 175, 175));
+        labelIniciarSesion.setFont(new Font("Dialog", Font.BOLD, 15));
+        labelIniciarSesion.setBounds(700, 516, 115, 23);
+        add(labelIniciarSesion);
         
-        textField_1 = new JTextField();
-        textField_1.setText("wacho@gmail.com");
-        textField_1.setFont(new Font("Dialog", Font.PLAIN, 20));
-        textField_1.setColumns(10);
-        textField_1.setBounds(465, 394, 350, 40);
-        add(textField_1);
+        textColor = new JTextField();
+        textColor.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textColor.setColumns(10);
+        textColor.setBounds(465, 465, 350, 40);
+        add(textColor);
         
-        JLabel lblCorreo_1 = new JLabel("Email");
+        JLabel lblCorreo_1 = new JLabel("Ingresa tu color favorito");
         lblCorreo_1.setForeground(new Color(163, 175, 175));
         lblCorreo_1.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblCorreo_1.setBounds(465, 364, 73, 30);
+        lblCorreo_1.setBounds(465, 435, 350, 30);
         add(lblCorreo_1);
         
-        JLabel lblCorreo_1_1 = new JLabel("Email");
+        JLabel lblCorreo_1_1 = new JLabel("Ingresa el nombre de tu mejor amigo");
         lblCorreo_1_1.setForeground(new Color(163, 175, 175));
         lblCorreo_1_1.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblCorreo_1_1.setBounds(465, 283, 73, 30);
+        lblCorreo_1_1.setBounds(465, 273, 350, 30);
         add(lblCorreo_1_1);
         
-        textField_2 = new JTextField();
-        textField_2.setText("wacho@gmail.com");
-        textField_2.setFont(new Font("Dialog", Font.PLAIN, 20));
-        textField_2.setColumns(10);
-        textField_2.setBounds(465, 313, 350, 40);
-        add(textField_2);
+        textAmigo = new JTextField();
+        textAmigo.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textAmigo.setColumns(10);
+        textAmigo.setBounds(465, 303, 350, 40);
+        add(textAmigo);
+        
+        JLabel lblCorreo_1_1_1 = new JLabel("Ingresa el nombre de tu mascota");
+        lblCorreo_1_1_1.setForeground(new Color(163, 175, 175));
+        lblCorreo_1_1_1.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lblCorreo_1_1_1.setBounds(465, 354, 350, 30);
+        add(lblCorreo_1_1_1);
+        
+        textMascota = new JTextField();
+        textMascota.setFont(new Font("Dialog", Font.PLAIN, 20));
+        textMascota.setColumns(10);
+        textMascota.setBounds(465, 384, 350, 40);
+        add(textMascota);
 
 	}
 }

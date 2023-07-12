@@ -11,6 +11,7 @@ public class RegistroFrame extends JFrame {
 	private RegistroPanel registroPanel;
 	 private InicioSesionPanel inicioSesionPanel;
 	 private RecuperarCuentaPanel recuperarCuenta;
+	 private CambiarPassword cambiarPassword;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -30,6 +31,7 @@ public class RegistroFrame extends JFrame {
         registroPanel = new RegistroPanel(this);
         inicioSesionPanel = new InicioSesionPanel(this);
         recuperarCuenta = new RecuperarCuentaPanel(this);
+        cambiarPassword = new CambiarPassword(this);
 		
         setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
 		setTitle("Gym");
@@ -55,7 +57,13 @@ public class RegistroFrame extends JFrame {
     }
     
     public void mostrarPanelRecuperarCuenta() {
-        setContentPane(recuperarCuenta); // Cambia al panel de inicio de sesión
+        setContentPane(recuperarCuenta); // Cambia al panel de RecuperarCuenta
+        revalidate();
+        repaint();
+    }
+    
+    public void mostrarCambiarPassword() {
+        setContentPane(cambiarPassword); // Cambia al panel de CambiarPassword
         revalidate();
         repaint();
     }

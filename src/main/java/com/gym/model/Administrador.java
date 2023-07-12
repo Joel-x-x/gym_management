@@ -82,7 +82,7 @@ public class Administrador {
 	}
 
 	public int getId() {
-        return id;
+        return Administrador.id;
     }
     public void setId(int id) {
         Administrador.id = id;

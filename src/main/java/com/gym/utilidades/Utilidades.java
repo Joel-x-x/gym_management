@@ -9,6 +9,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -70,5 +72,13 @@ public class Utilidades {
 			return "No se puedo eliminar";
 		}
 
+	}
+	
+	public static boolean validarEmail(String email) {
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_!#$%&'\\*+/=?{|}~^.-]+@[a-zA-Z0-9.-]+$");
+		
+		Matcher matcher = pattern.matcher(email);
+		
+		return matcher.matches();
 	}
 }
