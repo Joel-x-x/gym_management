@@ -10,6 +10,7 @@ public class ConnectionFactory {
 		try {
 			System.out.println("Sesion abierta");
 			return DriverManager.getConnection("jdbc:mysql://localhost/bdd_gym?serverTimezone=UTC", "root", "");
+			// return DriverManager.getConnection("jdbc:mysql://sql10.freemysqlhosting.net/sql10632347?serverTimezone=UTC", "sql10632347", "rdaPvX1QMb");
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
