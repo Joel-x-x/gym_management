@@ -1,10 +1,12 @@
 package com.gym.model;
 
+import java.sql.Date;
+
 public class Usuario{
     int id;
     String nombre;
     String apellido;
-    String fecha_nacimiento;
+    Date fecha_nacimiento;
     String sexo;
     String email;
     String cedula;
@@ -13,7 +15,7 @@ public class Usuario{
     String fecha_creacion;
     int administrador_id;
     
-    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion, int administrador_id) {
+    public Usuario(int id, String nombre, String apellido, Date fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion, int administrador_id) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -27,7 +29,7 @@ public class Usuario{
         this.administrador_id = administrador_id;
     }
     
-    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
+    public Usuario(int id, String nombre, String apellido, Date fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -40,7 +42,7 @@ public class Usuario{
         this.administrador_id = administrador_id;
     }
     
-    public Usuario(String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
+    public Usuario(String nombre, String apellido, Date fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, int administrador_id) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fecha_nacimiento = fecha_nacimiento;
@@ -52,7 +54,7 @@ public class Usuario{
         this.administrador_id = administrador_id;
     }
 
-    public Usuario(int id, String nombre, String apellido, String fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion) {
+    public Usuario(int id, String nombre, String apellido, Date fecha_nacimiento, String sexo, String email, String cedula, String direccion, String telefono, String fecha_creacion) {
     	this.id = id;
     	this.nombre = nombre;
     	this.apellido = apellido;
@@ -99,11 +101,11 @@ public class Usuario{
         this.apellido = apellido;
     }
 
-    public String getFecha_nacimiento() {
+    public Date getFecha_nacimiento() {
         return fecha_nacimiento;
     }
 
-    public void setFecha_nacimiento(String fecha_nacimiento) {
+    public void setFecha_nacimiento(Date fecha_nacimiento) {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 

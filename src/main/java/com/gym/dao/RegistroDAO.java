@@ -202,8 +202,7 @@ public List<Membresia> consultarFecha(int usuario_id, Date fechaInicio, Date fec
 			    		+ " join plan p on p.id = m.plan_id"
 			    		+ " join clase c on c.id = m.clase_id"
 			    		+ " where r.usuario_id = ? and r.fecha_entrada between ? and ?"
-			    		+ " order by r.id desc"
-			    		+ " limit 20";
+			    		+ " order by r.id desc";
 
 			    final PreparedStatement statement = con.prepareStatement(sentencia);
 

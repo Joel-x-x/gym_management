@@ -41,6 +41,11 @@ public class FechasUtilidades {
 	}
 	
     public static String cambiarFormatoFecha(String fecha) {
+    
+    	if(fecha == null) {
+    		return null;
+    	}
+    	
         String formatoEntrada = "yyyy-MM-dd HH:mm:ss";
         String formatoSalida = "EEE dd MMM yyyy HH:mm";
 

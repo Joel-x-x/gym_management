@@ -28,10 +28,6 @@ public class UsuarioDAO {
 	
 	public boolean guardar(Usuario usuario) {
 		
-		if(usuario.getFecha_nacimiento().equals("")) {
-			usuario.setFecha_nacimiento("1800-1-1");
-		}
-		
 		try {
 			String sentencia = "insert into usuario(nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id) "
 					+ "values(?,?,?,?,?,?,?,?,?);";
@@ -41,7 +37,7 @@ public class UsuarioDAO {
 			try(statement) {
 				statement.setString(1, usuario.getNombre());
 				statement.setString(2, usuario.getApellido());
-				statement.setString(3, usuario.getFecha_nacimiento());
+				statement.setDate(3, usuario.getFecha_nacimiento());
 				statement.setString(4, usuario.getSexo());
 				statement.setString(5, usuario.getEmail());
 				statement.setString(6, usuario.getCedula());
@@ -60,10 +56,6 @@ public class UsuarioDAO {
 	
 	public boolean modificar(Usuario usuario) {
 		
-		if(usuario.getFecha_nacimiento().equals("")) {
-			usuario.setFecha_nacimiento("1800-1-1");
-		}
-		
 		try {
 			String sentencia = "update usuario set nombre = ?, apellido = ?, fecha_nacimiento = ?,"
 					+ " sexo = ?, email = ?, cedula = ?, direccion = ?, telefono = ? where id = ?";
@@ -73,7 +65,7 @@ public class UsuarioDAO {
 			try(statement) {
 				statement.setString(1, usuario.getNombre());
 				statement.setString(2, usuario.getApellido());
-				statement.setString(3, usuario.getFecha_nacimiento());
+				statement.setDate(3, usuario.getFecha_nacimiento());
 				statement.setString(4, usuario.getSexo());
 				statement.setString(5, usuario.getEmail());
 				statement.setString(6, usuario.getCedula());
@@ -193,7 +185,7 @@ public class UsuarioDAO {
 								resultSet.getInt("id"),
 								resultSet.getString("nombre"),
 								resultSet.getString("apellido"),
-								resultSet.getString("fecha_nacimiento"),
+								resultSet.getDate("fecha_nacimiento"),
 								resultSet.getString("sexo"),
 								resultSet.getString("email"),
 								resultSet.getString("cedula"),
@@ -233,7 +225,7 @@ public class UsuarioDAO {
 								resultSet.getInt("id"),
 								resultSet.getString("nombre"),
 								resultSet.getString("apellido"),
-								resultSet.getString("fecha_nacimiento"),
+								resultSet.getDate("fecha_nacimiento"),
 								resultSet.getString("sexo"),
 								resultSet.getString("email"),
 								resultSet.getString("cedula"),
@@ -281,7 +273,7 @@ public class UsuarioDAO {
 								resultSet.getInt("id"),
 								resultSet.getString("nombre"),
 								resultSet.getString("apellido"),
-								resultSet.getString("fecha_nacimiento"),
+								resultSet.getDate("fecha_nacimiento"),
 								resultSet.getString("sexo"),
 								resultSet.getString("email"),
 								resultSet.getString("cedula"),

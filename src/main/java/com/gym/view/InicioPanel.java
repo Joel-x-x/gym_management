@@ -9,7 +9,6 @@ import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Membresia;
-import com.gym.utilidades.FechasUtilidades;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.event.ComponentAdapter;
@@ -23,7 +22,6 @@ import java.util.Calendar;
 
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
-import com.gym.model.Clase;
 
 public class InicioPanel extends JPanel {
 	UsuarioController usuarioController;
@@ -48,6 +46,7 @@ public class InicioPanel extends JPanel {
     private Calendar fechaInicio;
     private Calendar fechaFin;
     private JButton btnBuscarFecha;
+    private JButton btnListar;
     
     private void listarUsuarios() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Fecha_Nacimiento","Sexo","Correo","Cedula"};
@@ -114,12 +113,16 @@ public class InicioPanel extends JPanel {
 	
 	public void validarRegistros() {
 		boolean salida = false;
+		
 		for(int i=0;i<registroController.consultar(idSeleccionadoUsuario).length;i++) {
+			
 			if(registroController.consultar(idSeleccionadoUsuario)[i][3]==null) {
 				salida = true;
+				System.out.println(salida);
 				idUltimoRegistro = registroController.consultarLista(idSeleccionadoUsuario).get(i).getId();
 			}
 		}
+		
 		if(salida) {
 			btn_salida.setEnabled(true);
 			btn_entrada.setEnabled(false);
@@ -197,6 +200,7 @@ public class InicioPanel extends JPanel {
         		validarRegistros();
         		listarClases();
         		btnBuscarFecha.setEnabled(true);
+        		btnListar.setEnabled(true);
         	}
         });
         scrollPane.setViewportView(tableUsuarios);
@@ -273,14 +277,14 @@ public class InicioPanel extends JPanel {
         btn_buscar.setBounds(333, 88, 150, 25);
         add(btn_buscar);
         
-        JLabel lblNewLabel_5_1 = new JLabel("Selecciona un usuario y una clase");
+        JLabel lblNewLabel_5_1 = new JLabel("¡ Selecciona un usuario y una clase");
         lblNewLabel_5_1.setForeground(Color.BLACK);
         lblNewLabel_5_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel_5_1.setBounds(153, 370, 233, 14);
         add(lblNewLabel_5_1);
         
         comboBoxMembresia = new JComboBox<Membresia>();
-        comboBoxMembresia.setBounds(350, 409, 218, 30);
+        comboBoxMembresia.setBounds(350, 409, 150, 30);
         add(comboBoxMembresia);
         
         JLabel lblNewLabel_3 = new JLabel("Clase");
@@ -288,11 +292,11 @@ public class InicioPanel extends JPanel {
         add(lblNewLabel_3);
         
         dateChooserInicio = new JDateChooser();
-        dateChooserInicio.setBounds(608, 409, 138, 30);
+        dateChooserInicio.setBounds(517, 409, 138, 30);
         add(dateChooserInicio);
         
         dateChooserFin = new JDateChooser();
-        dateChooserFin.setBounds(756, 409, 138, 30);
+        dateChooserFin.setBounds(665, 409, 138, 30);
         add(dateChooserFin);
         
         btnBuscarFecha = new JButton("Buscar");
@@ -306,20 +310,46 @@ public class InicioPanel extends JPanel {
         btnBuscarFecha.setFocusPainted(false);
         btnBuscarFecha.setBorder(null);
         btnBuscarFecha.setBackground(new Color(46, 56, 64));
-        btnBuscarFecha.setBounds(904, 409, 119, 30);
+        btnBuscarFecha.setBounds(813, 409, 100, 30);
         add(btnBuscarFecha);
         
         JLabel lblNewLabel_2_1_1 = new JLabel("Fecha inicio");
         lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_1_1.setBounds(608, 391, 131, 14);
+        lblNewLabel_2_1_1.setBounds(517, 391, 131, 14);
         add(lblNewLabel_2_1_1);
         
         JLabel lblNewLabel_2_1_1_1 = new JLabel("Fecha fin");
         lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_1_1_1.setBounds(756, 391, 131, 14);
+        lblNewLabel_2_1_1_1.setBounds(665, 391, 131, 14);
         add(lblNewLabel_2_1_1_1);
+        
+
+        
+        JLabel lblNewLabel_5_1_1 = new JLabel("¡ Selecciona un usario para listar todos sus registros");
+        lblNewLabel_5_1_1.setForeground(Color.BLACK);
+        lblNewLabel_5_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel_5_1_1.setBounds(504, 93, 331, 14);
+        add(lblNewLabel_5_1_1);
+        
+        btnListar = new JButton("Listar");
+        btnListar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarRegistros();
+        		dateChooserInicio.setDate(null);
+        		dateChooserFin.setDate(null);
+        		
+        	}
+        });
+        btnListar.setForeground(Color.WHITE);
+        btnListar.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnListar.setFocusPainted(false);
+        btnListar.setBorder(null);
+        btnListar.setBackground(new Color(46, 56, 64));
+        btnListar.setBounds(923, 409, 100, 30);
+        add(btnListar);
         
         listarUsuarios();
         btnBuscarFecha.setEnabled(false);
+        btnListar.setEnabled(false);
     }
 }

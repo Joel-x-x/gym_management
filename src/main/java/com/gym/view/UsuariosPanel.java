@@ -9,12 +9,16 @@ import com.gym.model.Administrador;
 import com.gym.model.Fisico;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.util.Calendar;
+
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 
@@ -31,7 +35,6 @@ public class UsuariosPanel extends JPanel {
 	private JTextField textApellido;
 	private JTextField textCedula;
 	private JTextField textTelefono;
-	private JTextField textNacimiento;
 	private JTextField textDireccion;
 	private JTextField textPeso;
 	private JTextField textAltura;
@@ -50,6 +53,8 @@ public class UsuariosPanel extends JPanel {
 	private ButtonGroup buttonGroup;
 	private JTextField textEmail;
 	private JLabel lblNewLabel_5;
+	private JDateChooser dateChooser;
+	private Calendar fecha;
 	
 
 	
@@ -70,8 +75,7 @@ public class UsuariosPanel extends JPanel {
 	private void guardar() {
 		Usuario usuario = llenarUsuario();
 		
-		if(this.getRadioButton().equals("")) {
-			JOptionPane.showMessageDialog(null, "Campo sexo vacio, selecciona un sexo");
+		if(usuario == null) {
 			return;
 		}
 		
@@ -99,6 +103,10 @@ public class UsuariosPanel extends JPanel {
 	
 	private void modificar() {
 		Usuario usuario = llenarUsuario();
+		
+		if(usuario == null) {
+			return;
+		}
 		
 		if(usuarioController.modificar(usuario)) {
 			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
@@ -157,12 +165,49 @@ public class UsuariosPanel extends JPanel {
 	}
 	
 	private Usuario llenarUsuario() {
+		
+		// Retorna true si no cumple alguna validación
+		if(validarCampos()) {
+			return null;
+		}
+		// Agregar valor defecto a fecha si no fue agregada
+		if(dateChooser.getDate() == null) {
+			fecha = Calendar.getInstance();
+	        fecha.set(Calendar.YEAR, 1800);
+	        fecha.set(Calendar.MONTH, Calendar.JANUARY);
+	        fecha.set(Calendar.DAY_OF_MONTH, 1);
+		} else {
+			fecha = dateChooser.getCalendar();
+		}
+		
+		// Transformar a date tipo sql para insertar en la bdd
+		Date fechaSQL = new Date(fecha.getTimeInMillis());
+		
 		return new Usuario( idSeleccionadoUsuario,
 							textNombre.getText(), textApellido.getText(),
-							textNacimiento.getText(), getRadioButton(), 
+							fechaSQL, getRadioButton(), 
 							textEmail.getText(), textCedula.getText(), 
 							textDireccion.getText(), textTelefono.getText(),
 							administrador_id);
+	}
+	
+	public boolean validarCampos() {
+		if(textNombre.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+			return true;
+		}
+		
+		if(!Utilidades.validarEmail(textEmail.getText())) {
+			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+			return true;
+		}
+		
+		if(this.getRadioButton().equals("")) {
+			JOptionPane.showMessageDialog(null, "Campo sexo vacio, selecciona un sexo");
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private Fisico llenarFisico() {
@@ -187,7 +232,7 @@ public class UsuariosPanel extends JPanel {
 	private void limpiarFormularioUsuario() {
 		textNombre.setText("");
 		textApellido.setText("");
-		textNacimiento.setText("");
+		dateChooser.setDate(null);
 		buttonGroup.clearSelection();
 		textEmail.setText("");
 		textCedula.setText("");
@@ -204,7 +249,7 @@ public class UsuariosPanel extends JPanel {
 		Usuario usuario = usuarioController.consulta(idSeleccionadoUsuario, administrador_id);
 		textNombre.setText(usuario.getNombre());
 		textApellido.setText(usuario.getApellido());
-		textNacimiento.setText(usuario.getFecha_nacimiento());
+		dateChooser.setDate(usuario.getFecha_nacimiento());
 		
 		if(usuario.getSexo().equals("Masculino")) {
 			radioMasculino.setSelected(true);
@@ -332,11 +377,6 @@ public class UsuariosPanel extends JPanel {
         lblNewLabel_1_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_1_4.setBounds(30, 279, 125, 14);
         add(lblNewLabel_1_4);
-        
-        textNacimiento = new JTextField();
-        textNacimiento.setColumns(10);
-        textNacimiento.setBounds(30, 295, 225, 25);
-        add(textNacimiento);
         
         JLabel lblNewLabel_1_1_1 = new JLabel("Dirección");
         lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -513,11 +553,6 @@ public class UsuariosPanel extends JPanel {
         lblNewLabel_1_4_2.setBounds(30, 400, 99, 14);
         add(lblNewLabel_1_4_2);
         
-        JLabel lblNewLabel_1_4_3 = new JLabel("yyyy-mm-dd");
-        lblNewLabel_1_4_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_3.setBounds(30, 328, 125, 14);
-        add(lblNewLabel_1_4_3);
-        
         buttonGroup.add(radioMasculino);
         buttonGroup.add(radioFemenino);
         
@@ -564,6 +599,10 @@ public class UsuariosPanel extends JPanel {
         lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblNewLabel_5.setBounds(527, 160, 182, 14);
         add(lblNewLabel_5);
+        
+        dateChooser = new JDateChooser();
+        dateChooser.setBounds(30, 295, 225, 25);
+        add(dateChooser);
         
         // Listar Usuarios
         listar();
