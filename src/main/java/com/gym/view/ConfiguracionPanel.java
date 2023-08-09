@@ -26,11 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class ConfiguracionPanel extends JPanel {
-	private AdminFrame adminFrame;
 	private int administrador_id;
 	private CuentaController cuentaController;
 	private RecuperacionCuentaController recuperacionCuentaController;
@@ -63,10 +61,10 @@ public class ConfiguracionPanel extends JPanel {
 		}
 		
 		if(cuentaController.modificarEmpresa(cuenta)) {
-			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente, vuelve a ingresar para que se registren los cambios");
 			textNombreGym.setText("");
 		} else {
-			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			JOptionPane.showMessageDialog(null, "No se a podido actualizar los datos");
 		}
 	}
 	
@@ -86,9 +84,9 @@ public class ConfiguracionPanel extends JPanel {
 		}
 		
 		if(cuentaController.modificarPerfil(perfil, administrador_id)) {
-			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente, vuelve a ingresar para que se registren los cambios");
 		} else {
-			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente");
+			JOptionPane.showMessageDialog(null, "No se a podido actualizar los datos");
 		}
 	}
 	
@@ -169,7 +167,6 @@ public class ConfiguracionPanel extends JPanel {
 	}
 
 	public ConfiguracionPanel(int panelAncho, int panelAlto, AdminFrame adminFrame) {
-		this.adminFrame = adminFrame; 
 		administrador_id = new Administrador().getId();
 		cuentaController = new CuentaController();
 		recuperacionCuentaController = new RecuperacionCuentaController();
@@ -355,5 +352,15 @@ public class ConfiguracionPanel extends JPanel {
         textPasswordConfirmar = new JPasswordField();
         textPasswordConfirmar.setBounds(30, 616, 225, 25);
         add(textPasswordConfirmar);
+        
+        JLabel lblNewLabel_1_1_2 = new JLabel("Solo se permite formato .jpg");
+        lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_1_1_2.setBounds(143, 171, 225, 14);
+        add(lblNewLabel_1_1_2);
+        
+        JLabel lblNewLabel_1_1_2_1 = new JLabel("Solo se permite formato .jpg");
+        lblNewLabel_1_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_1_1_2_1.setBounds(654, 135, 225, 14);
+        add(lblNewLabel_1_1_2_1);
 	}
 }

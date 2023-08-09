@@ -59,7 +59,7 @@ public class ArrayUtilidades {
     		matrizFisico[contador][0] = fisico.getId();
     		matrizFisico[contador][1] = fisico.getPeso();
     		matrizFisico[contador][2] = fisico.getAltura();
-    		matrizFisico[contador][3] = fisico.getFecha();
+    		matrizFisico[contador][3] = FechasUtilidades.cambiarFormatoFecha(fisico.getFecha());
 
     		contador++;
     	}
