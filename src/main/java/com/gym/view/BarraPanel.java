@@ -186,6 +186,23 @@ public class BarraPanel extends JPanel {
         labelLogo.setBackground(new Color(217, 217, 217));
         labelLogo.setBounds(52, 41, 90, 90);
         add(labelLogo);
+        
+        JButton facturaButton = new JButton("     Factura");
+        facturaButton.addActionListener(new ActionListener() {
+        	@Override
+    		public void actionPerformed(ActionEvent e) {
+    			adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+    		}
+        });
+        facturaButton.setHorizontalAlignment(SwingConstants.LEFT);
+        facturaButton.setForeground(new Color(163, 175, 175));
+        facturaButton.setFont(new Font("Candara", Font.PLAIN, 18));
+        facturaButton.setFocusTraversalKeysEnabled(false);
+        facturaButton.setFocusPainted(false);
+        facturaButton.setBorder(null);
+        facturaButton.setBackground(new Color(46, 56, 64));
+        facturaButton.setBounds(0, 401, 200, 40);
+        add(facturaButton);
     }
     
     public void agregarNombreGym() {
@@ -207,5 +224,4 @@ public class BarraPanel extends JPanel {
         	System.out.println("No tiene logo");
         }
     }
-    
 }
