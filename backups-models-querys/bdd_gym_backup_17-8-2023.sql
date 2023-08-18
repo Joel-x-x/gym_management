@@ -995,14 +995,14 @@ CALL insertarFactura(1, 1);
 
 describe recuperacion_cuenta;
 
+INSERT INTO usuario (nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
+VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.com', '123456783', 'DirecciónUsuario', '987654322', 1);
+
+select * from auditoria_usuario;
+
+delete from usuario where id = 2;
 
 
--- select * from factura;
--- delete from factura where id between 1 and 6;
-
--- select * from membresia;
-
--- drop schema bdd_gym;
 
 
 
