@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import com.gym.utilidades.*;
-
+import com.gym.view.registro.RegistroFrame;
 import com.gym.controller.AdministradorController;
 import com.gym.controller.CuentaController;
 import com.gym.factory.ConnectionFactory;
