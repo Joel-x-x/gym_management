@@ -447,8 +447,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_administrador` (
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL,
-  `cedula` VARCHAR(15) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `cedula` VARCHAR(15) NULL DEFAULT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en administrador
@@ -498,8 +497,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_entrenador` (
   `sexo` ENUM('Masculino', 'Femenino') NOT NULL,
   `correo` VARCHAR(100) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NOT NULL,
-  `cedula` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`id`)
+  `cedula` VARCHAR(20) NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en entrenador
@@ -547,8 +545,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_clase` (
   `clase` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(300) NULL DEFAULT NULL,
   `entrenador_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en clase
@@ -594,8 +591,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_cuenta` (
   `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nombre_empresa` VARCHAR(50) NULL DEFAULT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en cuenta
@@ -648,8 +644,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
   `cedula` VARCHAR(15) NULL DEFAULT NULL,
   `direccion` VARCHAR(300) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en usuario
@@ -696,8 +691,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_fisico` (
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `altura` DOUBLE NOT NULL,
   `peso` DOUBLE NOT NULL,
-  `usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `usuario_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en fisico
@@ -749,8 +743,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
   `duracion` INT NOT NULL,
   `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
   `clase_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en tipo_membresia
@@ -801,8 +794,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_membresia` (
   `usuario_id` INT NOT NULL,
   `administrador_id` INT NOT NULL,
   `tipo_membresia_id` INT NOT NULL,
-  `factura_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `factura_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en membresia
@@ -850,8 +842,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_recuperacion_cuenta` (
   `nombre_amigo` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
   `nombre_mascota` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
   `color_favorito` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en recuperacion_cuenta
@@ -907,8 +898,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_factura` (
   `establecimiento` VARCHAR(3) DEFAULT '001',
   `punto_emision` VARCHAR(3) DEFAULT '001',
   `usuario_id` INT DEFAULT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en factura
@@ -957,7 +947,7 @@ DELIMITER ;
 -- Datos de la Base de Datos
 -- Insertar un administrador
 INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, clave, direccion)
-VALUES ('NombreAdmin', 'ApellidoAdmin', 'admin@example.com', '123456789', 'contraseñasegura', 'random', 0, 1, 'claveadmin', 'DirecciónAdmin');
+VALUES ('NombreAdmin', 'ApellidoAdmin', 'wacho@gmail.com', '123456789', '1234', 'random', 0, 1, 'claveadmin', 'DirecciónAdmin');
 
 -- Insertar un entrenador
 INSERT INTO entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id)
