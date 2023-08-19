@@ -6,7 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.gym.model.Usuario;
 import com.gym.utilidades.FechasUtilidades;
+import com.gym.view.BuscarUsuarioInterfaz;
+import com.gym.view.UsuariosFrame;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
@@ -19,7 +22,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.JButton;
 
-public class PruebaFrame extends JFrame {
+public class PruebaFrame extends JFrame implements BuscarUsuarioInterfaz {
 
 	private static final long serialVersionUID = 8591064380823471955L;
 	
@@ -29,6 +32,7 @@ public class PruebaFrame extends JFrame {
 	private JDateChooser dateChooserFin;
 	private Calendar fechaInicio;
 	private Calendar fechaFin;
+	private int id;
 
 	/**
 	 * Launch the application.
@@ -37,15 +41,28 @@ public class PruebaFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					PruebaFrame frame = new PruebaFrame();
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
+	
+	@Override
+	public void listarUsuarios() {
+		UsuariosFrame usuarios = new UsuariosFrame(this);
+		usuarios.setVisible(true);
+	}
+	
+	@Override
+	public void mostrarUsuario(Usuario usuario) {
+		System.out.println(usuario.getNombre());
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -87,8 +104,9 @@ public class PruebaFrame extends JFrame {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fechaInicio = dateChooserInicio.getCalendar();
-				System.out.println(FechasUtilidades.calendarToString(fechaInicio));
+				listarUsuarios();
+//				fechaInicio = dateChooserInicio.getCalendar();
+//				System.out.println(FechasUtilidades.calendarToString(fechaInicio));
 			}
 		});
 		btnNewButton.setBounds(104, 110, 89, 23);

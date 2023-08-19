@@ -67,6 +67,14 @@ public class Usuario{
     	this.fecha_creacion = fecha_creacion;
     }
     
+    // UsuariosFrame para el usuario seleccionado 
+    public Usuario(int id, String nombre, String apellido, String cedula) {
+    	this.id = id;
+    	this.nombre = nombre;
+    	this.apellido = apellido;
+    	this.cedula = cedula;
+    }
+    
     public Usuario(  String cedula) {
 		this.cedula = cedula;
 	}

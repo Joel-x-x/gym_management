@@ -913,6 +913,8 @@ END;
 //
 DELIMITER ;
 
+select * from administrador;
+
 -- Trigger para auditoría UPDATE en factura
 DELIMITER //
 CREATE TRIGGER auditoria_factura_update
