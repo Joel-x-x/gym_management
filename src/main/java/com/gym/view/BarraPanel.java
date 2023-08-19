@@ -30,6 +30,7 @@ public class BarraPanel extends JPanel {
     private JLabel labelNombreGimnasio;
     int panelAncho = 1080, panelAlto = 750;
     private CircularLabel labelLogo;
+    private JButton facturaButton;
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
@@ -77,6 +78,17 @@ public class BarraPanel extends JPanel {
         planesButton.setFont(new Font("Candara", Font.PLAIN, 18));
         planesButton.setBounds(0, 350, 200, 40);
         
+        facturaButton = new JButton("     Factura");
+        facturaButton.setHorizontalAlignment(SwingConstants.LEFT);
+        facturaButton.setForeground(new Color(163, 175, 175));
+        facturaButton.setFont(new Font("Candara", Font.PLAIN, 18));
+        facturaButton.setFocusTraversalKeysEnabled(false);
+        facturaButton.setFocusPainted(false);
+        facturaButton.setBorder(null);
+        facturaButton.setBackground(new Color(46, 56, 64));
+        facturaButton.setBounds(0, 400, 200, 40);
+        add(facturaButton);
+        
         if(administradorController.superUsuario(administrador_id)) {
             adminButton = new JButton("     Admin");
             adminButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -86,7 +98,7 @@ public class BarraPanel extends JPanel {
             adminButton.setForeground(new Color(163, 175, 175));
             adminButton.setBorder(null);
             adminButton.setFont(new Font("Candara", Font.PLAIN, 18));
-            adminButton.setBounds(0, 400, 200, 40);
+            adminButton.setBounds(0, 450, 200, 40);
         }
 
         inicioButton.addActionListener(new ActionListener() {
@@ -118,6 +130,12 @@ public class BarraPanel extends JPanel {
             }
         });
         
+        facturaButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		adminFrame.cambiarPanel(new FacturaPanel(panelAncho,panelAlto));
+        	}
+        });
         if(administradorController.superUsuario(administrador_id)) {
         	adminButton.addActionListener(new ActionListener() {
         		@Override
@@ -187,22 +205,7 @@ public class BarraPanel extends JPanel {
         labelLogo.setBounds(52, 41, 90, 90);
         add(labelLogo);
         
-        JButton facturaButton = new JButton("     Factura");
-        facturaButton.addActionListener(new ActionListener() {
-        	@Override
-    		public void actionPerformed(ActionEvent e) {
-    			adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
-    		}
-        });
-        facturaButton.setHorizontalAlignment(SwingConstants.LEFT);
-        facturaButton.setForeground(new Color(163, 175, 175));
-        facturaButton.setFont(new Font("Candara", Font.PLAIN, 18));
-        facturaButton.setFocusTraversalKeysEnabled(false);
-        facturaButton.setFocusPainted(false);
-        facturaButton.setBorder(null);
-        facturaButton.setBackground(new Color(46, 56, 64));
-        facturaButton.setBounds(0, 401, 200, 40);
-        add(facturaButton);
+        
     }
     
     public void agregarNombreGym() {
