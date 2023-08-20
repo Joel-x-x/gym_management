@@ -7,7 +7,7 @@ import com.gym.model.Clase;
 import com.gym.model.Entrenador;
 import com.gym.model.Fisico;
 import com.gym.model.Membresia;
-import com.gym.model.Plan;
+import com.gym.model.TipoMembresia;
 import com.gym.model.Registro;
 import com.gym.model.Reporte;
 import com.gym.model.Usuario;
@@ -66,20 +66,22 @@ public class ArrayUtilidades {
     	return matrizFisico;
 	}
 	
-	public Object[][] toMatrizPlan(List<Plan> lista) {
+	public Object[][] toMatrizTipoMembresia(List<TipoMembresia> lista) {
 		int contador = 0;
-		Object[][] matrizPlan =  new Object[lista.size()][5];
+		Object[][] matrizTipoMembresia =  new Object[lista.size()][7];
     	
-    	for(Plan plan : lista) {
-    		matrizPlan[contador][0] = plan.getId();
-    		matrizPlan[contador][1] = plan.getNombre();
-    		matrizPlan[contador][2] = plan.getPrecio();
-    		matrizPlan[contador][3] = plan.getDescripcion();
-    		matrizPlan[contador][4] = plan.getDuracion();
+    	for(TipoMembresia tipoMembresia : lista) {
+    		matrizTipoMembresia[contador][0] = tipoMembresia.getId();
+    		matrizTipoMembresia[contador][1] = tipoMembresia.getNombre();
+    		matrizTipoMembresia[contador][2] = tipoMembresia.getDescripcion();
+    		matrizTipoMembresia[contador][3] = tipoMembresia.getPrecio();
+    		matrizTipoMembresia[contador][4] = tipoMembresia.getDuracion();
+    		matrizTipoMembresia[contador][5] = Utilidades.cambiarTipoDuracionInverso(tipoMembresia.getTipoDuracion()); // Cambiar hour a Hora
+    		matrizTipoMembresia[contador][6] = tipoMembresia.getNombreClase();
 
     		contador++;
     	}
-    	return matrizPlan;
+    	return matrizTipoMembresia;
 	}
 	
 	public Object[][] toMatrizClase(List<Clase> lista) {

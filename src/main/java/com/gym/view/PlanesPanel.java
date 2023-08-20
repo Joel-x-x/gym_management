@@ -5,11 +5,11 @@ import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.ClaseController;
 import com.gym.controller.EntrenadorController;
-import com.gym.controller.PlanController;
+import com.gym.controller.TipoMembresiaController;
 import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Entrenador;
-import com.gym.model.Plan;
+import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class PlanesPanel extends JPanel {
 	private int idSeleccionadoEntrenador;
 	private int idSeleccionadoClase;
 	
-	private PlanController planController;
+	private TipoMembresiaController planController;
 	private EntrenadorController entrenadorController;
 	private ClaseController claseController;
 	
@@ -99,7 +99,7 @@ public class PlanesPanel extends JPanel {
 	}
     
 	public void guadarPlan() {
-		Plan plan = llenarPlan();
+		TipoMembresia plan = llenarPlan();
 		
 		if(planController.guardar(plan)) {
 			JOptionPane.showMessageDialog(null, "Se ha registrado el plan");
@@ -112,7 +112,7 @@ public class PlanesPanel extends JPanel {
 	
 	public void modificarPlan() {
 		
-		Plan plan = llenarPlan();
+		TipoMembresia plan = llenarPlan();
 		
 		plan.setId(idSeleccionadoPlan);
 		
@@ -139,11 +139,11 @@ public class PlanesPanel extends JPanel {
 		consultarPlan();
 	}
 	
-    public Plan llenarPlan() {
+    public TipoMembresia llenarPlan() {
 
 		Float precio_plan = Float.parseFloat(textPrecioPlan.getText());
 		
-		return new Plan(
+		return new TipoMembresia(
 						textNombrePlan.getText(),
 						precio_plan,
 						textDescripcionPlan.getText(),
@@ -152,7 +152,7 @@ public class PlanesPanel extends JPanel {
 	}
     
     public void llenarFormularioPlan() {
-    	Plan plan = planController.consulta(idSeleccionadoPlan);
+    	TipoMembresia plan = planController.consulta(idSeleccionadoPlan);
     	
     	textNombrePlan.setText(plan.getNombre());
     	textPrecioPlan.setText(plan.getPrecio() + "");
@@ -426,7 +426,7 @@ public class PlanesPanel extends JPanel {
 		
 		administrador_id = new Administrador().getId();
 		
-		planController = new PlanController();
+		planController = new TipoMembresiaController();
 		entrenadorController = new EntrenadorController();
 		claseController = new ClaseController();
 		

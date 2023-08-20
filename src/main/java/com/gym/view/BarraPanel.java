@@ -119,7 +119,7 @@ public class BarraPanel extends JPanel {
         membresiasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new MembresiasPanel(panelAncho, panelAlto));
+                adminFrame.cambiarPanel(new TipoMembresiasPanel(panelAncho, panelAlto));
             }
         });
 

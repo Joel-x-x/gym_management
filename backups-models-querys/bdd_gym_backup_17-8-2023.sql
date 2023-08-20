@@ -164,7 +164,6 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(30) NOT NULL,
   `descripcion` VARCHAR(300) DEFAULT '',
-  `anticipacion` INT NULL DEFAULT 0,
   `precio` DECIMAL(6,2) NOT NULL CHECK (precio >= 0),
   `duracion` INT NOT NULL CHECK (duracion > 0),
   `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
@@ -984,6 +983,8 @@ CALL insertarFactura(1, 1);
 
 -- Insertar una membresía
  call insertarMembresia(1,1,1,1);
+ 
+ select * from membresia;
 
 describe recuperacion_cuenta;
 
