@@ -97,7 +97,7 @@ public class FacturaPanel extends JPanel {
 		
 		JLabel lblFactura = new JLabel("FACTURA");
 		lblFactura.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblFactura.setBounds(40, 11, 1000, 46);
 		add(lblFactura);
 		
