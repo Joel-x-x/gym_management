@@ -68,7 +68,7 @@ public class AdminFrame extends JFrame implements ActionListener{
                 cambiarPanel(new TipoMembresiasPanel(panelAncho, panelAlto));
                 break;
             case "Planes":
-                cambiarPanel(new PlanesPanel(panelAncho, panelAlto));
+                cambiarPanel(new EntrenadorClasePanel(panelAncho, panelAlto));
                 break;
         }
     }

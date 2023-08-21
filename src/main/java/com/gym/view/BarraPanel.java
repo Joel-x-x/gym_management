@@ -126,7 +126,7 @@ public class BarraPanel extends JPanel {
         planesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new PlanesPanel(panelAncho, panelAlto));
+                adminFrame.cambiarPanel(new EntrenadorClasePanel(panelAncho, panelAlto));
             }
         });
         

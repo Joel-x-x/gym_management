@@ -227,7 +227,7 @@ public class TipoMembresiasPanel extends JPanel {
         btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnAgregar.setBorder(null);
         btnAgregar.setBackground(new Color(46, 56, 64));
-        btnAgregar.setBounds(30, 299, 100, 30);
+        btnAgregar.setBounds(30, 198, 100, 30);
         add(btnAgregar);
         
         btnModificar = new JButton("Modificar");
@@ -241,7 +241,7 @@ public class TipoMembresiasPanel extends JPanel {
         btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnModificar.setBorder(null);
         btnModificar.setBackground(new Color(46, 56, 64));
-        btnModificar.setBounds(140, 299, 100, 30);
+        btnModificar.setBounds(140, 198, 100, 30);
         add(btnModificar);
         
         btnEliminar = new JButton("Eliminar");
@@ -255,11 +255,11 @@ public class TipoMembresiasPanel extends JPanel {
         btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnEliminar.setBorder(null);
         btnEliminar.setBackground(new Color(46, 56, 64));
-        btnEliminar.setBounds(250, 299, 100, 30);
+        btnEliminar.setBounds(250, 198, 100, 30);
         add(btnEliminar);
         
         JScrollPane scrollPane_membresias_membresias = new JScrollPane();
-        scrollPane_membresias_membresias.setBounds(30, 421, 998, 263);
+        scrollPane_membresias_membresias.setBounds(30, 288, 998, 398);
         add(scrollPane_membresias_membresias);
         
         tableMembresias = new JTable();
@@ -297,7 +297,7 @@ public class TipoMembresiasPanel extends JPanel {
         btnLimpiar.setFocusPainted(false);
         btnLimpiar.setBorder(null);
         btnLimpiar.setBackground(new Color(46, 56, 64));
-        btnLimpiar.setBounds(361, 299, 100, 30);
+        btnLimpiar.setBounds(361, 198, 100, 30);
         add(btnLimpiar);
         
         textBuscar = new JTextField();
@@ -307,12 +307,12 @@ public class TipoMembresiasPanel extends JPanel {
         	}
         });
         textBuscar.setColumns(10);
-        textBuscar.setBounds(139, 390, 137, 25);
+        textBuscar.setBounds(139, 257, 137, 25);
         add(textBuscar);
         
         JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");
         lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_1_4_2.setBounds(30, 396, 99, 14);
+        lblNewLabel_1_4_2.setBounds(30, 263, 99, 14);
         add(lblNewLabel_1_4_2);
         
         JButton btnBuscar = new JButton("Buscar");
@@ -321,7 +321,7 @@ public class TipoMembresiasPanel extends JPanel {
         btnBuscar.setFocusPainted(false);
         btnBuscar.setBorder(null);
         btnBuscar.setBackground(new Color(46, 56, 64));
-        btnBuscar.setBounds(286, 390, 89, 25);
+        btnBuscar.setBounds(286, 257, 89, 25);
         add(btnBuscar);
         
         btnLimpiarTabla = new JButton("Limpiar");
@@ -330,7 +330,7 @@ public class TipoMembresiasPanel extends JPanel {
         btnLimpiarTabla.setFocusPainted(false);
         btnLimpiarTabla.setBorder(null);
         btnLimpiarTabla.setBackground(new Color(46, 56, 64));
-        btnLimpiarTabla.setBounds(385, 390, 89, 25);
+        btnLimpiarTabla.setBounds(385, 257, 89, 25);
         add(btnLimpiarTabla);
         
         JLabel lblNewLabel_1_1 = new JLabel("Nombre");
@@ -345,12 +345,12 @@ public class TipoMembresiasPanel extends JPanel {
         
         textDescripcion = new JTextField();
         textDescripcion.setColumns(10);
-        textDescripcion.setBounds(30, 186, 510, 92);
+        textDescripcion.setBounds(557, 83, 471, 145);
         add(textDescripcion);
         
         JLabel lblNewLabel_2_2 = new JLabel("Descripción");
         lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_2.setBounds(30, 172, 510, 14);
+        lblNewLabel_2_2.setBounds(557, 68, 231, 14);
         add(lblNewLabel_2_2);
         
         listarTipoMembresias();

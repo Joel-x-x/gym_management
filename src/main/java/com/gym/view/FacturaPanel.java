@@ -11,11 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 public class FacturaPanel extends JPanel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTable table;
@@ -74,8 +72,9 @@ public class FacturaPanel extends JPanel {
 		add(btnImprimir);
 		
 		JLabel lblFactura = new JLabel("FACTURA");
-		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblFactura.setBounds(499, 11, 150, 33);
+		lblFactura.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblFactura.setBounds(40, 11, 1000, 46);
 		add(lblFactura);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Buscar Nombre/Cedula");
@@ -83,17 +82,17 @@ public class FacturaPanel extends JPanel {
 		add(lblNewLabel_2_1);
 		
 		textField = new JTextField();
-		textField.setBounds(803, 103, 237, 20);
+		textField.setBounds(803, 103, 237, 25);
 		add(textField);
 		textField.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(40, 203, 1000, 447);
+		scrollPane.setBounds(40, 139, 1000, 547);
 		add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		setPreferredSize(new Dimension(1280, 800));
+		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
         
 	}
