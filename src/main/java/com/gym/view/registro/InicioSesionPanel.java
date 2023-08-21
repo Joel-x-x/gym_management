@@ -1,4 +1,6 @@
-package com.gym.view;
+package com.gym.view.registro;
+
+import com.gym.view.AdminFrame;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -20,7 +22,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.annotation.Documented;
 
 import javax.swing.ImageIcon;
 

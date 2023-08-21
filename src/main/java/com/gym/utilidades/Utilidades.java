@@ -81,4 +81,36 @@ public class Utilidades {
 		
 		return matcher.matches();
 	}
+	
+	public static String cambiarTipoDuracionInverso(String tipo) {
+	    switch (tipo) {
+	        case "hour":
+	            return "Hora";
+	        case "day":
+	            return "Día";
+	        case "month":
+	            return "Mes";
+	        case "year":
+	            return "Año";
+	        default:
+	            return null;
+	    }
+	}
+	
+	public static String cambiarTipoDuracion(String tipo) {
+		
+		switch(tipo) {
+			case "Hora":
+				return "hour";
+			case "Día":
+				return "year";
+			case "Mes":
+				return "month";
+			case "Año":
+				return "year";
+			default:
+				return null;
+		}
+	}
+
 }

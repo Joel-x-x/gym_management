@@ -164,7 +164,6 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(30) NOT NULL,
   `descripcion` VARCHAR(300) DEFAULT '',
-  `anticipacion` INT NULL DEFAULT 0,
   `precio` DECIMAL(6,2) NOT NULL CHECK (precio >= 0),
   `duracion` INT NOT NULL CHECK (duracion > 0),
   `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
@@ -271,9 +270,9 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   `numero_factura` VARCHAR(10) DEFAULT NULL,
   `descuento_porcentaje` DOUBLE DEFAULT 0.0,
   `descuento` DECIMAL(6,2) DEFAULT 0.0,
-  `subtotal` DECIMAL(6,2) DEFAULT NULL,
-  `iva` DECIMAL(6,2) DEFAULT NULL,
-  `total` DECIMAL(6,2) DEFAULT NULL,
+  `subtotal` DECIMAL(6,2) DEFAULT 0.0,
+  `iva` DECIMAL(6,2) DEFAULT 0.0,
+  `total` DECIMAL(6,2) DEFAULT 0.0,
   `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
   `fecha` DATETIME NOT NULL DEFAULT current_timestamp,
   `establecimiento` VARCHAR(3) DEFAULT '001',
@@ -304,20 +303,18 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 DELIMITER //
 drop procedure if exists insertarFactura//
 CREATE PROCEDURE insertarFactura(
-    IN usuarioId INT,
     IN administradorId INT
 )
 BEGIN
     DECLARE numeroFactura VARCHAR(10);
     
-    INSERT INTO factura (usuario_id, administrador_id) VALUES (usuarioId, administradorId);
+    INSERT INTO factura (administrador_id) VALUES (administradorId);
     SET numeroFactura = LPAD(LAST_INSERT_ID(), 9, '0');
     
     UPDATE factura SET numero_factura = numeroFactura WHERE id = LAST_INSERT_ID();
 END;
 //
 DELIMITER ;
-
 -- Calcular fecha fin
 delimiter //
 drop function if exists calcularFechaFin//
@@ -447,8 +444,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_administrador` (
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL,
-  `cedula` VARCHAR(15) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `cedula` VARCHAR(15) NULL DEFAULT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en administrador
@@ -498,8 +494,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_entrenador` (
   `sexo` ENUM('Masculino', 'Femenino') NOT NULL,
   `correo` VARCHAR(100) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NOT NULL,
-  `cedula` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`id`)
+  `cedula` VARCHAR(20) NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en entrenador
@@ -547,8 +542,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_clase` (
   `clase` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(300) NULL DEFAULT NULL,
   `entrenador_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en clase
@@ -594,8 +588,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_cuenta` (
   `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nombre_empresa` VARCHAR(50) NULL DEFAULT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en cuenta
@@ -648,8 +641,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
   `cedula` VARCHAR(15) NULL DEFAULT NULL,
   `direccion` VARCHAR(300) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en usuario
@@ -696,8 +688,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_fisico` (
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `altura` DOUBLE NOT NULL,
   `peso` DOUBLE NOT NULL,
-  `usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `usuario_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en fisico
@@ -744,13 +735,11 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nombre` VARCHAR(30) NOT NULL,
   `descripcion` VARCHAR(300) DEFAULT '',
-  `anticipacion` INT NULL DEFAULT 0,
   `precio` DECIMAL(6,2) NOT NULL,
   `duracion` INT NOT NULL,
   `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
   `clase_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en tipo_membresia
@@ -759,8 +748,8 @@ CREATE TRIGGER auditoria_tipo_membresia_insert
 AFTER INSERT ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.descripcion, NEW.anticipacion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
 END;
 //
 DELIMITER ;
@@ -771,8 +760,8 @@ CREATE TRIGGER auditoria_tipo_membresia_update
 AFTER UPDATE ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.descripcion, NEW.anticipacion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
 END;
 //
 DELIMITER ;
@@ -783,8 +772,8 @@ CREATE TRIGGER auditoria_tipo_membresia_delete
 AFTER DELETE ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.descripcion, OLD.anticipacion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.descripcion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
 END;
 //
 DELIMITER ;
@@ -801,8 +790,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_membresia` (
   `usuario_id` INT NOT NULL,
   `administrador_id` INT NOT NULL,
   `tipo_membresia_id` INT NOT NULL,
-  `factura_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `factura_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en membresia
@@ -850,8 +838,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_recuperacion_cuenta` (
   `nombre_amigo` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
   `nombre_mascota` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
   `color_favorito` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en recuperacion_cuenta
@@ -907,8 +894,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_factura` (
   `establecimiento` VARCHAR(3) DEFAULT '001',
   `punto_emision` VARCHAR(3) DEFAULT '001',
   `usuario_id` INT DEFAULT NULL,
-  `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `accion`)
+  `administrador_id` INT NOT NULL
 ) ENGINE = InnoDB;
 
 -- Trigger para auditoría INSERT en factura
@@ -922,6 +908,8 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+select * from administrador;
 
 -- Trigger para auditoría UPDATE en factura
 DELIMITER //
@@ -957,7 +945,7 @@ DELIMITER ;
 -- Datos de la Base de Datos
 -- Insertar un administrador
 INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, clave, direccion)
-VALUES ('NombreAdmin', 'ApellidoAdmin', 'admin@example.com', '123456789', 'contraseñasegura', 'random', 0, 1, 'claveadmin', 'DirecciónAdmin');
+VALUES ('NombreAdmin', 'ApellidoAdmin', 'wacho@gmail.com', '123456789', '1234', 'random', 0, 1, 'claveadmin', 'DirecciónAdmin');
 
 -- Insertar un entrenador
 INSERT INTO entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id)
@@ -984,14 +972,16 @@ INSERT INTO fisico (altura, peso, usuario_id)
 VALUES (170.5, 70.0, 1);
 
 -- Insertar un tipo de membresía
-INSERT INTO tipo_membresia (nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-VALUES ('Membresía Mensual', 'Descripción de la membresía', 5, 50.00, 30, 'day', 1, 1);
+INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
 
 -- Insertar una factura
-CALL insertarFactura(1, 1);
+CALL insertarFactura( 1);
 
 -- Insertar una membresía
  call insertarMembresia(1,1,1,1);
+ 
+ select * from membresia;
 
 describe recuperacion_cuenta;
 
@@ -1000,7 +990,8 @@ VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.
 
 select * from auditoria_usuario;
 
-delete from usuario where id = 2;
+select * from factura;
+
 
 
 

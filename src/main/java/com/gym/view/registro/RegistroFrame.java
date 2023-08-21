@@ -1,4 +1,4 @@
-package com.gym.view;
+package com.gym.view.registro;
 
 import java.awt.EventQueue;
 
@@ -11,7 +11,7 @@ public class RegistroFrame extends JFrame {
 	private RegistroPanel registroPanel;
 	 private InicioSesionPanel inicioSesionPanel;
 	 private RecuperarCuentaPanel recuperarCuenta;
-	 private CambiarPassword cambiarPassword;
+	 private CambiarPasswordPanel cambiarPassword;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -31,7 +31,7 @@ public class RegistroFrame extends JFrame {
         registroPanel = new RegistroPanel(this);
         inicioSesionPanel = new InicioSesionPanel(this);
         recuperarCuenta = new RecuperarCuentaPanel(this);
-        cambiarPassword = new CambiarPassword(this);
+        cambiarPassword = new CambiarPasswordPanel(this);
 		
         setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
 		setTitle("Gym");

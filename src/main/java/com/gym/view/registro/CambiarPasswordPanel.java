@@ -1,4 +1,4 @@
-package com.gym.view;
+package com.gym.view.registro;
 
 import java.awt.Color;
 
@@ -20,7 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CambiarPassword extends JPanel {
+public class CambiarPasswordPanel extends JPanel {
 	private RegistroFrame registroFrame;
 	private AdministradorController administradorController;
 	private int administrador_id;
@@ -49,7 +49,7 @@ public class CambiarPassword extends JPanel {
 		textPasswordConfirmar.setText("");
 	}
 
-	public CambiarPassword(RegistroFrame registroFrame) {
+	public CambiarPasswordPanel(RegistroFrame registroFrame) {
 		this.registroFrame = registroFrame;
 		administradorController = new AdministradorController();
 		

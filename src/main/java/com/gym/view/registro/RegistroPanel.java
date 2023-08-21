@@ -1,4 +1,4 @@
-package com.gym.view;
+package com.gym.view.registro;
 
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
