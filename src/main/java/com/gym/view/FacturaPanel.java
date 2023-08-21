@@ -12,13 +12,37 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import com.gym.controller.FacturaController;
+import com.gym.model.Administrador;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FacturaPanel extends JPanel {
+	private int administrador_id;
+	private int idSeleccionado;
+	private FacturaController facturaController;
+	private DefaultTableModel modelo;
+	
+	
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTable table;
+	
+	public void listar() {
+		String[] cabecera = {"Id" , "No Factura", "Cliente", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
+		
+		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id), cabecera);
+		
+		table.setModel(modelo);
+	}
 
 	public FacturaPanel(int panelAncho, int panelAlto) {
+		administrador_id = new Administrador().getId();
+		facturaController = new FacturaController();
+		
 		setLayout(null);
 		setFocusTraversalPolicyProvider(true);
 		JButton btnNuevo = new JButton("Nuevo");
@@ -91,9 +115,16 @@ public class FacturaPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				idSeleccionado = (int) table.getValueAt(table.getSelectedRow(), 0);
+			}
+		});
 		scrollPane.setViewportView(table);
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
         
+        listar();
 	}
 }

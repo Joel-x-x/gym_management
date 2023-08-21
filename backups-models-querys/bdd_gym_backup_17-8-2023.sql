@@ -270,9 +270,9 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   `numero_factura` VARCHAR(10) DEFAULT NULL,
   `descuento_porcentaje` DOUBLE DEFAULT 0.0,
   `descuento` DECIMAL(6,2) DEFAULT 0.0,
-  `subtotal` DECIMAL(6,2) DEFAULT NULL,
-  `iva` DECIMAL(6,2) DEFAULT NULL,
-  `total` DECIMAL(6,2) DEFAULT NULL,
+  `subtotal` DECIMAL(6,2) DEFAULT 0.0,
+  `iva` DECIMAL(6,2) DEFAULT 0.0,
+  `total` DECIMAL(6,2) DEFAULT 0.0,
   `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
   `fecha` DATETIME NOT NULL DEFAULT current_timestamp,
   `establecimiento` VARCHAR(3) DEFAULT '001',
@@ -303,20 +303,18 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 DELIMITER //
 drop procedure if exists insertarFactura//
 CREATE PROCEDURE insertarFactura(
-    IN usuarioId INT,
     IN administradorId INT
 )
 BEGIN
     DECLARE numeroFactura VARCHAR(10);
     
-    INSERT INTO factura (usuario_id, administrador_id) VALUES (usuarioId, administradorId);
+    INSERT INTO factura (administrador_id) VALUES (administradorId);
     SET numeroFactura = LPAD(LAST_INSERT_ID(), 9, '0');
     
     UPDATE factura SET numero_factura = numeroFactura WHERE id = LAST_INSERT_ID();
 END;
 //
 DELIMITER ;
-
 -- Calcular fecha fin
 delimiter //
 drop function if exists calcularFechaFin//
@@ -737,7 +735,6 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nombre` VARCHAR(30) NOT NULL,
   `descripcion` VARCHAR(300) DEFAULT '',
-  `anticipacion` INT NULL DEFAULT 0,
   `precio` DECIMAL(6,2) NOT NULL,
   `duracion` INT NOT NULL,
   `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
@@ -751,8 +748,8 @@ CREATE TRIGGER auditoria_tipo_membresia_insert
 AFTER INSERT ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.descripcion, NEW.anticipacion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
 END;
 //
 DELIMITER ;
@@ -763,8 +760,8 @@ CREATE TRIGGER auditoria_tipo_membresia_update
 AFTER UPDATE ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.descripcion, NEW.anticipacion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
 END;
 //
 DELIMITER ;
@@ -775,8 +772,8 @@ CREATE TRIGGER auditoria_tipo_membresia_delete
 AFTER DELETE ON tipo_membresia
 FOR EACH ROW
 BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.descripcion, OLD.anticipacion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
+  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.descripcion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
 END;
 //
 DELIMITER ;
@@ -975,11 +972,11 @@ INSERT INTO fisico (altura, peso, usuario_id)
 VALUES (170.5, 70.0, 1);
 
 -- Insertar un tipo de membresía
-INSERT INTO tipo_membresia (nombre, descripcion, anticipacion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-VALUES ('Membresía Mensual', 'Descripción de la membresía', 5, 50.00, 30, 'day', 1, 1);
+INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
 
 -- Insertar una factura
-CALL insertarFactura(1, 1);
+CALL insertarFactura( 1);
 
 -- Insertar una membresía
  call insertarMembresia(1,1,1,1);
@@ -993,7 +990,8 @@ VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.
 
 select * from auditoria_usuario;
 
-delete from usuario where id = 2;
+select * from factura;
+
 
 
 

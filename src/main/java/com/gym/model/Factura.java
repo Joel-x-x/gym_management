@@ -1,5 +1,7 @@
 package com.gym.model;
 
+import java.util.Date;
+
 public class Factura {
 	private int id;
 	private String numero_factura;
@@ -15,10 +17,13 @@ public class Factura {
 	private int usuario_id;
 	private int administrador_id;
 	
+	// Extras
+	private String nombreUsuario;
+
 	// 
 	public Factura(int id, String numero_factura, double descuento_porcentaje, double descuento, double subtotal,
 			double iva, double total, String forma_pago, String fecha, String establecimiento, String punto_emision,
-			int usuario_id, int administrador_id) {
+			int usuario_id, int administrador_id, String nombreUsuario) {
 		this.id = id;
 		this.numero_factura = numero_factura;
 		this.descuento_porcentaje = descuento_porcentaje;
@@ -32,11 +37,17 @@ public class Factura {
 		this.punto_emision = punto_emision;
 		this.usuario_id = usuario_id;
 		this.administrador_id = administrador_id;
+		this.nombreUsuario = nombreUsuario;
 	}
 	
-	public Factura(int usuario_id, int administrador_id) {
-		this.usuario_id = usuario_id;
-		this.administrador_id = administrador_id;
+	// Consultar ultima factura insertada
+	public Factura(int id, String numero_factura, String forma_pago, String fecha, String establecimiento, String punto_emision) {
+		this.id = id;
+		this.numero_factura = numero_factura;
+		this.forma_pago = forma_pago;
+		this.fecha = fecha;
+		this.establecimiento = establecimiento;
+		this.punto_emision = punto_emision;
 	}
 	
 	public int getId() {
@@ -116,6 +127,14 @@ public class Factura {
 	}
 	public void setAdministrador_id(int administrador_id) {
 		this.administrador_id = administrador_id;
+	}
+	
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
 	}
 	
 }

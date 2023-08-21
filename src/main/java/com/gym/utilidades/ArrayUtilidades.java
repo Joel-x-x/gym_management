@@ -5,6 +5,7 @@ import java.util.List;
 import com.gym.model.Administrador;
 import com.gym.model.Clase;
 import com.gym.model.Entrenador;
+import com.gym.model.Factura;
 import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.TipoMembresia;
@@ -191,6 +192,25 @@ public class ArrayUtilidades {
     	return matrizRegistro;
 	}
 	
-	
+	public Object[][] toMatrizFactura(List<Factura> lista) {
+	    int contador = 0;
+	    Object[][] matrizFacturas = new Object[lista.size()][10];  // Cambiar el tamaño de la matriz según el número de campos en Factura
+
+	    for (Factura factura : lista) {
+	        matrizFacturas[contador][0] = factura.getId();
+	        matrizFacturas[contador][1] = factura.getNumero_factura();
+	        matrizFacturas[contador][2] = factura.getNombreUsuario();
+	        matrizFacturas[contador][3] = factura.getSubtotal();
+	        matrizFacturas[contador][4] = factura.getIva();
+	        matrizFacturas[contador][5] = factura.getTotal();
+	        matrizFacturas[contador][6] = factura.getForma_pago();
+	        matrizFacturas[contador][7] = factura.getFecha();
+	        matrizFacturas[contador][8] = factura.getEstablecimiento();
+	        matrizFacturas[contador][9] = factura.getPunto_emision();
+
+	        contador++;
+	    }
+	    return matrizFacturas;
+	}
 	
 }
