@@ -21,6 +21,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class RegistroPanel extends JPanel {
 	private AdministradorController administradorController;
@@ -30,10 +34,12 @@ public class RegistroPanel extends JPanel {
     private RegistroFrame registroFrame;
     private JLabel iniciarSesionButton;
     private JTextField textEmail;
-    private JPasswordField textPassword;
-    private JPasswordField textPasswordConfirm;
+    private JTextField txt_Password;
     private JTextField textClave;
     private JTextField textNombre;
+    private JLabel lbl_verificador_contraseña;
+    private JLabel lbl_coincidencia_contraseñas;
+    private JTextField txt_confirmar_contraseña;
     
     public void registrar() {
 		Administrador administrador = llenarAdministrador();
@@ -54,7 +60,7 @@ public class RegistroPanel extends JPanel {
 			return;
 		}
 		
-		if(!administrador.getPassword().equals(String.valueOf(textPasswordConfirm.getPassword()))) {
+		if(!administrador.getPassword().equals(String.valueOf(txt_confirmar_contraseña.getText()))) {
 			JOptionPane.showMessageDialog(null, "Las contraseñan no coinciden");
 			return;
 		}
@@ -77,7 +83,7 @@ public class RegistroPanel extends JPanel {
     	return new Administrador(
     			textNombre.getText(),
     			textEmail.getText(),
-    			String.valueOf(textPassword.getPassword()),
+    			String.valueOf(txt_Password.getText()),
     			0,
     			0,
     			textClave.getText());
@@ -86,8 +92,8 @@ public class RegistroPanel extends JPanel {
     public void limpiarFormulario() {
     	textNombre.setText("");
     	textEmail.setText("");
-    	textPassword.setText("");
-    	textPasswordConfirm.setText("");
+    	txt_Password.setText("");
+    	txt_confirmar_contraseña.setText("");
     	textClave.setText("");
     }
     
@@ -126,15 +132,72 @@ public class RegistroPanel extends JPanel {
         textEmail.setBounds(250, 253, 350, 40);
         add(textEmail);
         
-        textPassword = new JPasswordField();
-        textPassword.setColumns(10);
-        textPassword.setBounds(250, 331, 350, 40);
-        add(textPassword);
+        txt_confirmar_contraseña = new JTextField();
+        txt_confirmar_contraseña.addCaretListener(new CaretListener() {
+        	
+			public void caretUpdate(CaretEvent e) {
+        		if(!txt_confirmar_contraseña.getText().equals(txt_Password.getText())) {
+                	lbl_coincidencia_contraseñas.setText("Sin coincidencias");
+                }else if(txt_confirmar_contraseña.getText().equals(txt_Password.getText())){
+                	lbl_coincidencia_contraseñas.setText("");
+                }
+        	}
+        });
         
-        textPasswordConfirm = new JPasswordField();
-        textPasswordConfirm.setColumns(10);
-        textPasswordConfirm.setBounds(250, 405, 350, 40);
-        add(textPasswordConfirm);
+        txt_Password = new JTextField();
+        txt_Password.addCaretListener(new CaretListener() {
+        	String contraseña= "";
+        	String contraseña_array [];
+        	
+        	public void caretUpdate(CaretEvent e) {
+        		contraseña = String.valueOf(txt_Password.getText());
+        		contraseña_array = new String[contraseña.length()];
+        		
+        		for(int i = 0; i<contraseña.length(); i++) {
+    				contraseña_array[i] = contraseña.substring(i,i+1);
+    			}
+        		if(contraseña.length()>=8) {
+        			boolean mayusculas = false ;
+        			for(int i = 0; i<contraseña.length(); i++) {
+        				if(contraseña.contains(contraseña_array[i].toUpperCase())) {
+        					mayusculas = true;
+        				}
+        			}
+        			
+        			if(mayusculas) {
+        				if(contraseña.matches(".*\\d.*")) {
+        					if(contraseña.matches(".*[^a-zA-Z0-9\\s].*")) {
+        						lbl_verificador_contraseña.setForeground(Color.GREEN);
+        						lbl_verificador_contraseña.setText("Contraseña Valida");
+        					}else {
+        						lbl_verificador_contraseña.setForeground(Color.RED);
+        	        			lbl_verificador_contraseña.setText("Minimo un caracter especial(*,?,+,-,_,....)");
+        	        		}
+        				}else {
+        					lbl_verificador_contraseña.setForeground(Color.RED);
+                			lbl_verificador_contraseña.setText("Minimo un número");
+                		}
+					}else {
+						lbl_verificador_contraseña.setForeground(Color.RED);
+	        			lbl_verificador_contraseña.setText("Minimo una Mayúscula");
+	        		}
+        			
+        		}else {
+        			lbl_verificador_contraseña.setForeground(Color.RED);
+        			lbl_verificador_contraseña.setText("Minimo 8 caracteres");
+        		}
+        	}
+        });
+        
+
+        txt_Password.setColumns(10);
+        txt_Password.setBounds(250, 331, 350, 40);
+        add(txt_Password);
+        
+
+        txt_confirmar_contraseña.setColumns(10);
+        txt_confirmar_contraseña.setBounds(250, 405, 350, 40);
+        add(txt_confirmar_contraseña);
         
         JButton btnNewButton = new JButton("Registrarse");
         btnNewButton.setForeground(new Color(0, 0, 0));
@@ -198,6 +261,18 @@ public class RegistroPanel extends JPanel {
         lblNewLabel.setIcon(new ImageIcon(RegistroPanel.class.getResource("/com/gym/resources/poseRegistro.png")));
         lblNewLabel.setBounds(671, 103, 500, 530);
         add(lblNewLabel);
+        
+        lbl_verificador_contraseña = new JLabel("");
+        lbl_verificador_contraseña.setBounds(615, 344, 247, 14);
+        add(lbl_verificador_contraseña);
+        
+        lbl_coincidencia_contraseñas = new JLabel("");
+        lbl_coincidencia_contraseñas.setBounds(615, 418, 159, 14);
+        add(lbl_coincidencia_contraseñas);
+        
+
+        txt_confirmar_contraseña.setColumns(10);
+        txt_confirmar_contraseña.setBounds(250, 405, 350, 40);
+        add(txt_confirmar_contraseña);
     }
-    
 }

@@ -16,11 +16,21 @@ import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.FacturaController;
 import com.gym.model.Administrador;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.*;
+
 
 public class FacturaPanel extends JPanel {
 	private int administrador_id;
@@ -34,6 +44,7 @@ public class FacturaPanel extends JPanel {
 	private JTable table;
 	private JTextField textField_1;
 	
+	
 	public void listar() {
 		String[] cabecera = {"Id" , "No Factura", "Cliente", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
 		
@@ -42,7 +53,20 @@ public class FacturaPanel extends JPanel {
 		table.setModel(modelo);
 		
 	}
-
+	
+	public void generarPDF(String nombre) throws FileNotFoundException, DocumentException{
+		FileOutputStream archivo = new FileOutputStream (nombre + ".pdf");
+		Document documento = new Document();
+		PdfWriter.getInstance(documento, archivo);
+		documento.open();
+		
+		Paragraph cabeceraFactura = new Paragraph("Nº Factura"+ nombre );
+		cabeceraFactura.setAlignment(1);
+		documento.add(cabeceraFactura);
+		documento.add(new Paragraph("Cliente: " ));
+		
+	}
+	
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
@@ -90,6 +114,13 @@ public class FacturaPanel extends JPanel {
 		add(btnRefrescar);
 		
 		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		
 		btnImprimir.setForeground(Color.WHITE);
 		btnImprimir.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnImprimir.setFocusPainted(false);
@@ -150,4 +181,5 @@ public class FacturaPanel extends JPanel {
         
         listar();
 	}
+	
 }
