@@ -24,13 +24,14 @@ public class BarraPanel extends JPanel {
 	private AdminFrame adminFrame;
 	private JButton inicioButton;
     private JButton usuariosButton;
-    private JButton membresiasButton;
-    private JButton planesButton;
+    private JButton tiposMembresiasButton;
+    private JButton EntrenadorClasesButton;
     private JButton adminButton;
     private JLabel labelNombreGimnasio;
     int panelAncho = 1080, panelAlto = 750;
     private CircularLabel labelLogo;
     private JButton facturaButton;
+    private JButton membresiasButton;
 
     public BarraPanel(AdminFrame frame) {
         adminFrame = frame;
@@ -59,24 +60,36 @@ public class BarraPanel extends JPanel {
         usuariosButton.setBorder(null);
         usuariosButton.setFont(new Font("Candara", Font.PLAIN, 18));
         usuariosButton.setBounds(0, 248, 200, 40);
+        tiposMembresiasButton = new JButton("     Tipos de Membresías");
+        tiposMembresiasButton.setHorizontalAlignment(SwingConstants.LEFT);
+        tiposMembresiasButton.setFocusPainted(false);
+        tiposMembresiasButton.setFocusTraversalKeysEnabled(false);
+        tiposMembresiasButton.setBackground(new Color(46, 56, 64));
+        tiposMembresiasButton.setForeground(new Color(163, 175, 175));
+        tiposMembresiasButton.setBorder(null);
+        tiposMembresiasButton.setFont(new Font("Candara", Font.PLAIN, 18));
+        tiposMembresiasButton.setBounds(0, 299, 200, 40);
+        
+        EntrenadorClasesButton = new JButton("     Entrenadores y Clases");
+        EntrenadorClasesButton.setHorizontalAlignment(SwingConstants.LEFT);
+        EntrenadorClasesButton.setFocusPainted(false);
+        EntrenadorClasesButton.setFocusTraversalKeysEnabled(false);
+        EntrenadorClasesButton.setBackground(new Color(46, 56, 64));
+        EntrenadorClasesButton.setForeground(new Color(163, 175, 175));
+        EntrenadorClasesButton.setBorder(null);
+        EntrenadorClasesButton.setFont(new Font("Candara", Font.PLAIN, 18));
+        EntrenadorClasesButton.setBounds(0, 350, 200, 40);
+        
         membresiasButton = new JButton("     Membresías");
         membresiasButton.setHorizontalAlignment(SwingConstants.LEFT);
-        membresiasButton.setFocusPainted(false);
-        membresiasButton.setFocusTraversalKeysEnabled(false);
-        membresiasButton.setBackground(new Color(46, 56, 64));
         membresiasButton.setForeground(new Color(163, 175, 175));
-        membresiasButton.setBorder(null);
         membresiasButton.setFont(new Font("Candara", Font.PLAIN, 18));
-        membresiasButton.setBounds(0, 299, 200, 40);
-        planesButton = new JButton("     Planes");
-        planesButton.setHorizontalAlignment(SwingConstants.LEFT);
-        planesButton.setFocusPainted(false);
-        planesButton.setFocusTraversalKeysEnabled(false);
-        planesButton.setBackground(new Color(46, 56, 64));
-        planesButton.setForeground(new Color(163, 175, 175));
-        planesButton.setBorder(null);
-        planesButton.setFont(new Font("Candara", Font.PLAIN, 18));
-        planesButton.setBounds(0, 350, 200, 40);
+        membresiasButton.setFocusTraversalKeysEnabled(false);
+        membresiasButton.setFocusPainted(false);
+        membresiasButton.setBorder(null);
+        membresiasButton.setBackground(new Color(46, 56, 64));
+        membresiasButton.setBounds(0, 400, 200, 40);
+        add(membresiasButton);
         
         facturaButton = new JButton("     Factura");
         facturaButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -86,7 +99,7 @@ public class BarraPanel extends JPanel {
         facturaButton.setFocusPainted(false);
         facturaButton.setBorder(null);
         facturaButton.setBackground(new Color(46, 56, 64));
-        facturaButton.setBounds(0, 400, 200, 40);
+        facturaButton.setBounds(0, 450, 200, 40);
         add(facturaButton);
         
         if(administradorController.superUsuario(administrador_id)) {
@@ -98,7 +111,7 @@ public class BarraPanel extends JPanel {
             adminButton.setForeground(new Color(163, 175, 175));
             adminButton.setBorder(null);
             adminButton.setFont(new Font("Candara", Font.PLAIN, 18));
-            adminButton.setBounds(0, 450, 200, 40);
+            adminButton.setBounds(0, 500, 200, 40);
         }
 
         inicioButton.addActionListener(new ActionListener() {
@@ -116,18 +129,25 @@ public class BarraPanel extends JPanel {
             }
         });
 
-        membresiasButton.addActionListener(new ActionListener() {
+        tiposMembresiasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 adminFrame.cambiarPanel(new TipoMembresiasPanel(panelAncho, panelAlto));
             }
         });
 
-        planesButton.addActionListener(new ActionListener() {
+        EntrenadorClasesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 adminFrame.cambiarPanel(new EntrenadorClasePanel(panelAncho, panelAlto));
             }
+        });
+        
+        membresiasButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		adminFrame.cambiarPanel(new MembresiasPanel(panelAncho, panelAlto));
+        	}
         });
         
         facturaButton.addActionListener(new ActionListener() {
@@ -148,8 +168,8 @@ public class BarraPanel extends JPanel {
         setLayout(null);
         add(inicioButton);
         add(usuariosButton);
-        add(membresiasButton);
-        add(planesButton);
+        add(tiposMembresiasButton);
+        add(EntrenadorClasesButton);
         
         if(administradorController.superUsuario(administrador_id)) {
         	add(adminButton);

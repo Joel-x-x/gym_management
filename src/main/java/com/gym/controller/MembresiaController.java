@@ -20,8 +20,8 @@ public class MembresiaController {
 		return membresiaDAO.listarClase(administrador_id);
 	}
 
-	public Object[][] listar(int usuario_id) {
-		var listaMembresia = membresiaDAO.listar(usuario_id);
+	public Object[][] listar(int administrador) {
+		var listaMembresia = membresiaDAO.listar(administrador);
 		
 		for(Membresia membresia : listaMembresia) {
 			membresia.cambiarActivoMembresia();
