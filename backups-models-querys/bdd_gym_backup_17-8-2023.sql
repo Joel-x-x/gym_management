@@ -990,7 +990,6 @@ VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.
 
 select * from auditoria_usuario;
 
-select * from factura;
 
 
 

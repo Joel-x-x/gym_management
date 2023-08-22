@@ -63,13 +63,13 @@ public class MembresiaDAO {
 		}
 	}
 
-	public List<Membresia> listar(int usuario_id) {
+	public List<Membresia> listar(int administrador) {
 
 		try {
-			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
-					+ " join plan p on p.id = m.plan_id"
-					+ " join clase c on c.id = m.clase_id"
-					+ " where usuario_id = ?"
+			String sentencia = "select m.*, c.clase from membresia m"
+					+ " join tipo_membresia t on m.tipo_membresia_id = t.id"
+					+ " join clase c on c.id = t.clase_id"
+					+ " where administrador_id = ?"
 					+ " order by m.activo desc";
 			
 			List<Membresia> resultado = new ArrayList<>();
@@ -78,7 +78,7 @@ public class MembresiaDAO {
 			
 			try(statement) {
 				
-				statement.setInt(1, usuario_id);
+				statement.setInt(1, administrador);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				try(resultSet) {

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gym.model.Factura;
+import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 
 public class FacturaDAO {
@@ -16,20 +17,77 @@ public class FacturaDAO {
 	public FacturaDAO(Connection con) {
 		this.con = con;
 	}
-	
-	public List<Factura> listarFactura(int administrador_id) {
+	public List<Factura> consultarFactura(){
 		List<Factura> resultado = new ArrayList<>();
-		int elementosPorPagina = 10; 
-		int paginaActual = 1;
+//		int elementosPorPagina = 10; 
+//		int paginaActual = 1;
 		
 		try {
 			
 			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id";
 			
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Factura(
+			                    resultSet.getInt("f.id"), 
+			                    resultSet.getString("f.numero_factura"),
+			                    resultSet.getDouble("f.descuento_porcentaje"),
+			                    resultSet.getDouble("f.descuento"),
+			                    resultSet.getDouble("f.subtotal"),
+			                    resultSet.getDouble("f.iva"),
+			                    resultSet.getDouble("f.total"),
+			                    resultSet.getString("f.forma_pago"),
+			                    resultSet.getString("f.fecha"),
+			                    resultSet.getString("f.establecimiento"),
+			                    resultSet.getString("f.punto_emision"),
+			                    resultSet.getInt("f.usuario_id"),
+			                    resultSet.getInt("f.administrador_id"),
+			                    resultSet.getString("u.nombre")
+								));
+					}
+					
+					return resultado;
+					
+				}
+				
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return resultado;
+		}
+	}
+	
+	public List<Factura> listarFactura(int administrador_id, String nombre) {
+		
+		List<Factura> resultado = new ArrayList<>();
+//		int elementosPorPagina = 10; 
+//		int paginaActual = 1;
+		
+		try {
+			
+			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id";
+			
+			if(!nombre.equals("")) {
+				sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ?";
+			}
+			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, administrador_id);
+				
+				if(!nombre.equals("")) {
+					statement.setString(2, nombre + "%");
+				}
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

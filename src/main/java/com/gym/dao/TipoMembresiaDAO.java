@@ -97,54 +97,54 @@ public class TipoMembresiaDAO {
 		}
 		
 	}
-		public List<TipoMembresia> consultar(String nombre, int administrador_id) {
+	public List<TipoMembresia> consultar(String nombre, int administrador_id) {
+		
+		List<TipoMembresia> resultado = new ArrayList<>();
+		
+		try {
 			
-			List<TipoMembresia> resultado = new ArrayList<>();
+			String sentencia = "select t.*, c.clase from tipo_membresia t, clase c"
+					+ " where t.clase_id = c.id and t.administrador_id = ?";
 			
-			try {
-				
-				String sentencia = "select t.*, c.clase from tipo_membresia t, clase c"
-						+ " where t.clase_id = c.id and t.administrador_id = ?";
-				
-				if(!nombre.equals("")) {
-					sentencia = "select t.*, c.clase from tipo_membresia t, clase c"
-							+ " where t.clase_id = c.id and t.administrador_id = ? and nombre like ?";
-				}
-				
-				final PreparedStatement statement = con.prepareStatement(sentencia);
-				
-				try(statement) {
-					statement.setInt(1, administrador_id);
-					
-					if(!nombre.equals("")) {
-						statement.setString(2, nombre + "%");
-					}
-					
-					final ResultSet resultSet = statement.executeQuery();
-					
-					try(resultSet) {
-						
-						while(resultSet.next()) {
-							resultado.add(new TipoMembresia(
-									resultSet.getInt("t.id"),
-									resultSet.getString("t.nombre"),
-									resultSet.getString("t.descripcion"),
-									resultSet.getFloat("t.precio"),
-									resultSet.getInt("t.duracion"),
-									resultSet.getString("t.tipo_duracion"),
-									resultSet.getInt("t.clase_id"),
-									resultSet.getString("c.clase")));
-						}
-					}
-				}
-				
-			} catch(SQLException e) {
-				e.printStackTrace();
+			if(!nombre.equals("")) {
+				sentencia = "select t.*, c.clase from tipo_membresia t, clase c"
+						+ " where t.clase_id = c.id and t.administrador_id = ? and nombre like ?";
 			}
 			
-			return resultado;
+			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				
+				if(!nombre.equals("")) {
+					statement.setString(2, nombre + "%");
+				}
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new TipoMembresia(
+								resultSet.getInt("t.id"),
+								resultSet.getString("t.nombre"),
+								resultSet.getString("t.descripcion"),
+								resultSet.getFloat("t.precio"),
+								resultSet.getInt("t.duracion"),
+								resultSet.getString("t.tipo_duracion"),
+								resultSet.getInt("t.clase_id"),
+								resultSet.getString("c.clase")));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
 		}
+		
+		return resultado;
+		
+	}
 	
 	public TipoMembresia consulta(int id) {
 	
