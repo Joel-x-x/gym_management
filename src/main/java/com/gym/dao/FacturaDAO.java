@@ -19,6 +19,8 @@ public class FacturaDAO {
 	
 	public List<Factura> listarFactura(int administrador_id) {
 		List<Factura> resultado = new ArrayList<>();
+		int elementosPorPagina = 10; 
+		int paginaActual = 1;
 		
 		try {
 			
