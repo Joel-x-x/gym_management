@@ -30,6 +30,7 @@ public class FacturaPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTable table;
+	private JTextField textField_1;
 	
 	public void listar() {
 		String[] cabecera = {"Id" , "No Factura", "Cliente", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
@@ -37,6 +38,7 @@ public class FacturaPanel extends JPanel {
 		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id), cabecera);
 		
 		table.setModel(modelo);
+		
 	}
 
 	public FacturaPanel(int panelAncho, int panelAlto) {
@@ -124,6 +126,20 @@ public class FacturaPanel extends JPanel {
 		scrollPane.setViewportView(table);
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
+        
+        JButton btnNewButton = new JButton(">>");
+        btnNewButton.setBounds(503, 683, 49, 23);
+        add(btnNewButton);
+        
+        JButton btnNewButton_1 = new JButton("<<");
+        btnNewButton_1.setBounds(421, 683, 49, 23);
+        add(btnNewButton_1);
+        
+        textField_1 = new JTextField();
+        textField_1.setText("1");
+        textField_1.setBounds(472, 684, 30, 20);
+        add(textField_1);
+        textField_1.setColumns(10);
         
         listar();
 	}
