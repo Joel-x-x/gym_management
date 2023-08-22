@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gym.model.Factura;
+import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 
 public class FacturaDAO {
@@ -17,19 +18,28 @@ public class FacturaDAO {
 		this.con = con;
 	}
 	
-	public List<Factura> listarFactura(int administrador_id) {
+	public List<Factura> listarFactura(int administrador_id, String nombre) {
+		
 		List<Factura> resultado = new ArrayList<>();
-		int elementosPorPagina = 10; 
-		int paginaActual = 1;
+//		int elementosPorPagina = 10; 
+//		int paginaActual = 1;
 		
 		try {
 			
 			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id";
 			
+			if(!nombre.equals("")) {
+				sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ?";
+			}
+			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, administrador_id);
+				
+				if(!nombre.equals("")) {
+					statement.setString(2, nombre + "%");
+				}
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

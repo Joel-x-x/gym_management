@@ -19,6 +19,8 @@ import com.gym.model.Administrador;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class FacturaPanel extends JPanel {
 	private int administrador_id;
@@ -28,14 +30,14 @@ public class FacturaPanel extends JPanel {
 	
 	
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
+	private JTextField textBuscar;
 	private JTable table;
 	private JTextField textField_1;
 	
 	public void listar() {
 		String[] cabecera = {"Id" , "No Factura", "Cliente", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
 		
-		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id), cabecera);
+		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id, textBuscar.getText()), cabecera);
 		
 		table.setModel(modelo);
 		
@@ -103,14 +105,19 @@ public class FacturaPanel extends JPanel {
 		lblFactura.setBounds(40, 11, 1000, 46);
 		add(lblFactura);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Buscar Nombre/Cedula");
-		lblNewLabel_2_1.setBounds(660, 106, 133, 14);
+		JLabel lblNewLabel_2_1 = new JLabel("Buscar Nombre/Cedula:");
+		lblNewLabel_2_1.setBounds(659, 102, 160, 22);
 		add(lblNewLabel_2_1);
 		
-		textField = new JTextField();
-		textField.setBounds(803, 103, 237, 25);
-		add(textField);
-		textField.setColumns(10);
+		textBuscar = new JTextField();
+		textBuscar.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				listar();
+			}
+		});
+		textBuscar.setBounds(803, 101, 237, 25);
+		add(textBuscar);
+		textBuscar.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(40, 139, 1000, 547);
