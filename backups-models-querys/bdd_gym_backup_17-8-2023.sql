@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
+select * from membresia;
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`membresia`
 -- -----------------------------------------------------
@@ -220,6 +220,54 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+-- Procedures Membresias
+delimiter ..
+drop procedure if exists listarMembresias..
+create procedure listarMembresias(in administradorId int)
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId
+    order by activo desc, fecha_fin;
+
+end.. 
+delimiter ;
+
+delimiter ..
+drop procedure if exists consultarMembresiasNombre..
+create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId and u.nombre like buscar
+    order by activo desc, fecha_fin;
+
+end.. 
+delimiter ;
+
+delimiter ..
+drop procedure if exists consultarMembresiasCedula..
+create procedure consultarMembresiasCedula(in administradorId int, in buscar varchar(20))
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId and u.cedula like buscar
+    order by activo desc, fecha_fin;
+end.. 
+delimiter ;
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`recuperacion_cuenta`

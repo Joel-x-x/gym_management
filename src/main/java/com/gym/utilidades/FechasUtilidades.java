@@ -1,14 +1,17 @@
 package com.gym.utilidades;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.formdev.flatlaf.json.ParseException;
+import java.time.Duration;
 
 public class FechasUtilidades {
 	
-	public Calendar stringToCalendar(String fecha) {
+	public static Calendar stringToCalendar(String fecha) {
 		String pattern = "yyyy-MM-dd HH:mm:ss";
 		
 		Calendar calendar = Calendar.getInstance();
@@ -39,6 +42,31 @@ public class FechasUtilidades {
 		
 		return fecha;
 	}
+	
+    public static LocalDateTime stringToLocalDateTime(String fecha) {
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        
+        LocalDateTime localDateTime = LocalDateTime.parse(fecha, formatter);
+        
+        return localDateTime;
+    }
+	
+    public static String obtenerTiempoRestante(LocalDateTime fechaFin) {
+        LocalDateTime fechaActual = LocalDateTime.now();
+
+        if (fechaActual.isAfter(fechaFin)) {
+            return "Finalizado";
+        }
+
+        Duration diferencia = Duration.between(fechaActual, fechaFin);
+
+        long dias = diferencia.toDays();
+        long horas = diferencia.toHoursPart();
+        long minutos = diferencia.toMinutesPart();
+
+        return dias + " días " + horas + " horas " + minutos + " minutos";
+    }
 	
     public static String cambiarFormatoFecha(String fecha) {
     

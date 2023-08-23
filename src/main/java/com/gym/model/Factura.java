@@ -1,7 +1,5 @@
 package com.gym.model;
 
-import java.util.Date;
-
 public class Factura {
 	private int id;
 	private String numero_factura;

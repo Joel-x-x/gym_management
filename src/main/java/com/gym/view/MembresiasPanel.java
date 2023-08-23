@@ -1,6 +1,7 @@
 package com.gym.view;
 
 import java.awt.Color;
+import java.awt.Component;
 
 import javax.swing.JPanel;
 
@@ -11,7 +12,10 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class MembresiasPanel extends JPanel {
 	private int administrador_id;
@@ -23,11 +27,41 @@ public class MembresiasPanel extends JPanel {
 	private JTextField textBuscar;
 	
 	public void listar() {
-		String[] cabeceras = {"Id","Finaliza", "Clase", "Membresia", "Notificación", "Valor Total"};
+		String[] cabeceras = {"Id", "Membresía", "Nombre", "Cédula", "Finalización", "Clase", "Entrenador", "No Factura", "Estado"};
 		
-		modelo = new DefaultTableModel(membresiaController.listar(administrador_id), cabeceras);
+		modelo = new DefaultTableModel(membresiaController.listar(administrador_id, textBuscar.getText()), cabeceras);
+		
 		table.setModel(modelo);
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(5);
+		table.getColumnModel().getColumn(4).setPreferredWidth(130);
+		table.getColumnModel().getColumn(7).setPreferredWidth(25);
+		table.getColumnModel().getColumn(8).setPreferredWidth(10);
+		
+		// Asiganar un color a la comuna estado
+		table.getColumnModel().getColumn(8).setCellRenderer(renderer);
+		
 	}
+	
+	// Crea el render para asignar un color a la columna estado en base a este
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+		private static final long serialVersionUID = -8267339185456423635L;
+
+		@Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                       boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            String estado = (String) table.getValueAt(row, 8);
+            if (estado.equals("Activa")) {
+                component.setBackground(new Color(112, 236, 98));
+            } else if(estado.equals("Caducada")){
+            	component.setBackground(new Color(241, 151, 120));
+            }
+
+            return component;
+        }
+    };
 
 	public MembresiasPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
@@ -59,8 +93,15 @@ public class MembresiasPanel extends JPanel {
         add(lblNewLabel_1_4_2);
         
         textBuscar = new JTextField();
+        textBuscar.addCaretListener(new CaretListener() {
+        	public void caretUpdate(CaretEvent e) {
+        		listar();
+        	}
+        });
         textBuscar.setColumns(10);
         textBuscar.setBounds(163, 98, 200, 25);
         add(textBuscar);
+        
+        listar();
 	}
 }

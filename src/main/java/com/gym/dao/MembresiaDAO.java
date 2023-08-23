@@ -26,6 +26,61 @@ public class MembresiaDAO {
 			return false;
 		}
 	}
+	
+	public List<Membresia> listar(int administrador_id, String buscar) {
+
+		List<Membresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call listarMembresias(?)";
+			
+			// Cedula
+			if(Utilidades.isNumber(buscar)) sentencia = "call consultarMembresiasCedula(?, ?)";
+			
+			// Nombre
+			if(!Utilidades.isNumber(buscar) && !buscar.equals("")) sentencia = "call consultarMembresiasNombre(?, ?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				
+				// Consultar
+				if(!buscar.equals("")) statement.setString(2, buscar + "%");
+				
+				final ResultSet resultSet = statement.executeQuery();
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+					    resultado.add(new Membresia(
+					        resultSet.getInt("m.id"),
+					        resultSet.getString("m.fecha_inicio"),
+					        resultSet.getString("m.fecha_fin"),
+					        resultSet.getInt("m.activo"),
+					        resultSet.getInt("m.usuario_id"),
+					        resultSet.getInt("m.tipo_membresia_id"),
+					        resultSet.getInt("m.factura_id"),
+					        resultSet.getString("u.nombre"),
+					        resultSet.getString("u.cedula"),
+					        resultSet.getString("t.nombre"),
+					        resultSet.getInt("t.clase_id"),
+					        resultSet.getString("c.clase"),
+					        resultSet.getInt("c.entrenador_id"),
+					        resultSet.getString("e.nombre"),
+					        resultSet.getString("f.numero_factura")
+					    ));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
 
 	
 	public List<Clase> listarClase(int administrador_id) {
@@ -61,54 +116,6 @@ public class MembresiaDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public List<Membresia> listar(int administrador) {
-
-		try {
-			String sentencia = "select m.*, c.clase from membresia m"
-					+ " join tipo_membresia t on m.tipo_membresia_id = t.id"
-					+ " join clase c on c.id = t.clase_id"
-					+ " where administrador_id = ?"
-					+ " order by m.activo desc";
-			
-			List<Membresia> resultado = new ArrayList<>();
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setInt(1, administrador);
-				
-				final ResultSet resultSet = statement.executeQuery();
-				try(resultSet) {
-					
-					while(resultSet.next()) {
-						resultado.add(new Membresia(
-								resultSet.getInt("m.id"),
-								resultSet.getString("m.fecha_inicio"),
-								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
-								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
-								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
-								));
-					}
-					
-					return resultado;
-				}
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
 	}
 
 	public boolean guardar(Membresia membresia) {

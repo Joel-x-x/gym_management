@@ -5,26 +5,35 @@ import java.util.Calendar;
 import com.gym.controller.MembresiaController;
 import com.gym.utilidades.FechasUtilidades;
 
-public class Membresia {
+public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase, Entrenador, No Factura, Estado
     private int id;
     private String fecha_inicio;
     private String fecha_fin;
-    private int usuario_id;
-    private int plan_id;
-    private int clase_id;
-    private float valor_extra;
-    private float valor_total;
-    private int administrador_id;
-
-	private String plan;
-    private String clase;
     private int activo;
-    private int anticipacion;
+    private int usuario_id;
+    private int administrador_id;
+    private int tipo_membresia_id;
+    private int factura_id;
     
+    // Usuario
     private String nombreUsuario;
+    private String cedula;
     private String fecha_entrada;
     private String fecha_salida;
-    private int membresia_id;
+    
+    // Tipo Membresia
+	private String nombreTipo;
+	private int clase_id;
+
+	// Clase
+    private String clase;
+    private int entrenador_id;
+    
+    // Entrenador
+    private String entrenador;
+    
+    // Factura
+    private String numeroFactura;
     
     
     private MembresiaController membresiaController;
@@ -32,6 +41,28 @@ public class Membresia {
     public Membresia() {
     	
     }
+    
+    // Listar Membresías
+	public Membresia(int id, String fecha_inicio, String fecha_fin, int activo, int usuario_id,
+			int tipo_membresia_id, int factura_id, String nombreUsuario, String cedula,
+			String nombreTipo, int clase_id, String clase, int entrenador_id, String entrenador,
+			String numeroFactura) {
+		this.id = id;
+		this.fecha_inicio = fecha_inicio;
+		this.fecha_fin = fecha_fin;
+		this.activo = activo;
+		this.usuario_id = usuario_id;
+		this.tipo_membresia_id = tipo_membresia_id;
+		this.factura_id = factura_id;
+		this.nombreUsuario = nombreUsuario;
+		this.cedula = cedula;
+		this.nombreTipo = nombreTipo;
+		this.clase_id = clase_id;
+		this.clase = clase;
+		this.entrenador_id = entrenador_id;
+		this.entrenador = entrenador;
+		this.numeroFactura = numeroFactura;
+	}
     
     public Membresia(int id, String clase) {
     	this.id = id;
@@ -44,10 +75,8 @@ public class Membresia {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.valor_extra = valor_extra;
-		this.valor_total = valor_total;
 	}
 	
 	// Consulta Membresia
@@ -57,7 +86,6 @@ public class Membresia {
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
 		this.activo = activo;
-		this.anticipacion = anticipacion;
 	}
 	
 	// Llenar Clase Membresia para Modificar
@@ -66,25 +94,19 @@ public class Membresia {
 		this.id = id;
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.valor_extra = valor_extra;
-		this.valor_total = valor_total;
 		this.administrador_id = administrador_id;
 		this.activo = activo;
-		this.anticipacion = anticipacion;
 	}
 	
 	// Guardar
 	public Membresia(String fecha_fin, int usuario_id, int plan_id, int clase_id, float valor_extra, float valor_total, int activo, int anticipacion, int administrador_id) {
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.valor_extra = valor_extra;
-		this.valor_total = valor_total;
 		this.activo = activo;
-		this.anticipacion = anticipacion;
 		this.administrador_id = administrador_id;
 	}
 
@@ -92,10 +114,8 @@ public class Membresia {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.valor_extra = valor_extra;
-		this.valor_total = valor_total;
 	}
 	
 	// Listar - Consultar
@@ -105,9 +125,9 @@ public class Membresia {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.usuario_id = usuario_id;
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.valor_extra = valor_extra;
+		this.precio = valor_extra;
 		this.valor_total = valor_total;
 		this.administrador_id = administrador_id;
 		this.plan = plan;
@@ -131,12 +151,61 @@ public class Membresia {
 		this.anticipacion = anticipacion;
 	}
 	
-    public int getAnticipacion() {
-		return anticipacion;
+	
+	public int getTipo_membresia_id() {
+		return tipo_membresia_id;
 	}
 
-	public void setAnticipacion(int anticipacion) {
-		this.anticipacion = anticipacion;
+	public void setTipo_membresia_id(int tipo_membresia_id) {
+		this.tipo_membresia_id = tipo_membresia_id;
+	}
+
+	public int getFactura_id() {
+		return factura_id;
+	}
+
+	public void setFactura_id(int factura_id) {
+		this.factura_id = factura_id;
+	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+
+	public String getNombreTipo() {
+		return nombreTipo;
+	}
+
+	public void setNombreTipo(String nombreTipo) {
+		this.nombreTipo = nombreTipo;
+	}
+
+	public int getEntrenador_id() {
+		return entrenador_id;
+	}
+
+	public void setEntrenador_id(int entrenador_id) {
+		this.entrenador_id = entrenador_id;
+	}
+
+	public String getEntrenador() {
+		return entrenador;
+	}
+
+	public void setEntrenador(String entrenador) {
+		this.entrenador = entrenador;
+	}
+
+	public String getNumeroFactura() {
+		return numeroFactura;
+	}
+
+	public void setNumeroFactura(String numeroFactura) {
+		this.numeroFactura = numeroFactura;
 	}
 
 	public String getNombreUsuario() {
@@ -228,11 +297,11 @@ public class Membresia {
 	}
 
 	public int getPlan_id() {
-		return plan_id;
+		return tipo_membresia_id;
 	}
 
 	public void setPlan_id(int plan_id) {
-		this.plan_id = plan_id;
+		this.tipo_membresia_id = plan_id;
 	}
 
 	public int getClase_id() {
@@ -244,11 +313,11 @@ public class Membresia {
 	}
 
 	public float getValor_extra() {
-		return valor_extra;
+		return precio;
 	}
 
 	public void setValor_extra(float valor_extra) {
-		this.valor_extra = valor_extra;
+		this.precio = valor_extra;
 	}
 
 	public float getValor_total() {
@@ -276,7 +345,7 @@ public class Membresia {
 	}
 	
 	public boolean validarMembresia() {
-		Calendar calendar = new FechasUtilidades().stringToCalendar(this.getFecha_fin());
+		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 		
 		if (Calendar.getInstance().before(calendar)) {
 			return true;
@@ -286,10 +355,10 @@ public class Membresia {
 	}
 	
 	public boolean notificarMembresia() {
-	    Calendar calendar = new FechasUtilidades().stringToCalendar(this.getFecha_fin());
+	    Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, - this.getAnticipacion() - 1);
+	    calendar.add(Calendar.DAY_OF_MONTH, - 5);
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();

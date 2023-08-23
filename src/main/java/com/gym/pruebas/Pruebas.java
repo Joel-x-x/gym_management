@@ -1,6 +1,7 @@
 package com.gym.pruebas;
 
 import com.gym.utilidades.PasswordUtilidades;
+import com.gym.utilidades.Utilidades;
 
 public class Pruebas {
 	public static void main(String[] args) {
