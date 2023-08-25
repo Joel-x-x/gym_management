@@ -316,6 +316,10 @@ public class TipoMembresiasPanel extends JPanel {
         add(lblNewLabel_1_4_2);
         
         JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btnBuscar.setForeground(Color.WHITE);
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setFocusPainted(false);

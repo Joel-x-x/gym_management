@@ -124,9 +124,9 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`usuario` (
   `telefono` VARCHAR(15) NOT NULL,
   `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `administrador_id`),
+  PRIMARY KEY (`id`),
+  INDEX `fk_administrador_id_usuario_idx` (`administrador_id` ASC) VISIBLE,
   UNIQUE INDEX `correo_UNIQUE` (`email` ASC) VISIBLE,
-  INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id`
     FOREIGN KEY (`administrador_id`)
@@ -135,7 +135,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`fisico`
@@ -184,7 +183,6 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-select * from membresia;
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`membresia`
 -- -----------------------------------------------------
@@ -322,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   `iva` DECIMAL(6,2) DEFAULT 0.0,
   `total` DECIMAL(6,2) DEFAULT 0.0,
   `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
-  `fecha` DATETIME NOT NULL DEFAULT current_timestamp,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `establecimiento` VARCHAR(3) DEFAULT '001',
   `punto_emision` VARCHAR(3) DEFAULT '001',
   `usuario_id` INT DEFAULT NULL,
@@ -957,8 +955,6 @@ END;
 //
 DELIMITER ;
 
-select * from administrador;
-
 -- Trigger para auditoría UPDATE en factura
 DELIMITER //
 CREATE TRIGGER auditoria_factura_update
@@ -983,12 +979,18 @@ END;
 //
 DELIMITER ;
 
--- === Clase ===
-
--- === Clase ===
-
-
-
+-- Funcion maximo de factura
+DELIMITER //
+DROP FUNCTION IF EXISTS maxIdFactura//
+CREATE FUNCTION maxIdFactura()
+RETURNS INT
+DETERMINISTIC
+BEGIN
+  DECLARE max_id INT;
+  SELECT MAX(id) INTO max_id FROM factura;
+  RETURN max_id;
+END //
+DELIMITER ;
 
 -- Datos de la Base de Datos
 -- Insertar un administrador
@@ -1024,19 +1026,16 @@ INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion
 VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
 
 -- Insertar una factura
-CALL insertarFactura( 1);
+CALL insertarFactura(1);
 
 -- Insertar una membresía
- call insertarMembresia(1,1,1,1);
+-- call insertarMembresia(1,1,1,1);
  
  select * from membresia;
+ 
 
-describe recuperacion_cuenta;
 
-INSERT INTO usuario (nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.com', '123456783', 'DirecciónUsuario', '987654322', 1);
 
-select * from auditoria_usuario;
 
 
 

@@ -424,6 +424,36 @@ public class AdministradorDAO {
 		return nombre;
 	}
 	
+	public String getApellidoUsuario(int id) {
+		String apellido = "";
+		
+		try {
+			
+			String sentencia = "select apellido from administrador where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					resultSet.next();
+					
+					apellido = resultSet.getString("apellido");
+				}
+				
+			}
+				
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return apellido;
+	}
+	
 	
 	
 }

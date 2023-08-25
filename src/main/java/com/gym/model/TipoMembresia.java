@@ -13,6 +13,8 @@ public class TipoMembresia {
     // Extras
     String nombreClase;
     
+    public TipoMembresia() {}
+    
     // Modificar 
     public TipoMembresia(int id, String nombre, String descripcion, Float precio, int duracion, String tipoDuracion,
 			int clase_id) {

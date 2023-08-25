@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.FacturaController;
 import com.gym.model.Administrador;
+import com.gym.model.Factura;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -30,9 +31,11 @@ import javax.swing.event.CaretEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
-public class FacturaPanel extends JPanel {
+public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private int administrador_id;
 	private int idSeleccionado;
 	private FacturaController facturaController;
@@ -43,6 +46,11 @@ public class FacturaPanel extends JPanel {
 	private JTextField textBuscar;
 	private JTable table;
 	private JTextField textField_1;
+	private JButton btnNuevo;
+	private JButton btnModificar;
+	private JButton btnEliminar;
+	private JButton btnRefrescar;
+	private JButton btnImprimir;
 	
 	
 	public void listar() {
@@ -51,6 +59,16 @@ public class FacturaPanel extends JPanel {
 		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id, textBuscar.getText()), cabecera);
 		
 		table.setModel(modelo);
+	}
+	
+	@Override
+	public void llamarFrame() {
+		new FacturaFrame(this);
+	}
+
+	@Override
+	public void Accion(Factura factura) {
+		// TODO Auto-generated method stub
 		
 	}
 	
@@ -67,53 +85,72 @@ public class FacturaPanel extends JPanel {
 		
 	}
 	
+	public void bloquearBotones() {
+		btnModificar.setEnabled(false);
+		btnEliminar.setEnabled(false);
+		btnImprimir.setEnabled(false);
+	}
+	
+	public void activarBotones() {
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
+		btnImprimir.setEnabled(true);
+	}
+	
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
 		
 		setLayout(null);
 		setFocusTraversalPolicyProvider(true);
-		JButton btnNuevo = new JButton("Nuevo");
+		btnNuevo = new JButton("Nuevo");
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				llamarFrame();
+			}
+		});
 		btnNuevo.setForeground(Color.WHITE);
 		btnNuevo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNuevo.setFocusPainted(false);
-		btnNuevo.setEnabled(false);
 		btnNuevo.setBorder(null);
 		btnNuevo.setBackground(new Color(46, 56, 64));
 		btnNuevo.setBounds(40, 98, 100, 30);
 		add(btnNuevo);
 		
-		JButton btnModificar = new JButton("Modificar");
+		btnModificar = new JButton("Modificar");
 		btnModificar.setForeground(Color.WHITE);
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnModificar.setFocusPainted(false);
-		btnModificar.setEnabled(false);
 		btnModificar.setBorder(null);
 		btnModificar.setBackground(new Color(46, 56, 64));
 		btnModificar.setBounds(150, 98, 100, 30);
 		add(btnModificar);
 		
-		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar = new JButton("Eliminar");
 		btnEliminar.setForeground(Color.WHITE);
 		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEliminar.setFocusPainted(false);
-		btnEliminar.setEnabled(false);
 		btnEliminar.setBorder(null);
 		btnEliminar.setBackground(new Color(46, 56, 64));
 		btnEliminar.setBounds(260, 98, 100, 30);
 		add(btnEliminar);
 		
-		JButton btnRefrescar = new JButton("Refrescar");
+		btnRefrescar = new JButton("Refrescar");
+		btnRefrescar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textBuscar.setText("");
+				listar();
+			}
+		});
 		btnRefrescar.setForeground(Color.WHITE);
 		btnRefrescar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnRefrescar.setFocusPainted(false);
-		btnRefrescar.setEnabled(false);
 		btnRefrescar.setBorder(null);
 		btnRefrescar.setBackground(new Color(46, 56, 64));
 		btnRefrescar.setBounds(370, 98, 100, 30);
 		add(btnRefrescar);
 		
-		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir = new JButton("Imprimir");
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -124,7 +161,6 @@ public class FacturaPanel extends JPanel {
 		btnImprimir.setForeground(Color.WHITE);
 		btnImprimir.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnImprimir.setFocusPainted(false);
-		btnImprimir.setEnabled(false);
 		btnImprimir.setBorder(null);
 		btnImprimir.setBackground(new Color(46, 56, 64));
 		btnImprimir.setBounds(480, 98, 100, 30);
@@ -155,10 +191,17 @@ public class FacturaPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				bloquearBotones();
+			}
+		});
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				idSeleccionado = (int) table.getValueAt(table.getSelectedRow(), 0);
+				activarBotones();
 			}
 		});
 		scrollPane.setViewportView(table);
@@ -180,6 +223,7 @@ public class FacturaPanel extends JPanel {
         textField_1.setColumns(10);
         
         listar();
+        bloquearBotones();
 	}
 	
 }

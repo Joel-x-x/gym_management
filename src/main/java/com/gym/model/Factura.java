@@ -1,5 +1,7 @@
 package com.gym.model;
 
+import java.sql.Date;
+
 public class Factura {
 	private int id;
 	private String numero_factura;
@@ -9,7 +11,7 @@ public class Factura {
 	private double iva;
 	private double total;
 	private String forma_pago;
-	private String fecha;
+	private Date fecha;
 	private String establecimiento;
 	private String punto_emision;
 	private int usuario_id;
@@ -20,7 +22,7 @@ public class Factura {
 
 	// 
 	public Factura(int id, String numero_factura, double descuento_porcentaje, double descuento, double subtotal,
-			double iva, double total, String forma_pago, String fecha, String establecimiento, String punto_emision,
+			double iva, double total, String forma_pago, Date fecha, String establecimiento, String punto_emision,
 			int usuario_id, int administrador_id, String nombreUsuario) {
 		this.id = id;
 		this.numero_factura = numero_factura;
@@ -39,7 +41,7 @@ public class Factura {
 	}
 	
 	// Consultar ultima factura insertada
-	public Factura(int id, String numero_factura, String forma_pago, String fecha, String establecimiento, String punto_emision) {
+	public Factura(int id, String numero_factura, String forma_pago, Date fecha, String establecimiento, String punto_emision) {
 		this.id = id;
 		this.numero_factura = numero_factura;
 		this.forma_pago = forma_pago;
@@ -96,10 +98,10 @@ public class Factura {
 	public void setForma_pago(String forma_pago) {
 		this.forma_pago = forma_pago;
 	}
-	public String getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	public String getEstablecimiento() {

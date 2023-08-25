@@ -81,7 +81,74 @@ public class MembresiaDAO {
 		
 		return resultado;
 	}
-
+	
+	public List<Membresia> listarMembresiaFactura(int administrador_id, int factura_id) {
+		List<Membresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from membresia m"
+					+ " join tipo_membresia t on t.id = m.tipo_membresia_id"
+					+ " join clase c on c.id = t.clase_id"
+					+ " join entrenador e on e.id = c.entrenador_id"
+					+ " where m.administrador_id = ? and m.factura_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				statement.setInt(2, factura_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Membresia(
+								resultSet.getInt("m.id"),
+								resultSet.getString("t.nombre"),
+								resultSet.getString("c.clase"),
+								resultSet.getString("e.nombre"),
+								resultSet.getDouble("t.precio")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	
+	public boolean crearMembresia(int administrador_id, int usuario_id, int factura_id, int tipo_membresia_id) {
+		
+		int item = 0;
+		
+		try {
+			String sentencia = "call insertarMembresia(?, ?, ?, ?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				statement.setInt(2, usuario_id);
+				statement.setInt(3, factura_id);
+				statement.setInt(4, tipo_membresia_id);
+				
+				item = statement.executeUpdate();
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return new Utilidades().toBoolean(item);
+		
+	}
 	
 	public List<Clase> listarClase(int administrador_id) {
 
@@ -116,35 +183,6 @@ public class MembresiaDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public boolean guardar(Membresia membresia) {
-		
-		try {
-			String sentencia = "insert into membresia(fecha_fin, usuario_id, plan_id, clase_id, valor_extra, valor_total, activo, anticipacion, administrador_id) "
-					+ "values(?,?,?,?,?,?,?,?,?)";
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setString(1, membresia.getFecha_fin());
-				statement.setInt(2, membresia.getUsuario_id());
-				statement.setInt(3, membresia.getPlan_id());
-				statement.setInt(4, membresia.getClase_id());
-				statement.setFloat(5, membresia.getValor_extra());
-				statement.setFloat(6, membresia.getValor_total());
-				statement.setInt(7, membresia.getActivo());
-				statement.setInt(8, membresia.getAnticipacion());
-				statement.setInt(9, membresia.getAdministrador_id());
-					
-					return toBoolean(statement.executeUpdate());
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
 	}
 
 	public Membresia consulta(int id, int usuario_id) {
@@ -245,42 +283,8 @@ public class MembresiaDAO {
 		
 	}
 
-	public boolean modificar(Membresia membresia) {
-
-		try {
-			String sentencia = "update membresia set fecha_fin = ?, plan_id = ?, clase_id = ?, valor_extra = ?, valor_total = ?, activo = ?, anticipacion = ?"
-					+ " where id = ?";
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setString(1, membresia.getFecha_fin());
-				statement.setInt(2, membresia.getPlan_id());
-				statement.setInt(3, membresia.getClase_id());
-				statement.setFloat(4, membresia.getValor_extra());
-				statement.setFloat(5, membresia.getValor_total());
-				statement.setFloat(6, membresia.getActivo());
-				statement.setFloat(7, membresia.getAnticipacion());
-				statement.setInt(8, membresia.getId());
-					
-					return toBoolean(statement.executeUpdate());
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
+	public boolean eliminar(int id) {
 		
-	}
-
-	public int eliminar(int id) {
-		
-//		if(!this.eliminarRegistro(id)) {
-//			System.out.println("No se encontraron registros");
-//		}
-		
-		int item = 0;
-
 		try {
 			String sentencia = "delete from membresia where id = ?";
 			
@@ -290,15 +294,13 @@ public class MembresiaDAO {
 				
 				statement.setInt(1, id);
 				
-				item = statement.executeUpdate();
+				return new Utilidades().toBoolean(statement.executeUpdate());
 			}
 			
 		} catch(SQLException e) {
-			item = e.getErrorCode();
+			e.printStackTrace();
+			return false;
 		}
-		
-		return item;
-		
 	}
 	
 	public boolean eliminarRegistro(int membresia_id) {

@@ -1,7 +1,5 @@
 package com.gym.view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -26,7 +24,7 @@ public class UsuariosFrame extends JFrame {
 	private int administrador_id, idSeleccionadoUsuario;
 	private UsuarioController usuarioController;
 	private DefaultTableModel modelo;
-	private BuscarUsuarioInterfaz frame;
+	private GenerarFrameInterfaz frame;
 	
 	private static final long serialVersionUID = 4154039692586232154L;	
 	private JPanel contentPane;
@@ -46,7 +44,7 @@ public class UsuariosFrame extends JFrame {
 		String apellido = (String) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),2);
 		String cedula = (String) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),6);
 		
-		frame.mostrarUsuario(
+		frame.usuarioSeleccionado(
 			new Usuario(
 			idSeleccionadoUsuario,
 			nombre,
@@ -58,14 +56,14 @@ public class UsuariosFrame extends JFrame {
 		this.dispose();
 	}
 	
-	public UsuariosFrame(BuscarUsuarioInterfaz frame) {
+	public UsuariosFrame(GenerarFrameInterfaz frame) {
 		this.frame = frame;
 		administrador_id = new Administrador().getId();
-		administrador_id = 1;
 		usuarioController = new UsuarioController();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

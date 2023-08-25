@@ -26,6 +26,10 @@ public class FacturaController {
 		return facturaDAO.consultarUltimaFactura(administrador_id);
 	}
 	
+	public boolean ultimaFacturaIncompleta(int administrador_id) {
+		return facturaDAO.ultimaFacturaIncompleta(administrador_id);
+	}
+	
 	public boolean actualizarFactura(Factura factura) {
 		return facturaDAO.actualizarFactura(factura);
 	}

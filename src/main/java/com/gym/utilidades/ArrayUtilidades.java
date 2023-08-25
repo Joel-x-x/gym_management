@@ -137,6 +137,24 @@ public class ArrayUtilidades {
 	    return matrizMembresia;
 	}
 	
+	public Object[][] toMatrizMembresiaFactura(List<Membresia> lista) {
+	    int contador = 0;
+	    Object[][] matrizMembresia = new Object[lista.size()][5];
+
+	    for (Membresia membresia : lista) {
+	    	
+	        matrizMembresia[contador][0] = membresia.getId();
+	        matrizMembresia[contador][1] = membresia.getNombreTipo();
+	        matrizMembresia[contador][2] = membresia.getClase();
+	        matrizMembresia[contador][3] = membresia.getEntrenador();
+	        matrizMembresia[contador][4] = membresia.getPrecio();
+
+
+	        contador++;
+	    }
+	    return matrizMembresia;
+	}
+	
 	public Object[][] toMatrizMembresiaRegistro(List<Membresia> lista) {
 		int contador = 0;
 		Object[][] matrizMembresia =  new Object[lista.size()][7];
@@ -147,7 +165,6 @@ public class ArrayUtilidades {
     		matrizMembresia[contador][1] = membresia.getNombreUsuario();
     		matrizMembresia[contador][2] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_entrada());
     		matrizMembresia[contador][3] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_salida());
-    		matrizMembresia[contador][4] = membresia.getPlan();
     		matrizMembresia[contador][5] = membresia.getClase();
     		matrizMembresia[contador][6] = membresia.mensajeMembresia();
 

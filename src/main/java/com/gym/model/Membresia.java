@@ -23,6 +23,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
     
     // Tipo Membresia
 	private String nombreTipo;
+	private double precio;
 	private int clase_id;
 
 	// Clase
@@ -62,6 +63,15 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.entrenador_id = entrenador_id;
 		this.entrenador = entrenador;
 		this.numeroFactura = numeroFactura;
+	}
+	
+	// Listar membresias en factura
+	public Membresia(int id, String nombreTipo, String clase, String entrenador, double precio ) {
+		this.id = id;
+		this.nombreTipo = nombreTipo;
+		this.clase = clase;
+		this.entrenador = entrenador;
+		this.precio = precio;
 	}
     
     public Membresia(int id, String clase) {
@@ -127,13 +137,9 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.usuario_id = usuario_id;
 		this.tipo_membresia_id = plan_id;
 		this.clase_id = clase_id;
-		this.precio = valor_extra;
-		this.valor_total = valor_total;
 		this.administrador_id = administrador_id;
-		this.plan = plan;
 		this.clase = clase;
 		this.activo = activo;
-		this.anticipacion = anticipacion;
 	}
 	
 	// Listar Registro
@@ -142,13 +148,10 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.nombreUsuario = nombreUsuario;
 		this.fecha_entrada = fecha_entrada;
 		this.fecha_salida = fecha_salida;
-		this.plan = plan;
 		this.clase = clase;
-		this.membresia_id = membresia_id;
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		this.activo = activo;
-		this.anticipacion = anticipacion;
 	}
 	
 	
@@ -232,28 +235,12 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.fecha_salida = fecha_salida;
 	}
 
-	public int getMembresia_id() {
-		return membresia_id;
-	}
-
-	public void setMembresia_id(int membresia_id) {
-		this.membresia_id = membresia_id;
-	}
-
 	public MembresiaController getMembresiaController() {
 		return membresiaController;
 	}
 
 	public void setMembresiaController(MembresiaController membresiaController) {
 		this.membresiaController = membresiaController;
-	}
-
-	public String getPlan() {
-		return plan;
-	}
-
-	public void setPlan(String plan) {
-		this.plan = plan;
 	}
 
 	public String getClase() {
@@ -312,22 +299,6 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.clase_id = clase_id;
 	}
 
-	public float getValor_extra() {
-		return precio;
-	}
-
-	public void setValor_extra(float valor_extra) {
-		this.precio = valor_extra;
-	}
-
-	public float getValor_total() {
-		return valor_total;
-	}
-
-	public void setValor_total(float valor_total) {
-		this.valor_total = valor_total;
-	}
-	
 	public int getActivo() {
 		return activo;
 	}
@@ -344,6 +315,14 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.administrador_id = administrador_id;
 	}
 	
+	public double getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(double precio) {
+		this.precio = precio;
+	}
+
 	public boolean validarMembresia() {
 		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 		
