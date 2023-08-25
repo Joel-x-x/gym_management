@@ -110,7 +110,8 @@ public class MembresiaDAO {
 								resultSet.getString("t.nombre"),
 								resultSet.getString("c.clase"),
 								resultSet.getString("e.nombre"),
-								resultSet.getDouble("t.precio")
+								resultSet.getDouble("t.precio"),
+								resultSet.getInt("t.id")
 								));
 					}
 				}

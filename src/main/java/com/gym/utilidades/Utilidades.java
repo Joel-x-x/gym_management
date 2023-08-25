@@ -103,7 +103,7 @@ public class Utilidades {
 			case "Hora":
 				return "hour";
 			case "Día":
-				return "year";
+				return "day";
 			case "Mes":
 				return "month";
 			case "Año":

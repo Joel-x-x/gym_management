@@ -66,12 +66,13 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	}
 	
 	// Listar membresias en factura
-	public Membresia(int id, String nombreTipo, String clase, String entrenador, double precio ) {
+	public Membresia(int id, String nombreTipo, String clase, String entrenador, double precio, int tipo_membresia_id) {
 		this.id = id;
 		this.nombreTipo = nombreTipo;
 		this.clase = clase;
 		this.entrenador = entrenador;
 		this.precio = precio;
+		this.tipo_membresia_id = tipo_membresia_id;
 	}
     
     public Membresia(int id, String clase) {

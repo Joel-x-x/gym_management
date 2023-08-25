@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,9 +68,9 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	}
 
 	@Override
-	public void Accion(Factura factura) {
-		// TODO Auto-generated method stub
-		
+	public void accion(Factura factura) {
+		JOptionPane.showMessageDialog(null, "Se guardo correctamente!");
+		listar();
 	}
 	
 	public void generarPDF(String nombre) throws FileNotFoundException, DocumentException{

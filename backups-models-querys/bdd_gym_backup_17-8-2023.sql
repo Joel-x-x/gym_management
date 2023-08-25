@@ -361,6 +361,20 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+-- Actualizar factura
+delimiter ..
+drop procedure if exists actualizarFactura..
+create procedure actualizarFactura(in idIn int, in descuentoPorcentaje double,
+in descuentoIn decimal(6,2), in subtotalIn decimal(6,2), in ivaIn decimal(6,2),
+in totalIn decimal(6,2), in formaPago varchar(15), in fechaIn datetime, in usuarioId int)
+begin
+	update factura set descuento_porcentaje = descuentoPorcentaje,
+    descuento = descuentoIn, subtotal = subtotalIn, iva = ivaIn, total = totalIn,
+    forma_pago = formaPago, fecha = fechaIn, usuario_id = usuarioid  where id = idIn;
+end ..
+delimiter ;
+
 -- Calcular fecha fin
 delimiter //
 drop function if exists calcularFechaFin//

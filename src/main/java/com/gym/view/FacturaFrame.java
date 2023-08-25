@@ -31,6 +31,7 @@ import com.gym.model.Clase;
 import com.gym.model.Factura;
 import com.gym.model.Membresia;
 import com.gym.model.Usuario;
+import com.gym.utilidades.Utilidades;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -38,6 +39,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 
 public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	private GenerarFacturaFrameInterfaz frame;
@@ -57,7 +59,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	private JPanel contentPane;
 	private JTextField textCliente;
 	private JTextField textEstablecimiento;
-	private JTextField textField_1;
+	private JTextField textDescuento;
 	private JTable table;
 	private JButton btnBuscarCliente;
 	private JLabel labelCliente;
@@ -71,6 +73,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	private JLabel labelSubtotal;
 	private JLabel labelIVA;
 	private JLabel labelTotal;
+	private JLabel labelDescuento;
 	
 	public void crearFactura() {
 		
@@ -105,6 +108,8 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		
 		modelo = new DefaultTableModel(membresiaController.listarMembresiaFactura(administrador_id, factura_id), cabeceras);
 		table.setModel(modelo);
+		
+		actualizarDatosFactura();
 	}
 	
 	@Override
@@ -135,6 +140,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	// Insertar membresias
 	@Override
 	public void tipoMembresiaSeleccionada(int id) {
+		System.out.println(validarSiExiste(id));
 		// Elemento ya seleccionado no hacer nada
 		if(validarSiExiste(id)) return;
 		
@@ -161,8 +167,9 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		// Si esta vacio retornamos false
 		if(membresiaController.listarMembresiaFacturaList(administrador_id, factura_id).isEmpty()) return false;
 		
+		// Comprobamos los id de las membresias en la factura con el id seleccionado
 		for(Membresia membresia : membresiaController.listarMembresiaFacturaList(administrador_id, factura_id)) {
-			if(membresia.getId() == id) {
+			if(membresia.getTipo_membresia_id() == id) {
 				return true;
 			}
 		}
@@ -172,6 +179,61 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	
 	// Actuliza el total subtotal e iva
 	public void actualizarDatosFactura() {
+		double total = 0, iva = 0, subtotal = 0, descuento = 0;
+		for(Membresia membresia : membresiaController.listarMembresiaFacturaList(administrador_id, factura_id)) {
+			total += membresia.getPrecio();
+		}
+		// Redondeamos a 2 decimales
+		descuento = Math.round(((Double.parseDouble(textDescuento.getText()) / 100) * total) * 100d) / 100d;
+		
+		total -= descuento;
+		
+		// Redondeamos a 2 decimales
+		iva = Math.round((total * 0.12) * 100d) / 100d;
+		
+		subtotal = total - iva;
+		
+		
+		labelTotal.setText(total + "");
+		labelIVA.setText(iva + "");
+		labelSubtotal.setText(subtotal + "");
+		labelDescuento.setText(descuento + "");
+	}
+	
+	public void actulizarFactura() {
+		Factura factura = llenarFactura();
+		
+		// Validar si existen membresias agregadas
+		if(labelTotal.getText().equals("0.0")) {
+			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");
+			return;
+		}
+		
+		if(facturaController.actualizarFactura(factura)) {
+			frame.accion(factura);
+			this.dispose();
+		} else {
+			JOptionPane.showMessageDialog(null, "Ocurrio un error");
+		}
+		
+	}
+	
+	public Factura llenarFactura() {
+		Date fecha = new Date(dateChooser.getCalendar().getTimeInMillis());
+		
+		System.out.println(fecha + " - " + (String) comboBoxFormaPago.getSelectedItem());
+		
+		return new Factura(
+				factura_id,
+				Double.parseDouble(textDescuento.getText()),
+				Double.parseDouble(labelDescuento.getText()),
+				Double.parseDouble(labelSubtotal.getText()),
+				Double.parseDouble(labelIVA.getText()),
+				Double.parseDouble(labelTotal.getText()),
+				(String) comboBoxFormaPago.getSelectedItem(),
+				fecha,
+				usuario_id				
+				);
 	}
 
 	public FacturaFrame(GenerarFacturaFrameInterfaz frame) {
@@ -313,12 +375,22 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		Establecimiento_1_1.setBounds(618, 211, 77, 14);
 		panel.add(Establecimiento_1_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setDragEnabled(true);
-		textField_1.setColumns(10);
-		textField_1.setBounds(689, 206, 50, 25);
-		panel.add(textField_1);
+		textDescuento = new JTextField();
+		textDescuento.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				// Con nos aseguramos que descuento siempre sea un número y no este vacío
+				if(textDescuento.getText().equals("") || !Utilidades.isNumber(textDescuento.getText()))
+					textDescuento.setText("0.0");
+				
+				actualizarDatosFactura();
+			}
+		});
+		textDescuento.setText("0.0");
+		textDescuento.setDragEnabled(true);
+		textDescuento.setColumns(10);
+		textDescuento.setBounds(689, 206, 50, 25);
+		panel.add(textDescuento);
 		
 		JLabel Establecimiento_1_1_1 = new JLabel("Fecha");
 		Establecimiento_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -373,7 +445,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		lblTotal.setBounds(745, 687, 129, 46);
 		panel.add(lblTotal);
 		
-		JLabel labelDescuento = new JLabel("0.0");
+		labelDescuento = new JLabel("0.0");
 		labelDescuento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelDescuento.setBounds(884, 545, 129, 46);
 		panel.add(labelDescuento);
@@ -394,6 +466,11 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		panel.add(labelTotal);
 		
 		btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actulizarFactura();
+			}
+		});
 		btnGuardar.setForeground(Color.WHITE);
 		btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnGuardar.setFocusPainted(false);

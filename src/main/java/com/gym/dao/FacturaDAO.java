@@ -247,22 +247,21 @@ public class FacturaDAO {
 		int item = 0;
 		
 		try {
-			String sentencia = "update factura set descuento_porcentaje = ?, descuento = ?, subtotal = ?, iva = ?, total = ?,"
-					+ " forma_pago = ?, fecha = ?, usuario_id = ? where id = ?";
+			String sentencia = "call actualizarFactura(?,?,?,?,?,?,?,?,?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement){
 				
-				statement.setDouble(1, factura.getDescuento_porcentaje());
-				statement.setDouble(2, factura.getDescuento());
-				statement.setDouble(3, factura.getSubtotal());
-				statement.setDouble(4, factura.getIva());
-				statement.setDouble(5, factura.getTotal());
-				statement.setString(6, factura.getForma_pago());
-				statement.setDate(7, factura.getFecha());
-				statement.setInt(8, factura.getUsuario_id());
-				statement.setInt(9, factura.getId());
+				statement.setInt(1, factura.getId());
+				statement.setDouble(2, factura.getDescuento_porcentaje());
+				statement.setDouble(3, factura.getDescuento());
+				statement.setDouble(4, factura.getSubtotal());
+				statement.setDouble(5, factura.getIva());
+				statement.setDouble(6, factura.getTotal());
+				statement.setString(7, factura.getForma_pago());
+				statement.setDate(8, factura.getFecha());
+				statement.setInt(9, factura.getUsuario_id());
 				
 				item = statement.executeUpdate();
 	

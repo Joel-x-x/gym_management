@@ -50,6 +50,19 @@ public class Factura {
 		this.punto_emision = punto_emision;
 	}
 	
+	public Factura(int id, double descuento_porcentaje, double descuento, double subtotal, double iva,
+			double total, String forma_pago, Date fecha, int usuario_id) {
+		this.id = id;
+		this.descuento_porcentaje = descuento_porcentaje;
+		this.descuento = descuento;
+		this.subtotal = subtotal;
+		this.iva = iva;
+		this.total = total;
+		this.forma_pago = forma_pago;
+		this.fecha = fecha;
+		this.usuario_id = usuario_id;
+	}
+
 	public int getId() {
 		return id;
 	}

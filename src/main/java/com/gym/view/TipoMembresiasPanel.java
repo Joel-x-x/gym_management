@@ -100,6 +100,8 @@ public class TipoMembresiasPanel extends JPanel {
 		
 		TipoMembresia membresia = llenarTipoMembresia();
 		
+		System.out.println(membresia.getTipoDuracion());
+		
 		if(tipoMembresiaController.modificar(membresia)) {
 			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
 			listarTipoMembresias();

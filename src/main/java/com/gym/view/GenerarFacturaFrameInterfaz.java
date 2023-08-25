@@ -6,5 +6,5 @@ public interface GenerarFacturaFrameInterfaz {
 	
 	public void llamarFrame();
 	
-	public void Accion(Factura factura);
+	public void accion(Factura factura);
 }

@@ -54,7 +54,7 @@ public class TipoMembresiaDAO {
 		int item = 0;
 		
 		try {
-			String sentencia = "update tipo_membresia set nombre= ?, descripcion = ?, precio = ?, duracion= ?, tipo_duracion = ?, clase_id,  where id = ?";
+			String sentencia = "update tipo_membresia set nombre= ?, descripcion = ?, precio = ?, duracion= ?, tipo_duracion = ?, clase_id = ?  where id = ?";
 					
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
