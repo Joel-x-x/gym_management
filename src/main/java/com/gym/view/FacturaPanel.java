@@ -267,7 +267,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         btnNewButton_2.setFocusPainted(false);
         btnNewButton_2.setBorder(null);
         btnNewButton_2.setBackground(new Color(46, 56, 64));
-        btnNewButton_2.setBounds(370, 98, 100, 30);
+        btnNewButton_2.setBounds(480, 98, 100, 30);
         add(btnNewButton_2);
         
         listar();
