@@ -1,6 +1,6 @@
 package com.gym.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Factura {
 	private int id;
@@ -11,7 +11,7 @@ public class Factura {
 	private double iva;
 	private double total;
 	private String forma_pago;
-	private String fecha;
+	private Date fecha;
 	private String establecimiento;
 	private String punto_emision;
 	private int usuario_id;
@@ -19,10 +19,12 @@ public class Factura {
 	
 	// Extras
 	private String nombreUsuario;
+	private String apellidoUsuario;
+	private String cedulaUsuario;
 
-	// 
+	// Listar y Consultar Facturas
 	public Factura(int id, String numero_factura, double descuento_porcentaje, double descuento, double subtotal,
-			double iva, double total, String forma_pago, String fecha, String establecimiento, String punto_emision,
+			double iva, double total, String forma_pago, Date fecha, String establecimiento, String punto_emision,
 			int usuario_id, int administrador_id, String nombreUsuario) {
 		this.id = id;
 		this.numero_factura = numero_factura;
@@ -40,8 +42,30 @@ public class Factura {
 		this.nombreUsuario = nombreUsuario;
 	}
 	
+	// Consultar factura clase
+	public Factura(int id, String numero_factura, double descuento_porcentaje, double descuento, double subtotal,
+			double iva, double total, String forma_pago, Date fecha, String establecimiento, String punto_emision,
+			int usuario_id, int administrador_id, String nombreUsuario, String apellidoUsuario, String cedulaUsuario) {
+		this.id = id;
+		this.numero_factura = numero_factura;
+		this.descuento_porcentaje = descuento_porcentaje;
+		this.descuento = descuento;
+		this.subtotal = subtotal;
+		this.iva = iva;
+		this.total = total;
+		this.forma_pago = forma_pago;
+		this.fecha = fecha;
+		this.establecimiento = establecimiento;
+		this.punto_emision = punto_emision;
+		this.usuario_id = usuario_id;
+		this.administrador_id = administrador_id;
+		this.nombreUsuario = nombreUsuario;
+		this.apellidoUsuario = apellidoUsuario;
+		this.cedulaUsuario = cedulaUsuario;
+	}
+	
 	// Consultar ultima factura insertada
-	public Factura(int id, String numero_factura, String forma_pago, String fecha, String establecimiento, String punto_emision) {
+	public Factura(int id, String numero_factura, String forma_pago, Date fecha, String establecimiento, String punto_emision) {
 		this.id = id;
 		this.numero_factura = numero_factura;
 		this.forma_pago = forma_pago;
@@ -50,6 +74,19 @@ public class Factura {
 		this.punto_emision = punto_emision;
 	}
 	
+	public Factura(int id, double descuento_porcentaje, double descuento, double subtotal, double iva,
+			double total, String forma_pago, Date fecha, int usuario_id) {
+		this.id = id;
+		this.descuento_porcentaje = descuento_porcentaje;
+		this.descuento = descuento;
+		this.subtotal = subtotal;
+		this.iva = iva;
+		this.total = total;
+		this.forma_pago = forma_pago;
+		this.fecha = fecha;
+		this.usuario_id = usuario_id;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -98,10 +135,10 @@ public class Factura {
 	public void setForma_pago(String forma_pago) {
 		this.forma_pago = forma_pago;
 	}
-	public String getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 	public String getEstablecimiento() {
@@ -135,6 +172,22 @@ public class Factura {
 
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getApellidoUsuario() {
+		return apellidoUsuario;
+	}
+
+	public void setApellidoUsuario(String apellidoUsuario) {
+		this.apellidoUsuario = apellidoUsuario;
+	}
+
+	public String getCedulaUsuario() {
+		return cedulaUsuario;
+	}
+
+	public void setCedulaUsuario(String cedulaUsuario) {
+		this.cedulaUsuario = cedulaUsuario;
 	}
 	
 }

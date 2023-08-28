@@ -124,9 +124,9 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`usuario` (
   `telefono` VARCHAR(15) NOT NULL,
   `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `administrador_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `administrador_id`),
+  PRIMARY KEY (`id`),
+  INDEX `fk_administrador_id_usuario_idx` (`administrador_id` ASC) VISIBLE,
   UNIQUE INDEX `correo_UNIQUE` (`email` ASC) VISIBLE,
-  INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id`
     FOREIGN KEY (`administrador_id`)
@@ -135,7 +135,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`fisico`
@@ -184,7 +183,6 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`membresia`
 -- -----------------------------------------------------
@@ -220,6 +218,54 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+-- Procedures Membresias
+delimiter ..
+drop procedure if exists listarMembresias..
+create procedure listarMembresias(in administradorId int)
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId
+    order by activo desc, fecha_fin;
+
+end.. 
+delimiter ;
+
+delimiter ..
+drop procedure if exists consultarMembresiasNombre..
+create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId and u.nombre like buscar
+    order by activo desc, fecha_fin;
+
+end.. 
+delimiter ;
+
+delimiter ..
+drop procedure if exists consultarMembresiasCedula..
+create procedure consultarMembresiasCedula(in administradorId int, in buscar varchar(20))
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId and u.cedula like buscar
+    order by activo desc, fecha_fin;
+end.. 
+delimiter ;
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`recuperacion_cuenta`
@@ -274,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   `iva` DECIMAL(6,2) DEFAULT 0.0,
   `total` DECIMAL(6,2) DEFAULT 0.0,
   `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
-  `fecha` DATETIME NOT NULL DEFAULT current_timestamp,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `establecimiento` VARCHAR(3) DEFAULT '001',
   `punto_emision` VARCHAR(3) DEFAULT '001',
   `usuario_id` INT DEFAULT NULL,
@@ -315,6 +361,20 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+-- Actualizar factura
+delimiter ..
+drop procedure if exists actualizarFactura..
+create procedure actualizarFactura(in idIn int, in descuentoPorcentaje double,
+in descuentoIn decimal(6,2), in subtotalIn decimal(6,2), in ivaIn decimal(6,2),
+in totalIn decimal(6,2), in formaPago varchar(15), in fechaIn datetime, in usuarioId int)
+begin
+	update factura set descuento_porcentaje = descuentoPorcentaje,
+    descuento = descuentoIn, subtotal = subtotalIn, iva = ivaIn, total = totalIn,
+    forma_pago = formaPago, fecha = fechaIn, usuario_id = usuarioid  where id = idIn;
+end ..
+delimiter ;
+
 -- Calcular fecha fin
 delimiter //
 drop function if exists calcularFechaFin//
@@ -909,8 +969,6 @@ END;
 //
 DELIMITER ;
 
-select * from administrador;
-
 -- Trigger para auditoría UPDATE en factura
 DELIMITER //
 CREATE TRIGGER auditoria_factura_update
@@ -935,12 +993,18 @@ END;
 //
 DELIMITER ;
 
--- === Clase ===
-
--- === Clase ===
-
-
-
+-- Funcion maximo de factura
+DELIMITER //
+DROP FUNCTION IF EXISTS maxIdFactura//
+CREATE FUNCTION maxIdFactura()
+RETURNS INT
+DETERMINISTIC
+BEGIN
+  DECLARE max_id INT;
+  SELECT MAX(id) INTO max_id FROM factura;
+  RETURN max_id;
+END //
+DELIMITER ;
 
 -- Datos de la Base de Datos
 -- Insertar un administrador
@@ -976,19 +1040,16 @@ INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion
 VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
 
 -- Insertar una factura
-CALL insertarFactura( 1);
+CALL insertarFactura(1);
 
 -- Insertar una membresía
- call insertarMembresia(1,1,1,1);
+-- call insertarMembresia(1,1,1,1);
  
  select * from membresia;
+ 
 
-describe recuperacion_cuenta;
 
-INSERT INTO usuario (nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-VALUES ('Auditoria', 'Auditoria', '1990-01-01', 'Masculino', 'auditoria@example.com', '123456783', 'DirecciónUsuario', '987654322', 1);
 
-select * from auditoria_usuario;
 
 
 

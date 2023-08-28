@@ -92,7 +92,7 @@ public class InicioPanel extends JPanel {
 		System.out.println(membresia.notificarMembresia() + "membresia");
 		
 		if(membresia.notificarMembresia()) {
-			JOptionPane.showMessageDialog(null, "La membresia caducara en " + membresia.getAnticipacion() + " días");
+			JOptionPane.showMessageDialog(null, "La membresia caducara pronto");
 		}
 		
 		registroController.registrar(idSeleccionadoUsuario, getIdClaseComboBox());

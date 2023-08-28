@@ -8,7 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.gym.model.Usuario;
 import com.gym.utilidades.FechasUtilidades;
-import com.gym.view.BuscarUsuarioInterfaz;
+import com.gym.view.GenerarFrameInterfaz;
+import com.gym.view.GenerarFacturaFrameInterfaz;
 import com.gym.view.UsuariosFrame;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
@@ -22,7 +23,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.JButton;
 
-public class PruebaFrame extends JFrame implements BuscarUsuarioInterfaz {
+public class PruebaFrame extends JFrame {
 
 	private static final long serialVersionUID = 8591064380823471955L;
 	
@@ -51,17 +52,7 @@ public class PruebaFrame extends JFrame implements BuscarUsuarioInterfaz {
 			}
 		});
 	}
-	
-	@Override
-	public void listarUsuarios() {
-		UsuariosFrame usuarios = new UsuariosFrame(this);
-		usuarios.setVisible(true);
-	}
-	
-	@Override
-	public void mostrarUsuario(Usuario usuario) {
-		System.out.println(usuario.getNombre());
-	}
+
 	
 	/**
 	 * Create the frame.
@@ -104,7 +95,6 @@ public class PruebaFrame extends JFrame implements BuscarUsuarioInterfaz {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				listarUsuarios();
 //				fechaInicio = dateChooserInicio.getCalendar();
 //				System.out.println(FechasUtilidades.calendarToString(fechaInicio));
 			}

@@ -103,13 +103,22 @@ public class Utilidades {
 			case "Hora":
 				return "hour";
 			case "Día":
-				return "year";
+				return "day";
 			case "Mes":
 				return "month";
 			case "Año":
 				return "year";
 			default:
 				return null;
+		}
+	}
+	
+	public static boolean isNumber(String string) {
+		try {
+			Integer.parseInt(string);
+			return true;
+		} catch(NumberFormatException e) {
+			return false;
 		}
 	}
 

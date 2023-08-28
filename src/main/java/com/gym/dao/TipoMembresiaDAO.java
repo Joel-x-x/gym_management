@@ -54,7 +54,7 @@ public class TipoMembresiaDAO {
 		int item = 0;
 		
 		try {
-			String sentencia = "update tipo_membresia set nombre= ?, descripcion = ?, precio = ?, duracion= ?, tipo_duracion = ?, clase_id,  where id = ?";
+			String sentencia = "update tipo_membresia set nombre= ?, descripcion = ?, precio = ?, duracion= ?, tipo_duracion = ?, clase_id = ?  where id = ?";
 					
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -181,6 +181,41 @@ public class TipoMembresiaDAO {
 		}
 		
 		return tipoMembresia;
+		
+	}
+	
+public List<TipoMembresia> listarPrecios(int tipo_membresia_id) {
+		
+		List<TipoMembresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call listarHistorialPrecios(?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, tipo_membresia_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new TipoMembresia(
+								resultSet.getDouble("precio"),
+								resultSet.getInt("tipo_membresia_id"),
+								resultSet.getString("fecha")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
 		
 	}
 

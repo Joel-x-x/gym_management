@@ -3,53 +3,302 @@ package com.gym.view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
-import com.gym.model.Clase;
 
-public class FacturaFrame extends JFrame {
+import com.gym.controller.AdministradorController;
+import com.gym.controller.FacturaController;
+import com.gym.controller.MembresiaController;
+import com.gym.model.Administrador;
+import com.gym.model.Clase;
+import com.gym.model.Factura;
+import com.gym.model.Membresia;
+import com.gym.model.Usuario;
+import com.gym.utilidades.Utilidades;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.sql.Date;
+
+public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
+	private GenerarFacturaFrameInterfaz frame;
+	private FacturaController facturaController;
+	private AdministradorController administradorController;
+	private MembresiaController membresiaController;
+	private DefaultTableModel modelo;
+	private int administrador_id;
+	private int usuario_id;
+	private int factura_id;
+	private int idSeleccionado;
+	private String nro_factura;
+	private String cliente_factura;
+	private String subtotal_factura;
+	private String iva;
+	private String total;
+	private String forma_pago;
+	private java.util.Date fecha;
+	private String establecimiento;
+	private String punto_emisionfactura;
+	private String descuento;
+	
+	private DefaultComboBoxModel<String> comboBoxModelFormaPago;
+	private JComboBox<String> comboBoxFormaPago;
+	
 	private static final long serialVersionUID = -7374175822145503705L;
 	private JPanel contentPane;
 	private JTextField textCliente;
-	private JTextField textBuscar;
 	private JTextField textEstablecimiento;
-	private JTextField textField_1;
+	private JTextField textDescuento;
 	private JTable table;
-	private JButton btnConsumidor;
 	private JButton btnBuscarCliente;
-	private JButton btnLimpiarCliente;
-	private JLabel textNombre;
+	private JLabel labelCliente;
 	private JButton btnBuscarMembresia;
-	private JButton btnLimpiarMembresia;
+	private JButton btnEliminarMembresia;
 	private JScrollPane scrollPane;
 	private JLabel labelEstablecimiento;
 	private JLabel labelNumeroFactura;
-	private JComboBox<Clase> comboBoxClase;
 	private JDateChooser dateChooser;
 	private JButton btnGuardar;
 	private JLabel labelSubtotal;
 	private JLabel labelIVA;
 	private JLabel labelTotal;
+	private JLabel labelDescuento;
 	
-	public static void main(String[] args) {
-		new FacturaFrame().setVisible(true);;
+	public void crearFactura() {
+		
+		if(!facturaController.ultimaFacturaIncompleta(administrador_id)) {
+			// Crear Factura
+			facturaController.crearFactura(administrador_id);
+		}
+		
+		// Traer los datos de la factura
+		Factura factura = facturaController.consultarUltimaFactura(administrador_id);
+		
+		llenarFacturaCabecera(factura);
+		
+	}
+	
+	// Llena la cabecera de la factura esto sirve tanto para nueva como para modificar una factura
+	public void llenarFacturaCabecera(Factura factura) {
+		factura_id = factura.getId();
+		
+		labelEstablecimiento.setText(factura.getEstablecimiento() + " - " + factura.getPunto_emision());
+		labelNumeroFactura.setText(factura.getNumero_factura());
+		textEstablecimiento.setText(administradorController.getNombreUsuario(administrador_id) 
+		+ " " + administradorController.getApellidoUsuario(administrador_id));		
+		
+		
+		// Elmentos tipo pago
+		List<String> tipo = new ArrayList<>(Arrays.asList("efectivo", "transferencia"));
+		
+		comboBoxModelFormaPago.addAll(tipo);
+		comboBoxFormaPago.setModel(comboBoxModelFormaPago);
+		comboBoxFormaPago.setSelectedItem(factura.getForma_pago());
+		
+		dateChooser.setDate(factura.getFecha());	
+	}
+	
+
+	public void llenarFacturaFormulario() {
+		factura_id = frame.getIdSeleccionado();
+		
+		Factura factura = facturaController.consultarFactura(factura_id);
+		
+		// Cabecera Factura
+		llenarFacturaCabecera(factura);
+		
+		// Cuerpo Factura
+		usuarioSeleccionado(new Usuario(
+				factura.getUsuario_id(),
+				factura.getNombreUsuario(),
+				factura.getApellidoUsuario(),
+				factura.getCedulaUsuario()));
+		
+		textDescuento.setText(factura.getDescuento_porcentaje() + "");
+		labelDescuento.setText(factura.getDescuento() + "");
+		labelSubtotal.setText(factura.getSubtotal() + "");
+		labelIVA.setText(factura.getIva() + "");
+		labelTotal.setText(factura.getTotal() + "");
+		
+	}
+	
+	public void actulizarFactura() {
+		Factura factura = llenarFactura();
+		
+		// Validar si existen membresias agregadas
+		if(labelTotal.getText().equals("0.0")) {
+			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");
+			return;
+		}
+		
+		if(facturaController.actualizarFactura(factura)) {
+			frame.accion(factura);
+			this.dispose();
+		} else {
+			JOptionPane.showMessageDialog(null, "Ocurrio un error");
+		}
 		
 	}
 
-	public FacturaFrame() {
+	
+	public void listarMembresias() {
+		String[] cabeceras = {"Id","Membresia","Clase","Entrenador","Precio"};
+		
+		modelo = new DefaultTableModel(membresiaController.listarMembresiaFactura(administrador_id, factura_id), cabeceras);
+		table.setModel(modelo);
+		
+		actualizarDatosFactura();
+	}
+	
+	@Override
+	public void listarUsuarios() {
+		UsuariosFrame usuarios = new UsuariosFrame(this);
+		usuarios.setVisible(true);
+	}
+
+	@Override
+	public void usuarioSeleccionado(Usuario usuario) {
+		textCliente.setText("      " + usuario.getCedula());
+		labelCliente.setText(usuario.getNombre() + " " + usuario.getApellido());
+		
+		usuario_id = usuario.getId();
+	}
+	
+	@Override
+	public void listarTipoMembresias() {
+		if(textCliente.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Selecciona un usuario primero");
+			return;
+		}
+		
+		TiposMembresiasFrame tiposMembresiasFrame = new TiposMembresiasFrame(this);
+		tiposMembresiasFrame.setVisible(true);
+	}
+	
+	// Insertar membresias
+	@Override
+	public void tipoMembresiaSeleccionada(int id) {
+		System.out.println(validarSiExiste(id));
+		// Elemento ya seleccionado no hacer nada
+		if(validarSiExiste(id)) return;
+		
+		// Si ocurre un error al agregar la membresia
+		if(!membresiaController.crearMembresia(administrador_id, usuario_id, factura_id, id)) 
+			JOptionPane.showMessageDialog(null, "Ocurrio un error");
+		
+		listarMembresias();
+		
+	}
+	
+	// Eliminar membresias
+	public void eliminarMembresia() {
+		if(membresiaController.eliminar(idSeleccionado)) {
+			JOptionPane.showMessageDialog(null, "Eliminado con exito!");
+			listarMembresias();
+			btnEliminarMembresia.setEnabled(false);
+		} else {
+			JOptionPane.showMessageDialog(null, "No se puedo eliminar");
+		}
+	}
+	
+	private boolean validarSiExiste(int id) {
+		// Si esta vacio retornamos false
+		if(membresiaController.listarMembresiaFacturaList(administrador_id, factura_id).isEmpty()) return false;
+		
+		// Comprobamos los id de las membresias en la factura con el id seleccionado
+		for(Membresia membresia : membresiaController.listarMembresiaFacturaList(administrador_id, factura_id)) {
+			if(membresia.getTipo_membresia_id() == id) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	// Actuliza el total subtotal e iva
+	public void actualizarDatosFactura() {
+		double total = 0, iva = 0, subtotal = 0, descuento = 0;
+		for(Membresia membresia : membresiaController.listarMembresiaFacturaList(administrador_id, factura_id)) {
+			total += membresia.getPrecio();
+		}
+		// Redondeamos a 2 decimales
+		descuento = Math.round(((Double.parseDouble(textDescuento.getText()) / 100) * total) * 100d) / 100d;
+		
+		total -= descuento;
+		
+		// Redondeamos a 2 decimales
+		iva = Math.round((total * 0.12) * 100d) / 100d;
+		
+		subtotal = Math.round((total - iva) * 100d) / 100d;
+		
+		
+		labelTotal.setText(total + "");
+		labelIVA.setText(iva + "");
+		labelSubtotal.setText(subtotal + "");
+		labelDescuento.setText(descuento + "");
+	}
+	
+
+
+	
+
+	public Factura llenarFactura() {
+		Date fecha = new Date(dateChooser.getCalendar().getTimeInMillis());
+		
+		return new Factura(
+				factura_id,
+				Double.parseDouble(textDescuento.getText()),
+				Double.parseDouble(labelDescuento.getText()),
+				Double.parseDouble(labelSubtotal.getText()),
+				Double.parseDouble(labelIVA.getText()),
+				Double.parseDouble(labelTotal.getText()),
+				(String) comboBoxFormaPago.getSelectedItem(),
+				fecha,
+				usuario_id				
+				);
+	}
+
+	public FacturaFrame(GenerarFacturaFrameInterfaz frame, boolean nuevo) {
+		this.frame = frame;
+		administrador_id = new Administrador().getId();
+		
+		facturaController = new FacturaController();
+		administradorController = new AdministradorController();
+		membresiaController = new MembresiaController();
+		comboBoxModelFormaPago = new DefaultComboBoxModel<>();
 		
 		setSize(1080, 800);
 		setLocationRelativeTo(null);
 		setTitle("Factura");
 		setResizable(false);
+		setVisible(true);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
@@ -76,81 +325,72 @@ public class FacturaFrame extends JFrame {
 		panel.add(lblNewLabel_1_4_2);
 		
 		textCliente = new JTextField();
+		textCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
+		textCliente.setForeground(new Color(0, 64, 128));
+		textCliente.setEditable(false);
 		textCliente.setColumns(10);
 		textCliente.setBounds(85, 82, 150, 25);
 		panel.add(textCliente);
 		
-		btnConsumidor = new JButton("Cons. Final");
-		btnConsumidor.setForeground(Color.WHITE);
-		btnConsumidor.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnConsumidor.setFocusPainted(false);
-		btnConsumidor.setBorder(null);
-		btnConsumidor.setBackground(new Color(46, 56, 64));
-		btnConsumidor.setBounds(36, 124, 100, 30);
-		panel.add(btnConsumidor);
-		
-		btnBuscarCliente = new JButton("Buscar");
+		btnBuscarCliente = new JButton("Buscar un cliente");
+		btnBuscarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listarUsuarios();
+			}
+		});
 		btnBuscarCliente.setForeground(Color.WHITE);
 		btnBuscarCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscarCliente.setFocusPainted(false);
 		btnBuscarCliente.setBorder(null);
 		btnBuscarCliente.setBackground(new Color(46, 56, 64));
-		btnBuscarCliente.setBounds(146, 124, 100, 30);
+		btnBuscarCliente.setBounds(36, 125, 199, 30);
 		panel.add(btnBuscarCliente);
-		
-		btnLimpiarCliente = new JButton("Limpiar");
-		btnLimpiarCliente.setForeground(Color.WHITE);
-		btnLimpiarCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnLimpiarCliente.setFocusPainted(false);
-		btnLimpiarCliente.setBorder(null);
-		btnLimpiarCliente.setBackground(new Color(46, 56, 64));
-		btnLimpiarCliente.setBounds(256, 124, 100, 30);
-		panel.add(btnLimpiarCliente);
 		
 		JLabel lblNewLabel_1_4_2_1 = new JLabel("Nombre:");
 		lblNewLabel_1_4_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_1_4_2_1.setBounds(36, 184, 50, 14);
 		panel.add(lblNewLabel_1_4_2_1);
 		
-		textNombre = new JLabel("Nombre");
-		textNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
-		textNombre.setBounds(85, 166, 350, 46);
-		panel.add(textNombre);
+		labelCliente = new JLabel("");
+		labelCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
+		labelCliente.setBounds(85, 166, 350, 46);
+		panel.add(labelCliente);
 		
-		JLabel lblNewLabel_1_4_2_2 = new JLabel("Buscar membresía");
-		lblNewLabel_1_4_2_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblNewLabel_1_4_2_2.setBounds(36, 228, 99, 14);
-		panel.add(lblNewLabel_1_4_2_2);
-		
-		textBuscar = new JTextField();
-		textBuscar.setColumns(10);
-		textBuscar.setBounds(129, 223, 150, 25);
-		panel.add(textBuscar);
-		
-		btnBuscarMembresia = new JButton("Buscar");
+		btnBuscarMembresia = new JButton("Buscar membresías");
+		btnBuscarMembresia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listarTipoMembresias();
+			}
+		});
 		btnBuscarMembresia.setForeground(Color.WHITE);
 		btnBuscarMembresia.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscarMembresia.setFocusPainted(false);
 		btnBuscarMembresia.setBorder(null);
 		btnBuscarMembresia.setBackground(new Color(46, 56, 64));
-		btnBuscarMembresia.setBounds(289, 223, 100, 25);
+		btnBuscarMembresia.setBounds(36, 223, 199, 25);
 		panel.add(btnBuscarMembresia);
 		
-		btnLimpiarMembresia = new JButton("Limpiar");
-		btnLimpiarMembresia.setForeground(Color.WHITE);
-		btnLimpiarMembresia.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnLimpiarMembresia.setFocusPainted(false);
-		btnLimpiarMembresia.setBorder(null);
-		btnLimpiarMembresia.setBackground(new Color(46, 56, 64));
-		btnLimpiarMembresia.setBounds(399, 223, 100, 25);
-		panel.add(btnLimpiarMembresia);
+		btnEliminarMembresia = new JButton("Eliminar");
+		btnEliminarMembresia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarMembresia();
+			}
+		});
+		btnEliminarMembresia.setEnabled(false);
+		btnEliminarMembresia.setForeground(Color.WHITE);
+		btnEliminarMembresia.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnEliminarMembresia.setFocusPainted(false);
+		btnEliminarMembresia.setBorder(null);
+		btnEliminarMembresia.setBackground(new Color(46, 56, 64));
+		btnEliminarMembresia.setBounds(245, 223, 100, 25);
+		panel.add(btnEliminarMembresia);
 		
 		JLabel lblNewLabel_1_4_2_3 = new JLabel("No Factura");
 		lblNewLabel_1_4_2_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1_4_2_3.setBounds(618, 88, 77, 14);
 		panel.add(lblNewLabel_1_4_2_3);
 		
-		labelEstablecimiento = new JLabel("001-001");
+		labelEstablecimiento = new JLabel("");
 		labelEstablecimiento.setForeground(new Color(128, 128, 128));
 		labelEstablecimiento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelEstablecimiento.setBounds(689, 70, 70, 46);
@@ -184,11 +424,22 @@ public class FacturaFrame extends JFrame {
 		Establecimiento_1_1.setBounds(618, 211, 77, 14);
 		panel.add(Establecimiento_1_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setDragEnabled(true);
-		textField_1.setColumns(10);
-		textField_1.setBounds(689, 206, 50, 25);
-		panel.add(textField_1);
+		textDescuento = new JTextField();
+		textDescuento.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				// Con nos aseguramos que descuento siempre sea un número y no este vacío
+				if(textDescuento.getText().equals("") || !Utilidades.isNumber(textDescuento.getText()))
+					textDescuento.setText("0.0");
+				
+				actualizarDatosFactura();
+			}
+		});
+		textDescuento.setText("0.0");
+		textDescuento.setDragEnabled(true);
+		textDescuento.setColumns(10);
+		textDescuento.setBounds(689, 206, 50, 25);
+		panel.add(textDescuento);
 		
 		JLabel Establecimiento_1_1_1 = new JLabel("Fecha");
 		Establecimiento_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -207,6 +458,14 @@ public class FacturaFrame extends JFrame {
 		panel.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				idSeleccionado = (int) table.getValueAt(table.getSelectedRow(), 0);
+				
+				btnEliminarMembresia.setEnabled(true);
+			}
+		});
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
 		
@@ -215,10 +474,10 @@ public class FacturaFrame extends JFrame {
 		lblDescuento.setBounds(745, 545, 129, 46);
 		panel.add(lblDescuento);
 		
-		comboBoxClase = new JComboBox<Clase>();
+		comboBoxFormaPago = new JComboBox<>();
 		//comboBoxClase.setSelectedIndex(0);
-		comboBoxClase.setBounds(710, 166, 250, 25);
-		panel.add(comboBoxClase);
+		comboBoxFormaPago.setBounds(710, 166, 250, 25);
+		panel.add(comboBoxFormaPago);
 		
 		JLabel lblDescuento_1 = new JLabel("Subtotal");
 		lblDescuento_1.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -235,7 +494,7 @@ public class FacturaFrame extends JFrame {
 		lblTotal.setBounds(745, 687, 129, 46);
 		panel.add(lblTotal);
 		
-		JLabel labelDescuento = new JLabel("0.0");
+		labelDescuento = new JLabel("0.0");
 		labelDescuento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelDescuento.setBounds(884, 545, 129, 46);
 		panel.add(labelDescuento);
@@ -256,6 +515,64 @@ public class FacturaFrame extends JFrame {
 		panel.add(labelTotal);
 		
 		btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actulizarFactura();
+				//Generar factura 
+				try {
+					
+					
+					nro_factura = labelNumeroFactura.getText();
+					cliente_factura = textCliente.getText();
+					subtotal_factura = labelSubtotal.getText();
+					iva =  labelIVA.getText();
+					total = labelTotal.getText();
+					forma_pago = (String) comboBoxFormaPago.getSelectedItem();
+					fecha =  dateChooser.getDate();
+					establecimiento = labelEstablecimiento.getText();
+					punto_emisionfactura = labelEstablecimiento.getText();
+					descuento = textDescuento.getText();
+					
+					
+					String nombre = nro_factura;
+					FileOutputStream archivo = new FileOutputStream(nombre + ".pdf");
+					Document documento = new Document();
+					PdfWriter.getInstance(documento, archivo);
+					documento.open();
+					
+					Paragraph parrafo = new Paragraph("NÚMERO DE FACTURA: " + nro_factura);
+					parrafo.setAlignment(1);
+					documento.add(parrafo);
+					
+					documento.add(new Paragraph("   CLIENTE: " + cliente_factura));
+					documento.add(new Paragraph("   ESTABLECIMIENTO: " +establecimiento));
+					documento.add(new Paragraph("   FECHA DE EMISION: "+ fecha));
+					documento.add(new Paragraph("   FORMA DE PAGO: " + forma_pago));
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.add(new Paragraph("	CANT.DESCRIPCIÓN"+"                             "+"P.TOTAL")); //8-tabs
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					
+					for(int i = 0;i<table.getRowCount();i++) {
+						documento.add(new Paragraph("   "+table.getValueAt(i, 1)+ "                             " 
+															+table.getValueAt(i, 4)));
+					}
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.add(new Paragraph("      SUBTOTAL:"+"                                "+ subtotal_factura));
+					documento.add(new Paragraph("   DESCUENTO %:"+"                                "+ descuento));
+					documento.add(new Paragraph("       IVA 12%:"+"                                "+ iva));
+					documento.add(new Paragraph("   VALOR TOTAL:"+"                                "+ total));
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.close();
+					
+				} catch ( FileNotFoundException e1) {
+					
+					System.out.println(e1);
+				} catch (DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnGuardar.setForeground(Color.WHITE);
 		btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnGuardar.setFocusPainted(false);
@@ -263,5 +580,10 @@ public class FacturaFrame extends JFrame {
 		btnGuardar.setBackground(new Color(46, 56, 64));
 		btnGuardar.setBounds(36, 701, 100, 30);
 		panel.add(btnGuardar);
+		
+		if(nuevo) crearFactura();
+		if(!nuevo) llenarFacturaFormulario();
+		if(!nuevo) listarMembresias();
 	}
+
 }

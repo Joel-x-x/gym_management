@@ -100,6 +100,8 @@ public class TipoMembresiasPanel extends JPanel {
 		
 		TipoMembresia membresia = llenarTipoMembresia();
 		
+		System.out.println(membresia.getTipoDuracion());
+		
 		if(tipoMembresiaController.modificar(membresia)) {
 			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
 			listarTipoMembresias();
@@ -116,6 +118,18 @@ public class TipoMembresiasPanel extends JPanel {
 				+ "solo puedes modificar este tipo de membresia"));
 		listarTipoMembresias();
 		limpiarFormulario();
+	}
+	
+	private void listarHistorial() {
+		List<TipoMembresia> listaPrecios = tipoMembresiaController.listarPrecios(idSeleccionado);
+		
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (TipoMembresia item : listaPrecios) {
+            listModel.addElement(item.getPrecioHistorial() + "     " + item.getFecha());
+        }
+        
+        new HistorialPreciosFrame(listModel);
 	}
 	
 	private TipoMembresia llenarTipoMembresia() {
@@ -316,6 +330,10 @@ public class TipoMembresiasPanel extends JPanel {
         add(lblNewLabel_1_4_2);
         
         JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btnBuscar.setForeground(Color.WHITE);
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setFocusPainted(false);
@@ -352,6 +370,20 @@ public class TipoMembresiasPanel extends JPanel {
         lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_2_2.setBounds(557, 68, 231, 14);
         add(lblNewLabel_2_2);
+        
+        JButton btnHistorialPrecios = new JButton("Historial de precios");
+        btnHistorialPrecios.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarHistorial();
+        	}
+        });
+        btnHistorialPrecios.setForeground(Color.WHITE);
+        btnHistorialPrecios.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnHistorialPrecios.setFocusPainted(false);
+        btnHistorialPrecios.setBorder(null);
+        btnHistorialPrecios.setBackground(new Color(46, 56, 64));
+        btnHistorialPrecios.setBounds(557, 257, 150, 25);
+        add(btnHistorialPrecios);
         
         listarTipoMembresias();
         listarTipoDuracion();

@@ -67,5 +67,9 @@ public class AdministradorController {
 	public String getNombreUsuario(int administrador_id) {
 		return administradorDAO.getNombreUsuario(administrador_id);
 	}
+	
+	public String getApellidoUsuario(int administrador_id) {
+		return administradorDAO.getApellidoUsuario(administrador_id);
+	}
 
 }

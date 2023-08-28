@@ -97,7 +97,7 @@ public class InicioSesionPanel extends JPanel {
         
         textContra = new JPasswordField();
         textContra.setFont(new Font("Dialog", Font.PLAIN, 12));
-        textContra.setText("1234");
+        textContra.setText("123456789");
         textContra.setBounds(465, 349, 350, 40);
         add(textContra);
         
