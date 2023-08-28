@@ -91,6 +91,7 @@ public class MembresiaDAO {
 					+ " join tipo_membresia t on t.id = m.tipo_membresia_id"
 					+ " join clase c on c.id = t.clase_id"
 					+ " join entrenador e on e.id = c.entrenador_id"
+					+ " join historial_precio_tipo_membresia h on h.id = m.precio_id"
 					+ " where m.administrador_id = ? and m.factura_id = ?";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
@@ -110,7 +111,7 @@ public class MembresiaDAO {
 								resultSet.getString("t.nombre"),
 								resultSet.getString("c.clase"),
 								resultSet.getString("e.nombre"),
-								resultSet.getDouble("t.precio"),
+								resultSet.getDouble("h.precio"),
 								resultSet.getInt("t.id")
 								));
 					}
