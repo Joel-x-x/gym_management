@@ -120,6 +120,18 @@ public class TipoMembresiasPanel extends JPanel {
 		limpiarFormulario();
 	}
 	
+	private void listarHistorial() {
+		List<TipoMembresia> listaPrecios = tipoMembresiaController.listarPrecios(idSeleccionado);
+		
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (TipoMembresia item : listaPrecios) {
+            listModel.addElement(item.getPrecioHistorial() + "     " + item.getFecha());
+        }
+        
+        new HistorialPreciosFrame(listModel);
+	}
+	
 	private TipoMembresia llenarTipoMembresia() {
 		
 		String tipoDuracion = Utilidades.cambiarTipoDuracion((String) comboBoxTipoDuracion.getSelectedItem());
@@ -358,6 +370,20 @@ public class TipoMembresiasPanel extends JPanel {
         lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblNewLabel_2_2.setBounds(557, 68, 231, 14);
         add(lblNewLabel_2_2);
+        
+        JButton btnHistorialPrecios = new JButton("Historial de precios");
+        btnHistorialPrecios.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarHistorial();
+        	}
+        });
+        btnHistorialPrecios.setForeground(Color.WHITE);
+        btnHistorialPrecios.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnHistorialPrecios.setFocusPainted(false);
+        btnHistorialPrecios.setBorder(null);
+        btnHistorialPrecios.setBackground(new Color(46, 56, 64));
+        btnHistorialPrecios.setBounds(557, 257, 150, 25);
+        add(btnHistorialPrecios);
         
         listarTipoMembresias();
         listarTipoDuracion();

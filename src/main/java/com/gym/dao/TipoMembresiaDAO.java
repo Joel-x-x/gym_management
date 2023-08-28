@@ -183,5 +183,40 @@ public class TipoMembresiaDAO {
 		return tipoMembresia;
 		
 	}
+	
+public List<TipoMembresia> listarPrecios(int tipo_membresia_id) {
+		
+		List<TipoMembresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call listarHistorialPrecios(?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, tipo_membresia_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new TipoMembresia(
+								resultSet.getDouble("precio"),
+								resultSet.getInt("tipo_membresia_id"),
+								resultSet.getString("fecha")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+		
+	}
 
 }

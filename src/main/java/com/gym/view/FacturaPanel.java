@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.FacturaController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
+import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -63,14 +64,32 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	}
 	
 	@Override
-	public void llamarFrame() {
-		new FacturaFrame(this);
+	public void llamarFrame(boolean nuevo) {
+		new FacturaFrame(this, nuevo);
 	}
 
 	@Override
 	public void accion(Factura factura) {
 		JOptionPane.showMessageDialog(null, "Se guardo correctamente!");
 		listar();
+	}
+	
+	public void modificarFactura() {
+		llamarFrame(false);
+	}
+	
+	public void eliminarFactura() {
+		
+		int respuesta = JOptionPane.showConfirmDialog(null, "Estas seguro de que quieres eliminar está factura");
+		
+		if(respuesta == 0) {
+			JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(facturaController.eliminarFactura(idSeleccionado),
+					"No se pudo eliminar, parece que tienes registros que dependen de esta factura, "
+							+ "solo puedes modificarla"));
+			listar();
+			bloquearBotones();
+		}
+		
 	}
 	
 	public void generarPDF(String nombre) throws FileNotFoundException, DocumentException{
@@ -98,6 +117,16 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		btnImprimir.setEnabled(true);
 	}
 	
+	@Override
+	public int getIdSeleccionado() {
+		return idSeleccionado;
+	}
+	
+	@Override
+	public void setIdSeleccionado(int idSeleccionado) {
+		this.idSeleccionado = idSeleccionado;
+	}
+
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
@@ -107,7 +136,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		btnNuevo = new JButton("Nuevo");
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				llamarFrame();
+				llamarFrame(true);
 			}
 		});
 		btnNuevo.setForeground(Color.WHITE);
@@ -119,6 +148,11 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		add(btnNuevo);
 		
 		btnModificar = new JButton("Modificar");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificarFactura();
+			}
+		});
 		btnModificar.setForeground(Color.WHITE);
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnModificar.setFocusPainted(false);
@@ -128,6 +162,11 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		add(btnModificar);
 		
 		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarFactura();
+			}
+		});
 		btnEliminar.setForeground(Color.WHITE);
 		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEliminar.setFocusPainted(false);
@@ -192,12 +231,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		add(scrollPane);
 		
 		table = new JTable();
-		table.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				bloquearBotones();
-			}
-		});
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

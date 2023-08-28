@@ -85,6 +85,12 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		// Traer los datos de la factura
 		Factura factura = facturaController.consultarUltimaFactura(administrador_id);
 		
+		llenarFacturaCabecera(factura);
+		
+	}
+	
+	// Llena la cabecera de la factura esto sirve tanto para nueva como para modificar una factura
+	public void llenarFacturaCabecera(Factura factura) {
 		factura_id = factura.getId();
 		
 		labelEstablecimiento.setText(factura.getEstablecimiento() + " - " + factura.getPunto_emision());
@@ -101,6 +107,47 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		comboBoxFormaPago.setSelectedItem(factura.getForma_pago());
 		
 		dateChooser.setDate(factura.getFecha());	
+	}
+	
+	public void llenarFacturaFormulario() {
+		factura_id = frame.getIdSeleccionado();
+		
+		Factura factura = facturaController.consultarFactura(factura_id);
+		
+		// Cabecera Factura
+		llenarFacturaCabecera(factura);
+		
+		// Cuerpo Factura
+		usuarioSeleccionado(new Usuario(
+				factura.getUsuario_id(),
+				factura.getNombreUsuario(),
+				factura.getApellidoUsuario(),
+				factura.getCedulaUsuario()));
+		
+		textDescuento.setText(factura.getDescuento_porcentaje() + "");
+		labelDescuento.setText(factura.getDescuento() + "");
+		labelSubtotal.setText(factura.getSubtotal() + "");
+		labelIVA.setText(factura.getIva() + "");
+		labelTotal.setText(factura.getTotal() + "");
+		
+	}
+	
+	public void actulizarFactura() {
+		Factura factura = llenarFactura();
+		
+		// Validar si existen membresias agregadas
+		if(labelTotal.getText().equals("0.0")) {
+			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");
+			return;
+		}
+		
+		if(facturaController.actualizarFactura(factura)) {
+			frame.accion(factura);
+			this.dispose();
+		} else {
+			JOptionPane.showMessageDialog(null, "Ocurrio un error");
+		}
+		
 	}
 	
 	public void listarMembresias() {
@@ -191,7 +238,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		// Redondeamos a 2 decimales
 		iva = Math.round((total * 0.12) * 100d) / 100d;
 		
-		subtotal = total - iva;
+		subtotal = Math.round((total - iva) * 100d) / 100d;
 		
 		
 		labelTotal.setText(total + "");
@@ -200,28 +247,8 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		labelDescuento.setText(descuento + "");
 	}
 	
-	public void actulizarFactura() {
-		Factura factura = llenarFactura();
-		
-		// Validar si existen membresias agregadas
-		if(labelTotal.getText().equals("0.0")) {
-			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");
-			return;
-		}
-		
-		if(facturaController.actualizarFactura(factura)) {
-			frame.accion(factura);
-			this.dispose();
-		} else {
-			JOptionPane.showMessageDialog(null, "Ocurrio un error");
-		}
-		
-	}
-	
 	public Factura llenarFactura() {
 		Date fecha = new Date(dateChooser.getCalendar().getTimeInMillis());
-		
-		System.out.println(fecha + " - " + (String) comboBoxFormaPago.getSelectedItem());
 		
 		return new Factura(
 				factura_id,
@@ -236,7 +263,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 				);
 	}
 
-	public FacturaFrame(GenerarFacturaFrameInterfaz frame) {
+	public FacturaFrame(GenerarFacturaFrameInterfaz frame, boolean nuevo) {
 		this.frame = frame;
 		administrador_id = new Administrador().getId();
 		
@@ -302,7 +329,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		lblNewLabel_1_4_2_1.setBounds(36, 184, 50, 14);
 		panel.add(lblNewLabel_1_4_2_1);
 		
-		labelCliente = new JLabel("Nombre");
+		labelCliente = new JLabel("");
 		labelCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelCliente.setBounds(85, 166, 350, 46);
 		panel.add(labelCliente);
@@ -479,8 +506,9 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		btnGuardar.setBounds(36, 701, 100, 30);
 		panel.add(btnGuardar);
 		
-		crearFactura();
-		listarMembresias();
+		if(nuevo) crearFactura();
+		if(!nuevo) llenarFacturaFormulario();
+		if(!nuevo) listarMembresias();
 	}
 
 }

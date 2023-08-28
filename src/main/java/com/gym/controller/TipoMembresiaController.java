@@ -1,5 +1,7 @@
 package com.gym.controller;
 
+import java.util.List;
+
 import com.gym.dao.TipoMembresiaDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.TipoMembresia;
@@ -30,6 +32,10 @@ public class TipoMembresiaController {
 	}
 	public boolean modificar(TipoMembresia tipoMembresia) {
 		return tipoMembresiaDAO.modificar(tipoMembresia);
+	}
+	
+	public List<TipoMembresia> listarPrecios(int tipo_membresia_id) {
+		return tipoMembresiaDAO.listarPrecios(tipo_membresia_id);
 	}
 
 }

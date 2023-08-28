@@ -18,6 +18,10 @@ public class FacturaController {
 		return new ArrayUtilidades().toMatrizFactura(listaFactura);
 	}
 	
+	public Factura consultarFactura(int id) {
+		return facturaDAO.consultarFactura(id);
+	}
+	
 	public boolean crearFactura(int administrador_id) {
 		return facturaDAO.crearFactura(administrador_id);
 	}

@@ -61,7 +61,7 @@ public class UsuariosFrame extends JFrame {
 		administrador_id = new Administrador().getId();
 		usuarioController = new UsuarioController();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

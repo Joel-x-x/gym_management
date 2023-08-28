@@ -17,52 +17,52 @@ public class FacturaDAO {
 	public FacturaDAO(Connection con) {
 		this.con = con;
 	}
-	public List<Factura> consultarFactura(){
-		List<Factura> resultado = new ArrayList<>();
-//		int elementosPorPagina = 10; 
-//		int paginaActual = 1;
+	
+	public Factura consultarFactura(int id){
+		Factura factura = null;
 		
 		try {
 			
-			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id";
+			String sentencia = "select * from factura f, usuario u where f.usuario_id = u.id and f.id = ?";
 			
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
+				statement.setInt(1, id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				
 				try(resultSet) {
 					
-					while(resultSet.next()) {
-						resultado.add(new Factura(
-			                    resultSet.getInt("f.id"), 
-			                    resultSet.getString("f.numero_factura"),
-			                    resultSet.getDouble("f.descuento_porcentaje"),
-			                    resultSet.getDouble("f.descuento"),
-			                    resultSet.getDouble("f.subtotal"),
-			                    resultSet.getDouble("f.iva"),
-			                    resultSet.getDouble("f.total"),
-			                    resultSet.getString("f.forma_pago"),
-			                    resultSet.getDate("f.fecha"),
-			                    resultSet.getString("f.establecimiento"),
-			                    resultSet.getString("f.punto_emision"),
-			                    resultSet.getInt("f.usuario_id"),
-			                    resultSet.getInt("f.administrador_id"),
-			                    resultSet.getString("u.nombre")
-								));
-					}
+					resultSet.next();
 					
-					return resultado;
+					factura = new Factura(
+	                    resultSet.getInt("f.id"), 
+	                    resultSet.getString("f.numero_factura"),
+	                    resultSet.getDouble("f.descuento_porcentaje"),
+	                    resultSet.getDouble("f.descuento"),
+	                    resultSet.getDouble("f.subtotal"),
+	                    resultSet.getDouble("f.iva"),
+	                    resultSet.getDouble("f.total"),
+	                    resultSet.getString("f.forma_pago"),
+	                    resultSet.getDate("f.fecha"),
+	                    resultSet.getString("f.establecimiento"),
+	                    resultSet.getString("f.punto_emision"),
+	                    resultSet.getInt("f.usuario_id"),
+	                    resultSet.getInt("f.administrador_id"),
+	                    resultSet.getString("u.nombre"),
+	                    resultSet.getString("u.apellido"),
+	                    resultSet.getString("u.cedula")
+							);
 					
+					return factura;
 				}
-				
 			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
-			return resultado;
+			return factura;
 		}
 	}
 	
@@ -275,6 +275,10 @@ public class FacturaDAO {
 	
 	public int eliminarFactura(int id) {
 		
+		if(!eliminarMembresiasFactura(id)) {
+			return 0;
+		}
+		
 		try {
 			String sentencia = "delete from factura where id = ?";
 			
@@ -293,4 +297,26 @@ public class FacturaDAO {
 		}
 		
 	}
+	
+	public boolean eliminarMembresiasFactura(int factura_id) {
+		
+		try {
+			String sentencia = "delete from membresia where factura_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setInt(1, factura_id);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
 }

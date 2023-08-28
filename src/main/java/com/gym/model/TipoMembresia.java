@@ -13,6 +13,13 @@ public class TipoMembresia {
     // Extras
     String nombreClase;
     
+    // Historial de precios
+    int idPrecio;
+    double precioHistorial;
+    int tipoMembresiaId;
+    String fecha;
+    
+    
     public TipoMembresia() {}
     
     // Modificar 
@@ -63,6 +70,13 @@ public class TipoMembresia {
 		this.tipoDuracion = tipoDuracion;
 		this.clase_id = clase_id;
 		this.nombreClase = nombreClase;
+	}
+    
+    // Listar Precios
+    public TipoMembresia(double precioHistorial, int tipoMembresiaId, String fecha) {
+    	this.precioHistorial = precioHistorial;
+    	this.tipoMembresiaId = tipoMembresiaId;
+    	this.fecha = fecha;
 	}
     
 	public int getId() {
@@ -136,5 +150,37 @@ public class TipoMembresia {
 	public void setNombreClase(String nombreClase) {
 		this.nombreClase = nombreClase;
 	}
-    
+
+	public int getIdPrecio() {
+		return idPrecio;
+	}
+
+	public void setIdPrecio(int idPrecio) {
+		this.idPrecio = idPrecio;
+	}
+
+	public double getPrecioHistorial() {
+		return precioHistorial;
+	}
+
+	public void setPrecioHistorial(double precioHistorial) {
+		this.precioHistorial = precioHistorial;
+	}
+
+	public int getTipoMembresiaId() {
+		return tipoMembresiaId;
+	}
+
+	public void setTipoMembresiaId(int tipoMembresiaId) {
+		this.tipoMembresiaId = tipoMembresiaId;
+	}
+
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+	
 }
