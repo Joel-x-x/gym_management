@@ -32,6 +32,10 @@ import com.gym.model.Factura;
 import com.gym.model.Membresia;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +43,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Date;
 
 public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
@@ -51,6 +57,16 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	private int usuario_id;
 	private int factura_id;
 	private int idSeleccionado;
+	private String nro_factura;
+	private String cliente_factura;
+	private String subtotal_factura;
+	private String iva;
+	private String total;
+	private String forma_pago;
+	private java.util.Date fecha;
+	private String establecimiento;
+	private String punto_emisionfactura;
+	private String descuento;
 	
 	private DefaultComboBoxModel<String> comboBoxModelFormaPago;
 	private JComboBox<String> comboBoxFormaPago;
@@ -102,6 +118,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		
 		dateChooser.setDate(factura.getFecha());	
 	}
+	
 	
 	public void listarMembresias() {
 		String[] cabeceras = {"Id","Membresia","Clase","Entrenador","Precio"};
@@ -215,6 +232,8 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		} else {
 			JOptionPane.showMessageDialog(null, "Ocurrio un error");
 		}
+		
+		
 		
 	}
 	
@@ -469,6 +488,59 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actulizarFactura();
+				//Generar factura 
+				try {
+					
+					
+					nro_factura = labelNumeroFactura.getText();
+					cliente_factura = textCliente.getText();
+					subtotal_factura = labelSubtotal.getText();
+					iva =  labelIVA.getText();
+					total = labelTotal.getText();
+					forma_pago = (String) comboBoxFormaPago.getSelectedItem();
+					fecha =  dateChooser.getDate();
+					establecimiento = labelEstablecimiento.getText();
+					punto_emisionfactura = labelEstablecimiento.getText();
+					descuento = textDescuento.getText();
+					
+					
+					String nombre = nro_factura;
+					FileOutputStream archivo = new FileOutputStream(nombre + ".pdf");
+					Document documento = new Document();
+					PdfWriter.getInstance(documento, archivo);
+					documento.open();
+					
+					Paragraph parrafo = new Paragraph("NÚMERO DE FACTURA: " + nro_factura);
+					parrafo.setAlignment(1);
+					documento.add(parrafo);
+					
+					documento.add(new Paragraph("   CLIENTE: " + cliente_factura));
+					documento.add(new Paragraph("   ESTABLECIMIENTO: " +establecimiento));
+					documento.add(new Paragraph("   FECHA DE EMISION: "+ fecha));
+					documento.add(new Paragraph("   FORMA DE PAGO: " + forma_pago));
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.add(new Paragraph("	CANT.DESCRIPCIÓN"+"                             "+"P.TOTAL")); //8-tabs
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					
+					for(int i = 0;i<table.getRowCount();i++) {
+						documento.add(new Paragraph("   "+table.getValueAt(i, 1)+ "                             " 
+															+table.getValueAt(i, 4)));
+					}
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.add(new Paragraph("      SUBTOTAL:"+"                                "+ subtotal_factura));
+					documento.add(new Paragraph("   DESCUENTO %:"+"                                "+ descuento));
+					documento.add(new Paragraph("       IVA 12%:"+"                                "+ iva));
+					documento.add(new Paragraph("   VALOR TOTAL:"+"                                "+ total));
+					documento.add(new Paragraph("------------------------------------------------------------------"));
+					documento.close();
+					
+				} catch ( FileNotFoundException e1) {
+					
+					System.out.println(e1);
+				} catch (DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnGuardar.setForeground(Color.WHITE);

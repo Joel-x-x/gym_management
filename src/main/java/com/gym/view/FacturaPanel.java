@@ -1,6 +1,7 @@
 package com.gym.view;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 
 
@@ -41,6 +42,9 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private int idSeleccionado;
 	private FacturaController facturaController;
 	private DefaultTableModel modelo;
+	private int factura_imprimir;
+	
+	
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -51,7 +55,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JButton btnRefrescar;
-	private JButton btnImprimir;
 	
 	
 	public void listar() {
@@ -73,29 +76,16 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		listar();
 	}
 	
-	public void generarPDF(String nombre) throws FileNotFoundException, DocumentException{
-		FileOutputStream archivo = new FileOutputStream (nombre + ".pdf");
-		Document documento = new Document();
-		PdfWriter.getInstance(documento, archivo);
-		documento.open();
-		
-		Paragraph cabeceraFactura = new Paragraph("Nº Factura"+ nombre );
-		cabeceraFactura.setAlignment(1);
-		documento.add(cabeceraFactura);
-		documento.add(new Paragraph("Cliente: " ));
-		
-	}
 	
 	public void bloquearBotones() {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
-		btnImprimir.setEnabled(false);
 	}
 	
 	public void activarBotones() {
 		btnModificar.setEnabled(true);
 		btnEliminar.setEnabled(true);
-		btnImprimir.setEnabled(true);
+		
 	}
 	
 	public FacturaPanel(int panelAncho, int panelAlto) {
@@ -151,22 +141,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		btnRefrescar.setBounds(370, 98, 100, 30);
 		add(btnRefrescar);
 		
-		btnImprimir = new JButton("Imprimir");
-		btnImprimir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		
-		btnImprimir.setForeground(Color.WHITE);
-		btnImprimir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnImprimir.setFocusPainted(false);
-		btnImprimir.setBorder(null);
-		btnImprimir.setBackground(new Color(46, 56, 64));
-		btnImprimir.setBounds(480, 98, 100, 30);
-		add(btnImprimir);
-		
 		JLabel lblFactura = new JLabel("FACTURA");
 		lblFactura.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -205,6 +179,8 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 				activarBotones();
 			}
 		});
+		
+		
 		scrollPane.setViewportView(table);
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
@@ -223,8 +199,31 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         add(textField_1);
         textField_1.setColumns(10);
         
+        JButton btnNewButton_2 = new JButton("Imprimir");
+        btnNewButton_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("xdxd");
+				File path = new File(table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
+				System.out.println(path);
+				
+				if (path.exists()) {
+		            try {
+		                Desktop.getDesktop().open(path);
+		            } catch (IOException e1) {
+		                e1.printStackTrace();
+		            }
+				}
+        	}
+        });
+        btnNewButton_2.setForeground(Color.WHITE);
+        btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnNewButton_2.setFocusPainted(false);
+        btnNewButton_2.setBorder(null);
+        btnNewButton_2.setBackground(new Color(46, 56, 64));
+        btnNewButton_2.setBounds(370, 98, 100, 30);
+        add(btnNewButton_2);
+        
         listar();
         bloquearBotones();
 	}
-	
 }
