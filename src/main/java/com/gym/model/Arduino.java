@@ -7,16 +7,15 @@ import com.fazecast.jSerialComm.SerialPort;
 
 
 public class Arduino{
+    public static SerialPort serialPort;
+    private static OutputStream outputStream;
+    private static InputStream inputStream;
 
-    private SerialPort serialPort;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+//    public Arduino() {
+//        initializeSerialPort();
+//    }
 
-    public Arduino() {
-        initializeSerialPort();
-    }
-
-    private void initializeSerialPort() {
+    public static void initializeSerialPort() {
         SerialPort[] ports = SerialPort.getCommPorts();
         serialPort = null;
 
@@ -42,9 +41,15 @@ public class Arduino{
 		
 		ArduinoDataListener listener = new ArduinoDataListener();
 		serialPort.addDataListener(listener);
+		
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 
-    public void sendCommand(String command) {
+    public static void sendCommand(String command) {
         try {
             outputStream.write(command.getBytes());
             outputStream.flush();
@@ -74,7 +79,7 @@ public class Arduino{
         }
     }
 
-    public void close() {
+    public static void close() {
         try {
             outputStream.close();
             inputStream.close();

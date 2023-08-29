@@ -3,24 +3,41 @@ package com.gym.view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.gym.model.Arduino;
+import com.gym.model.ArduinoDataListener;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AgregarHuellaFrame extends JFrame {
 	private int id;
-
 	private static final long serialVersionUID = 7152304837393286877L;
 	private JPanel contentPane;
+	private JLabel labelMensaje;
 	
 	public void agregarHuella() {
-		
+		Arduino.sendCommand("r" + id);
+		ArduinoDataListener.setClass(this);
+	}
+	
+	public void modificarLabel(String mensaje) {
+		labelMensaje.setText(mensaje);
 	}
 
 	public AgregarHuellaFrame(int id) {
 		this.id = id;
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		Arduino.initializeSerialPort();
+		
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setResizable(false);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -31,8 +48,8 @@ public class AgregarHuellaFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(244, 244, 244));
 		panel.setBounds(0, 0, 434, 261);
+		panel.setBackground(new Color(244, 244, 244));
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -48,11 +65,11 @@ public class AgregarHuellaFrame extends JFrame {
 		panel_1.setBounds(108, 101, 200, 96);
 		panel.add(panel_1);
 		
-		JLabel lblInicio_3 = new JLabel("Coloca tu dedo");
-		lblInicio_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInicio_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblInicio_3.setBounds(0, 23, 200, 49);
-		panel_1.add(lblInicio_3);
+		labelMensaje = new JLabel("Coloca tu dedo");
+		labelMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+		labelMensaje.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		labelMensaje.setBounds(0, 23, 200, 49);
+		panel_1.add(labelMensaje);
 		
 		agregarHuella();
 	}
