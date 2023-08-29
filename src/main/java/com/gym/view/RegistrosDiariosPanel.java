@@ -64,6 +64,7 @@ public class RegistrosDiariosPanel extends JPanel {
     private JLabel lblNewLabel_2;
     private JLabel lblNewLabel_4;
     private JLabel lblNewLabel_5;
+    private JButton btn_entrada_3;
 	
 	public void registrar() {
 
@@ -219,12 +220,12 @@ public class RegistrosDiariosPanel extends JPanel {
         
         comboBoxMembresia = new JComboBox<Membresia>();
         comboBoxMembresia.setBackground(new Color(255, 255, 255));
-        comboBoxMembresia.setBounds(423, 485, 250, 30);
+        comboBoxMembresia.setBounds(289, 485, 250, 30);
         add(comboBoxMembresia);
         
         JLabel lblNewLabel_3 = new JLabel("Membresía");
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_3.setBounds(423, 467, 95, 14);
+        lblNewLabel_3.setBounds(289, 467, 95, 14);
         add(lblNewLabel_3);
         
         dateChooserInicio = new JDateChooser();
@@ -279,7 +280,7 @@ public class RegistrosDiariosPanel extends JPanel {
         btnBuscarFecha.setEnabled(false);
         btnListar.setEnabled(false);
         
-        btn_entrada_1 = new JButton("Registrar usuario");
+        btn_entrada_1 = new JButton("Escoger usuario");
         btn_entrada_1.setForeground(Color.WHITE);
         btn_entrada_1.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_entrada_1.setFocusPainted(false);
@@ -415,7 +416,7 @@ public class RegistrosDiariosPanel extends JPanel {
         panel_2 = new JPanel();
         panel_2.setLayout(null);
         panel_2.setBackground(new Color(23, 159, 38));
-        panel_2.setBounds(423, 526, 250, 76);
+        panel_2.setBounds(416, 530, 250, 76);
         add(panel_2);
         
         lblNewLabel_2 = new JLabel("Si el usuario tiene más de una");
@@ -435,5 +436,14 @@ public class RegistrosDiariosPanel extends JPanel {
         lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblNewLabel_5.setBounds(10, 48, 230, 14);
         panel_2.add(lblNewLabel_5);
+        
+        btn_entrada_3 = new JButton("Registrar");
+        btn_entrada_3.setForeground(Color.WHITE);
+        btn_entrada_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btn_entrada_3.setFocusPainted(false);
+        btn_entrada_3.setBorder(null);
+        btn_entrada_3.setBackground(new Color(31, 33, 38));
+        btn_entrada_3.setBounds(549, 485, 250, 30);
+        add(btn_entrada_3);
     }
 }
