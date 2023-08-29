@@ -249,7 +249,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         JButton btnNewButton_2 = new JButton("Imprimir");
         btnNewButton_2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		System.out.println("xdxd");
 				File path = new File(table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
 				System.out.println(path);
 				

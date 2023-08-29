@@ -42,7 +42,7 @@ public class BarraPanel extends JPanel {
         setPreferredSize(new Dimension(200, 750));
         setBackground(new Color(46, 56, 64));
         
-        inicioButton = new JButton("     Inicio");
+        inicioButton = new JButton("     Registro");
         inicioButton.setHorizontalAlignment(SwingConstants.LEFT);
         inicioButton.setFocusPainted(false);
         inicioButton.setFocusTraversalKeysEnabled(false);
@@ -118,7 +118,7 @@ public class BarraPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
             	
-                adminFrame.cambiarPanel(new InicioPanel(panelAncho, panelAlto));
+                adminFrame.cambiarPanel(new RegistrosDiariosPanel(panelAncho, panelAlto));
             }
         });
 

@@ -36,7 +36,7 @@ public class AdminFrame extends JFrame implements ActionListener{
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         
-        cambiarPanel(new InicioPanel(panelAncho, panelAlto));
+        cambiarPanel(new RegistrosDiariosPanel(panelAncho, panelAlto));
         
         // Agregar BarraPanel y panelPrincipal al JFrame
         add(barraSuperiorPanel, BorderLayout.NORTH);
@@ -59,7 +59,7 @@ public class AdminFrame extends JFrame implements ActionListener{
 
         switch (comando) {
             case "Inicio":
-                cambiarPanel(new InicioPanel(panelAncho, panelAlto));
+                cambiarPanel(new RegistrosDiariosPanel(panelAncho, panelAlto));
                 break;
             case "Usuarios":
                 cambiarPanel(new UsuariosPanel(panelAncho, panelAlto));
