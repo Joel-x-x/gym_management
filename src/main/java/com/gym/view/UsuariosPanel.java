@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.FisicoController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
+import com.gym.model.Arduino;
 import com.gym.model.Fisico;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
@@ -232,7 +233,11 @@ public class UsuariosPanel extends JPanel {
 	
 	// Registrar Huella
 	public void registrarHuella() {
-		new AgregarHuellaFrame(idSeleccionadoUsuario);
+		try {
+			new AgregarHuellaFrame(idSeleccionadoUsuario);
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
+		}
 	}
 	
 	private void limpiarFormularioUsuario() {

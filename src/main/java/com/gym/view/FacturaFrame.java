@@ -205,7 +205,6 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	// Insertar membresias
 	@Override
 	public void tipoMembresiaSeleccionada(int id) {
-		System.out.println(validarSiExiste(id));
 		// Elemento ya seleccionado no hacer nada
 		if(validarSiExiste(id)) return;
 		
@@ -245,16 +244,20 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	// Actuliza el total subtotal e iva
 	public void actualizarDatosFactura() {
 		double total = 0, iva = 0, subtotal = 0, descuento = 0;
+		double ivaValor = facturaController.obtenerIva(administrador_id);
+		double ivaPorcentaje = ivaValor / 100;
+		
 		for(Membresia membresia : membresiaController.listarMembresiaFacturaList(administrador_id, factura_id)) {
 			total += membresia.getPrecio();
 		}
+		
 		// Redondeamos a 2 decimales
 		descuento = Math.round(((Double.parseDouble(textDescuento.getText()) / 100) * total) * 100d) / 100d;
 		
 		total -= descuento;
 		
 		// Redondeamos a 2 decimales
-		iva = Math.round((total * 0.12) * 100d) / 100d;
+		iva = Math.round((total * ivaPorcentaje) * 100d) / 100d;
 		
 		subtotal = Math.round((total - iva) * 100d) / 100d;
 		

@@ -321,6 +321,7 @@ public class RegistrosDiariosPanel extends JPanel {
         panel.add(lblApellido);
         
         textField = new JTextField();
+        textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
         textField.setBorder(null);
         textField.setEditable(false);
         textField.setBounds(110, 29, 250, 25);
@@ -328,6 +329,7 @@ public class RegistrosDiariosPanel extends JPanel {
         textField.setColumns(10);
         
         textField_1 = new JTextField();
+        textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         textField_1.setEditable(false);
         textField_1.setColumns(10);
         textField_1.setBorder(null);
@@ -346,6 +348,7 @@ public class RegistrosDiariosPanel extends JPanel {
         panel.add(lblEstatura);
         
         textField_2 = new JTextField();
+        textField_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
         textField_2.setEditable(false);
         textField_2.setColumns(10);
         textField_2.setBorder(null);
@@ -359,6 +362,7 @@ public class RegistrosDiariosPanel extends JPanel {
         panel.add(lblPeso);
         
         textField_3 = new JTextField();
+        textField_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
         textField_3.setEditable(false);
         textField_3.setColumns(10);
         textField_3.setBorder(null);

@@ -9,6 +9,8 @@ import com.gym.model.ArduinoDataListener;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.WindowAdapter;
@@ -34,6 +36,7 @@ public class AgregarHuellaFrame extends JFrame {
 
 	public AgregarHuellaFrame(int id) {
 		this.id = id;
+
 		Arduino.initializeSerialPort();
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

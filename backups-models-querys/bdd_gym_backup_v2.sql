@@ -488,14 +488,21 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   `establecimiento` VARCHAR(3) DEFAULT '001',
   `punto_emision` VARCHAR(3) DEFAULT '001',
   `usuario_id` INT DEFAULT NULL,
+  `iva_id` INT NOT NULL,
   `administrador_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_usuario_id_establecimiento_idx` (`usuario_id` ASC) VISIBLE,
   INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
+  INDEX `fk_iva_id_idx` (`iva_id` ASC) VISIBLE,
   UNIQUE INDEX `numero_factura_UNIQUE` (`numero_factura` ASC) VISIBLE,
   CONSTRAINT `fk_usuario_id_factura`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `bdd_gym`.`usuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_iva_id_factura`
+    FOREIGN KEY (`iva_id`)
+    REFERENCES `bdd_gym`.`iva` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_administrador_id_factura`
@@ -518,7 +525,7 @@ CREATE PROCEDURE insertarFactura(
 BEGIN
     DECLARE numeroFactura VARCHAR(10);
     
-    INSERT INTO factura (administrador_id) VALUES (administradorId);
+    INSERT INTO factura (administrador_id, iva_id) VALUES (administradorId, (select obtenerIdIva(administradorId)));
     SET numeroFactura = LPAD(LAST_INSERT_ID(), 9, '0');
     
     UPDATE factura SET numero_factura = numeroFactura WHERE id = LAST_INSERT_ID();
@@ -566,6 +573,48 @@ begin
     return fecha_fin;
 end;
 //
+delimiter ;
+
+-- IVA
+CREATE TABLE IF NOT EXISTS `bdd_gym`.`iva` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `iva` DECIMAL(6,2) NOT NULL CHECK (iva >= 0),
+  `administrador_id` INT NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_administrador_id_iva`
+	FOREIGN KEY (`administrador_id`)
+    REFERENCES `bdd_gym`.`administrador`(id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+-- Function que devuelve el ultimo iva insertador recibe el id del administrador
+delimiter .. 
+drop function if exists obtenerIdIva.. 
+create function obtenerIdIva(administradorId int)
+returns int unsigned
+reads sql data
+begin 
+	declare idIva int unsigned;
+    set idIva = (
+		select max(id) from iva where administrador_id = administradorId
+    ); 
+    return idIva;
+end.. 
+delimiter ;
+
+-- Procedure listar ivas
+delimiter ..
+drop procedure if exists listarIvas..
+create procedure listarIvas(in administradorId int)
+begin
+	select * from iva where administrador_id = administradorId order by id desc;
+end..
 delimiter ;
 
 -- === AUDITORIAS ===
@@ -1113,13 +1162,14 @@ VALUES (170.5, 70.0, 1);
 INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
 VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
 
+-- Insertar iva por defecto
+INSERT INTO iva(iva, administrador_id) values(12, 1);
+
 -- Insertar una factura
 CALL insertarFactura(1);
 
 -- Insertar una membresía
 -- call insertarMembresia(1,1,1,1);
-
-select * from administrador;
  
 
 
