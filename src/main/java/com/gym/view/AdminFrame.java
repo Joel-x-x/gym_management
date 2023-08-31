@@ -1,6 +1,10 @@
 package com.gym.view;
 
 import javax.swing.*;
+
+import com.gym.model.Arduino;
+import com.gym.model.ArduinoDataListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +51,13 @@ public class AdminFrame extends JFrame implements ActionListener{
     }
 
     public void cambiarPanel(JPanel nuevoPanel) {
+    	// Al cambiar de ventana cortar la conexión
+    	if(!String.valueOf(nuevoPanel.getClass()).equals("class com.gym.view.RegistrosDiariosPanel") && Arduino.isActivo()) {
+    		Arduino.sendCommand("t"); // Comando que para el arduino
+    		Arduino.close(); // Cerrar conexión
+    		Arduino.setActivo(false); // Poner atributo de arduino activo en falso
+    		ArduinoDataListener.limpiarMensaje(); // Resetear el mensaje de arduino
+    	}
         panelPrincipal.removeAll();
         panelPrincipal.add(nuevoPanel);
         panelPrincipal.revalidate();

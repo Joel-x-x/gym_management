@@ -8,6 +8,8 @@ import com.gym.controller.MembresiaController;
 import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
+import com.gym.model.Arduino;
+import com.gym.model.ArduinoDataListener;
 import com.gym.model.Membresia;
 import com.toedter.calendar.JDateChooser;
 
@@ -49,22 +51,36 @@ public class RegistrosDiariosPanel extends JPanel {
     private JLabel labelFechaHoy;
     private JLabel lblNombre;
     private JLabel lblApellido;
-    private JTextField textField;
-    private JTextField textField_1;
-    private JTextField textField_2;
+    private JTextField textNombre;
+    private JTextField textApellido;
+    private JTextField textEstatura;
     private JLabel lblPeso;
-    private JTextField textField_3;
+    private JTextField textPeso;
     private JTextField textVencimiento;
-    private JLabel labelFechaHoy_1;
+    private JLabel labelDesde;
     private JLabel lblNewLabel_1;
     private JLabel lblInicio_2;
     private JPanel panel_1;
-    private JLabel lblInicio_3;
+    private JLabel labelMensaje;
     private JPanel panel_2;
     private JLabel lblNewLabel_2;
     private JLabel lblNewLabel_4;
     private JLabel lblNewLabel_5;
-    private JButton btn_entrada_3;
+    private JButton btn_registrar;
+    
+	public void verificarHuella() {
+		Arduino.sendCommand("v");
+		ArduinoDataListener.setClassVerficar(this);
+	}
+	
+	// Mensaje en el panel de la huella
+	public void modificarLabel(String mensaje) {
+		labelMensaje.setText(mensaje);
+	}
+	
+	public void usuarioEncontrado(int id) {
+		JOptionPane.showMessageDialog(null, id);
+	}
 	
 	public void registrar() {
 
@@ -92,7 +108,6 @@ public class RegistrosDiariosPanel extends JPanel {
 		}
 		
 		registroController.registrar(idSeleccionadoUsuario, getIdClaseComboBox());
-		listarRegistros();
 		validarRegistros();
 	}
 	
@@ -160,16 +175,23 @@ public class RegistrosDiariosPanel extends JPanel {
 	}
     
 	public RegistrosDiariosPanel(int panelAncho, int panelAlto) {
-		
 		 usuarioController = new UsuarioController();
 		 registroController = new RegistroController(); 
 		 membresiaController = new MembresiaController();
 		 administrador_id = new Administrador().getId();
+		 
+		 Arduino.initializeSerialPort();
 		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
+				System.out.println("Activo");
 				bloquearBotones();
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				System.out.println("Oculto");
 			}
 		});
     	
@@ -207,7 +229,6 @@ public class RegistrosDiariosPanel extends JPanel {
         btn_salida.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		registroController.registrarSalida(idUltimoRegistro);
-        		listarRegistros();
         		validarRegistros();
         	}
         });
@@ -263,7 +284,6 @@ public class RegistrosDiariosPanel extends JPanel {
         btnListar = new JButton("Listar");
         btnListar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		listarRegistros();
         		dateChooserInicio.setDate(null);
         		dateChooserFin.setDate(null);
         		
@@ -320,26 +340,26 @@ public class RegistrosDiariosPanel extends JPanel {
         lblApellido.setBounds(29, 65, 87, 30);
         panel.add(lblApellido);
         
-        textField = new JTextField();
-        textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        textField.setBorder(null);
-        textField.setEditable(false);
-        textField.setBounds(110, 29, 250, 25);
-        panel.add(textField);
-        textField.setColumns(10);
+        textNombre = new JTextField();
+        textNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textNombre.setBorder(null);
+        textNombre.setEditable(false);
+        textNombre.setBounds(110, 29, 250, 25);
+        panel.add(textNombre);
+        textNombre.setColumns(10);
         
-        textField_1 = new JTextField();
-        textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        textField_1.setEditable(false);
-        textField_1.setColumns(10);
-        textField_1.setBorder(null);
-        textField_1.setBounds(110, 70, 250, 25);
-        panel.add(textField_1);
+        textApellido = new JTextField();
+        textApellido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textApellido.setEditable(false);
+        textApellido.setColumns(10);
+        textApellido.setBorder(null);
+        textApellido.setBounds(110, 70, 250, 25);
+        panel.add(textApellido);
         
-        JLabel lblCi = new JLabel("CI. 1850038314");
-        lblCi.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblCi.setBounds(420, 11, 142, 30);
-        panel.add(lblCi);
+        JLabel labelCedula = new JLabel("CI. 1850038314");
+        labelCedula.setFont(new Font("Tahoma", Font.BOLD, 14));
+        labelCedula.setBounds(420, 11, 142, 30);
+        panel.add(labelCedula);
         
         JLabel lblEstatura = new JLabel("Estatura");
         lblEstatura.setHorizontalAlignment(SwingConstants.CENTER);
@@ -347,13 +367,13 @@ public class RegistrosDiariosPanel extends JPanel {
         lblEstatura.setBounds(62, 106, 100, 30);
         panel.add(lblEstatura);
         
-        textField_2 = new JTextField();
-        textField_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        textField_2.setEditable(false);
-        textField_2.setColumns(10);
-        textField_2.setBorder(null);
-        textField_2.setBounds(62, 133, 100, 25);
-        panel.add(textField_2);
+        textEstatura = new JTextField();
+        textEstatura.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textEstatura.setEditable(false);
+        textEstatura.setColumns(10);
+        textEstatura.setBorder(null);
+        textEstatura.setBounds(62, 133, 100, 25);
+        panel.add(textEstatura);
         
         lblPeso = new JLabel("Peso");
         lblPeso.setHorizontalAlignment(SwingConstants.CENTER);
@@ -361,13 +381,13 @@ public class RegistrosDiariosPanel extends JPanel {
         lblPeso.setBounds(181, 106, 100, 30);
         panel.add(lblPeso);
         
-        textField_3 = new JTextField();
-        textField_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        textField_3.setEditable(false);
-        textField_3.setColumns(10);
-        textField_3.setBorder(null);
-        textField_3.setBounds(181, 133, 100, 25);
-        panel.add(textField_3);
+        textPeso = new JTextField();
+        textPeso.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPeso.setEditable(false);
+        textPeso.setColumns(10);
+        textPeso.setBorder(null);
+        textPeso.setBounds(181, 133, 100, 25);
+        panel.add(textPeso);
         
         textVencimiento = new JTextField();
         textVencimiento.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -378,10 +398,10 @@ public class RegistrosDiariosPanel extends JPanel {
         textVencimiento.setBounds(29, 196, 331, 30);
         panel.add(textVencimiento);
         
-        labelFechaHoy_1 = new JLabel("Hoy es Lunes 28 de Agosto del 2023");
-        labelFechaHoy_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        labelFechaHoy_1.setBounds(29, 259, 399, 30);
-        panel.add(labelFechaHoy_1);
+        labelDesde = new JLabel("Miembro desde el 30 de Septiembre del 2022");
+        labelDesde.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        labelDesde.setBounds(29, 259, 399, 30);
+        panel.add(labelDesde);
         
         lblNewLabel_1 = new JLabel("");
         lblNewLabel_1.setIcon(new ImageIcon(RegistrosDiariosPanel.class.getResource("/com/gym/resources/negro.png")));
@@ -411,11 +431,11 @@ public class RegistrosDiariosPanel extends JPanel {
         add(panel_1);
         panel_1.setLayout(null);
         
-        lblInicio_3 = new JLabel("Coloca tu dedo");
-        lblInicio_3.setHorizontalAlignment(SwingConstants.CENTER);
-        lblInicio_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblInicio_3.setBounds(0, 23, 200, 49);
-        panel_1.add(lblInicio_3);
+        labelMensaje = new JLabel("Coloca tu dedo");
+        labelMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+        labelMensaje.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        labelMensaje.setBounds(0, 23, 200, 49);
+        panel_1.add(labelMensaje);
         
         panel_2 = new JPanel();
         panel_2.setLayout(null);
@@ -441,13 +461,15 @@ public class RegistrosDiariosPanel extends JPanel {
         lblNewLabel_5.setBounds(10, 48, 230, 14);
         panel_2.add(lblNewLabel_5);
         
-        btn_entrada_3 = new JButton("Registrar");
-        btn_entrada_3.setForeground(Color.WHITE);
-        btn_entrada_3.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btn_entrada_3.setFocusPainted(false);
-        btn_entrada_3.setBorder(null);
-        btn_entrada_3.setBackground(new Color(31, 33, 38));
-        btn_entrada_3.setBounds(549, 485, 250, 30);
-        add(btn_entrada_3);
+        btn_registrar = new JButton("Registrar");
+        btn_registrar.setForeground(Color.WHITE);
+        btn_registrar.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btn_registrar.setFocusPainted(false);
+        btn_registrar.setBorder(null);
+        btn_registrar.setBackground(new Color(31, 33, 38));
+        btn_registrar.setBounds(549, 485, 250, 30);
+        add(btn_registrar);
+        
+        verificarHuella();
     }
 }

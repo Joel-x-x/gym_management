@@ -1170,6 +1170,8 @@ CALL insertarFactura(1);
 
 -- Insertar una membresía
 -- call insertarMembresia(1,1,1,1);
+
+select iva from iva where id = (select obtenerIdIva(1));
  
 
 

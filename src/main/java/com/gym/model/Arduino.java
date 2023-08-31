@@ -10,12 +10,23 @@ public class Arduino{
     public static SerialPort serialPort;
     private static OutputStream outputStream;
     private static InputStream inputStream;
-
+    private static boolean activo;
+    
 //    public Arduino() {
 //        initializeSerialPort();
 //    }
 
-    public static void initializeSerialPort() {
+    public static boolean isActivo() {
+		return activo;
+	}
+
+	public static void setActivo(boolean activo) {
+		Arduino.activo = activo;
+	}
+
+	public static void initializeSerialPort() {
+    	Arduino.activo = true;
+    	
         SerialPort[] ports = SerialPort.getCommPorts();
         serialPort = null;
 
