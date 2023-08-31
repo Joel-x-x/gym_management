@@ -321,4 +321,86 @@ public class FacturaDAO {
 		
 	}
 	
+	public int obtenerIva(int administrador_id) {
+			
+		try {
+			String sentencia = "select iva from iva where id = (select obtenerIdIva(?))";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setInt(1, administrador_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					resultSet.next();
+					
+					return resultSet.getInt("iva");
+				}
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public boolean actualizarIva(double iva, int administrador_id) {
+		
+		try {
+			String sentencia = "insert into iva(iva, administrador_id) values(?, ?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setDouble(1, iva);
+				statement.setInt(2, administrador_id);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public List<Factura> listarIvas(int administrador_id) {
+		
+		List<Factura> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call listarIvas(?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Factura(
+								resultSet.getDouble("iva"),
+								resultSet.getInt("administrador_id"),
+								resultSet.getString("fecha")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+		
+	}
+	
 }

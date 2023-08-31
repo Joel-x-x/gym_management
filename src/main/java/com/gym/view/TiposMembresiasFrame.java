@@ -69,7 +69,7 @@ public class TiposMembresiasFrame extends JFrame {
 		JLabel lblTiposDeMembresias = new JLabel("TIPOS DE MEMBRESIAS");
 		lblTiposDeMembresias.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTiposDeMembresias.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblTiposDeMembresias.setBounds(0, 30, 999, 37);
+		lblTiposDeMembresias.setBounds(0, 30, 1064, 37);
 		panel.add(lblTiposDeMembresias);
 		
 		JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");

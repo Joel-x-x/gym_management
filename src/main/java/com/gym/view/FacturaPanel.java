@@ -6,6 +6,7 @@ import java.awt.Dimension;
 
 
 import javax.swing.JPanel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.FacturaController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
+import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -28,6 +30,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
@@ -45,9 +48,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private DefaultTableModel modelo;
 	private int factura_imprimir;
 	
-	
-	
-	
 	private static final long serialVersionUID = 1L;
 	private JTextField textBuscar;
 	private JTable table;
@@ -56,6 +56,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JButton btnRefrescar;
+	private JButton btnNewButton_3;
 	
 	
 	public void listar() {
@@ -108,7 +109,18 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		documento.add(new Paragraph("Cliente: " ));
 		
 	}
+	
+	public void listarIvas() {
+		List<Factura> listaIvas = facturaController.listarIvas(administrador_id);
+		
+        DefaultListModel<String> listModel = new DefaultListModel<>();
 
+        for (Factura item : listaIvas) {
+            listModel.addElement(item.getIvaPorcentaje() + "     " + item.getFechaIva());
+        }
+        
+        new IvaFrame(listModel);
+	}
 	
 	public void bloquearBotones() {
 		btnModificar.setEnabled(false);
@@ -249,7 +261,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         JButton btnNewButton_2 = new JButton("Imprimir");
         btnNewButton_2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		System.out.println("xdxd");
 				File path = new File(table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
 				System.out.println(path);
 				
@@ -267,8 +278,22 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         btnNewButton_2.setFocusPainted(false);
         btnNewButton_2.setBorder(null);
         btnNewButton_2.setBackground(new Color(46, 56, 64));
-        btnNewButton_2.setBounds(370, 98, 100, 30);
+        btnNewButton_2.setBounds(480, 98, 100, 30);
         add(btnNewButton_2);
+        
+        btnNewButton_3 = new JButton("Actualizar IVA");
+        btnNewButton_3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarIvas();
+        	}
+        });
+        btnNewButton_3.setForeground(Color.WHITE);
+        btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnNewButton_3.setFocusPainted(false);
+        btnNewButton_3.setBorder(null);
+        btnNewButton_3.setBackground(new Color(46, 56, 64));
+        btnNewButton_3.setBounds(940, 60, 100, 30);
+        add(btnNewButton_3);
         
         listar();
         bloquearBotones();

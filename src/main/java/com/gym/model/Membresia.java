@@ -75,10 +75,18 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.tipo_membresia_id = tipo_membresia_id;
 	}
     
-    public Membresia(int id, String clase) {
-    	this.id = id;
-    	this.clase = clase;
-    }
+	// Listar Registros Diarios
+	public Membresia(int id, String nombreUsuario, String cedula, String fecha_entrada, String fecha_salida,
+			String nombreTipo) {
+		this.id = id;
+		this.nombreUsuario = nombreUsuario;
+		this.cedula = cedula;
+		this.fecha_entrada = fecha_entrada;
+		this.fecha_salida = fecha_salida;
+		this.nombreTipo = nombreTipo;
+	}
+	
+	// Anterior borrar si no sirven
 
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
 			float valor_extra, float valor_total) {
@@ -141,20 +149,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.administrador_id = administrador_id;
 		this.clase = clase;
 		this.activo = activo;
-	}
-	
-	// Listar Registro
-	public Membresia(int id, String nombreUsuario, String fecha_entrada, String fecha_salida, String plan, String clase, int membresia_id, String fecha_inicio, String fecha_fin, int activo, int anticipacion) {
-		this.id = id;
-		this.nombreUsuario = nombreUsuario;
-		this.fecha_entrada = fecha_entrada;
-		this.fecha_salida = fecha_salida;
-		this.clase = clase;
-		this.fecha_inicio = fecha_inicio;
-		this.fecha_fin = fecha_fin;
-		this.activo = activo;
-	}
-	
+	}	
 	
 	public int getTipo_membresia_id() {
 		return tipo_membresia_id;
@@ -284,14 +279,6 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.usuario_id = usuario_id;
 	}
 
-	public int getPlan_id() {
-		return tipo_membresia_id;
-	}
-
-	public void setPlan_id(int plan_id) {
-		this.tipo_membresia_id = plan_id;
-	}
-
 	public int getClase_id() {
 		return clase_id;
 	}
@@ -308,6 +295,14 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.activo = activo;
 	}
 	
+	public double getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(double precio) {
+		this.precio = precio;
+	}
+
 	public int getAdministrador_id() {
 		return administrador_id;
 	}
@@ -316,13 +311,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.administrador_id = administrador_id;
 	}
 	
-	public double getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
+	
 
 	public boolean validarMembresia() {
 		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());

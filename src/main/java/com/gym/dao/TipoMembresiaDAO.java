@@ -184,7 +184,7 @@ public class TipoMembresiaDAO {
 		
 	}
 	
-public List<TipoMembresia> listarPrecios(int tipo_membresia_id) {
+	public List<TipoMembresia> listarPrecios(int tipo_membresia_id) {
 		
 		List<TipoMembresia> resultado = new ArrayList<>();
 		

@@ -1,5 +1,7 @@
 package com.gym.controller;
 
+import java.util.List;
+
 import com.gym.dao.FacturaDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Factura;
@@ -40,5 +42,17 @@ public class FacturaController {
 	
 	public int eliminarFactura(int id) {
 		return  facturaDAO.eliminarFactura(id);
+	}
+	
+	public int obtenerIva(int administrador_id) {
+		return facturaDAO.obtenerIva(administrador_id);
+	}
+	
+	public boolean actulizarIva(double iva, int administrador_id) {
+		return facturaDAO.actualizarIva(iva, administrador_id);
+	}
+	
+	public List<Factura> listarIvas(int administrador_id) {
+		return facturaDAO.listarIvas(administrador_id);
 	}
 }

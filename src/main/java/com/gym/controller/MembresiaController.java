@@ -56,10 +56,6 @@ public class MembresiaController {
 	public boolean consultaActivo(int usuario_id, int id) {
 		return membresiaDAO.consultaActivo(usuario_id, id);
 	}
-
-	public boolean modificar(Membresia membresia) {
-		return membresiaDAO.modificar(membresia);
-	}
 	
 	public boolean modificarActivo(int id, int activo) {
 		return membresiaDAO.modificarActivo(id, activo);
@@ -79,8 +75,6 @@ public class MembresiaController {
 
 	public List<Membresia> listarMembresias(int usuario_id) {
 		var listaMembresias = membresiaDAO.listarMembresias(usuario_id);
-		
-		listaMembresias.add(0, new Membresia(0, "-- Selecciona una Clase --"));
 		
 		return listaMembresias;
 	}

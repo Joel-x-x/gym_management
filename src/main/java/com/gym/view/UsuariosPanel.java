@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import com.gym.controller.FisicoController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
+import com.gym.model.Arduino;
 import com.gym.model.Fisico;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
@@ -55,6 +56,7 @@ public class UsuariosPanel extends JPanel {
 	private JLabel lblNewLabel_5;
 	private JDateChooser dateChooser;
 	private Calendar fecha;
+	private JButton btnAgregarHuella;
 	
 
 	
@@ -229,6 +231,15 @@ public class UsuariosPanel extends JPanel {
 		}
 	}
 	
+	// Registrar Huella
+	public void registrarHuella() {
+		try {
+			new AgregarHuellaFrame(idSeleccionadoUsuario);
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
+		}
+	}
+	
 	private void limpiarFormularioUsuario() {
 		textNombre.setText("");
 		textApellido.setText("");
@@ -274,11 +285,13 @@ public class UsuariosPanel extends JPanel {
 	public void bloquearBotonesUsuarios() {
         btnModificarUsuario.setEnabled(false);
         btnEliminarUsuario.setEnabled(false);
+        btnAgregarHuella.setEnabled(false);
 	}
 	
 	public void activarBotonesUsuarios() {
         btnModificarUsuario.setEnabled(true);
         btnEliminarUsuario.setEnabled(true);
+        btnAgregarHuella.setEnabled(true);
 	}
 	
 	public void activarBotonesFisico() {
@@ -603,6 +616,20 @@ public class UsuariosPanel extends JPanel {
         dateChooser = new JDateChooser();
         dateChooser.setBounds(30, 295, 225, 25);
         add(dateChooser);
+        
+        btnAgregarHuella = new JButton("Agregar huella");
+        btnAgregarHuella.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		registrarHuella();
+        	}
+        });
+        btnAgregarHuella.setForeground(Color.WHITE);
+        btnAgregarHuella.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnAgregarHuella.setFocusPainted(false);
+        btnAgregarHuella.setBorder(null);
+        btnAgregarHuella.setBackground(new Color(46, 56, 64));
+        btnAgregarHuella.setBounds(484, 394, 147, 25);
+        add(btnAgregarHuella);
         
         // Listar Usuarios
         listar();
