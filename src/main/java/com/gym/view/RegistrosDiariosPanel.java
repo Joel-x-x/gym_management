@@ -11,6 +11,7 @@ import com.gym.model.Administrador;
 import com.gym.model.Arduino;
 import com.gym.model.ArduinoDataListener;
 import com.gym.model.Membresia;
+import com.gym.model.Usuario;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.event.ComponentAdapter;
@@ -25,7 +26,8 @@ import java.util.Calendar;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 
-public class RegistrosDiariosPanel extends JPanel {
+public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfaz {
+	private int usuario_id;
 	UsuarioController usuarioController;
 	RegistroController registroController;
 	MembresiaController membresiaController;
@@ -69,8 +71,12 @@ public class RegistrosDiariosPanel extends JPanel {
     private JButton btn_registrar;
     
 	public void verificarHuella() {
-		Arduino.sendCommand("v");
-		ArduinoDataListener.setClassVerficar(this);
+		try {
+			Arduino.sendCommand("v");
+			ArduinoDataListener.setClassVerficar(this);
+		} catch(Exception e) {
+			System.out.println("No se encontro una huella");
+		}
 	}
 	
 	// Mensaje en el panel de la huella
@@ -111,6 +117,21 @@ public class RegistrosDiariosPanel extends JPanel {
 		validarRegistros();
 	}
 	
+
+	@Override
+	public void listarUsuarios() {
+		UsuariosFrame usuarios = new UsuariosFrame(this);
+		usuarios.setVisible(true);
+	}
+
+	@Override
+	public void usuarioSeleccionado(Usuario usuario) {
+		usuario_id = usuario.getId();
+		
+		System.out.println(usuario_id);
+		
+	}
+	
 	public int getIdClaseComboBox() {
 		return ((Membresia) comboBoxMembresia.getSelectedItem()).getId();
 	}
@@ -149,30 +170,30 @@ public class RegistrosDiariosPanel extends JPanel {
 		btn_salida.setEnabled(false);
 	}
 	
-	public void buscarRegistros() {
-		fechaInicio = dateChooserInicio.getCalendar();
-		fechaFin = dateChooserFin.getCalendar();
-		
-		if(fechaInicio == null) {
-			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
-			return;
-		}
-		
-		if(fechaFin == null) {
-			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
-			return;
-		}
-		
-		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
-		
-        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
-        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
-		
-		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Plan", "Clase", "Membresia"};
-		
-		modelo = new DefaultTableModel(registroController.consultarFecha(idSeleccionadoUsuario, fechaInicioSQL, fechaFinSQL ),cabeceras);
-		table.setModel(modelo);
-	}
+//	public void buscarRegistros() {
+//		fechaInicio = dateChooserInicio.getCalendar();
+//		fechaFin = dateChooserFin.getCalendar();
+//		
+//		if(fechaInicio == null) {
+//			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
+//			return;
+//		}
+//		
+//		if(fechaFin == null) {
+//			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
+//			return;
+//		}
+//		
+//		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
+//		
+//        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
+//        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
+//		
+//		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Plan", "Clase", "Membresia"};
+//		
+//		modelo = new DefaultTableModel(registroController.consultarFecha(idSeleccionadoUsuario, fechaInicioSQL, fechaFinSQL ),cabeceras);
+//		table.setModel(modelo);
+//	}
     
 	public RegistrosDiariosPanel(int panelAncho, int panelAlto) {
 		 usuarioController = new UsuarioController();
@@ -182,19 +203,6 @@ public class RegistrosDiariosPanel extends JPanel {
 		 
 		 Arduino.initializeSerialPort();
 		
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				System.out.println("Activo");
-				bloquearBotones();
-			}
-			
-			@Override
-			public void componentHidden(ComponentEvent e) {
-				System.out.println("Oculto");
-			}
-		});
-    	
     	setPreferredSize(new Dimension(1080, 800));
         setBackground(new Color(244, 244, 244));
         setLayout(null);
@@ -260,7 +268,6 @@ public class RegistrosDiariosPanel extends JPanel {
         btnBuscarFecha = new JButton("Buscar");
         btnBuscarFecha.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {	
-        		buscarRegistros();
         	}
         });
         btnBuscarFecha.setForeground(Color.WHITE);
@@ -301,6 +308,11 @@ public class RegistrosDiariosPanel extends JPanel {
         btnListar.setEnabled(false);
         
         btn_entrada_1 = new JButton("Escoger usuario");
+        btn_entrada_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarUsuarios();
+        	}
+        });
         btn_entrada_1.setForeground(Color.WHITE);
         btn_entrada_1.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_entrada_1.setFocusPainted(false);
@@ -470,6 +482,18 @@ public class RegistrosDiariosPanel extends JPanel {
         btn_registrar.setBounds(549, 485, 250, 30);
         add(btn_registrar);
         
-        verificarHuella();
+        verificarHuella(); 
     }
+
+	@Override
+	public void listarTipoMembresias() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void tipoMembresiaSeleccionada(int id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

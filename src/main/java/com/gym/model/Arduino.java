@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.swing.JOptionPane;
+
 import com.fazecast.jSerialComm.SerialPort;
 
 
@@ -15,9 +17,17 @@ public class Arduino{
 //    public Arduino() {
 //        initializeSerialPort();
 //    }
-
+    
     public static boolean isActivo() {
 		return activo;
+	}
+
+	public static SerialPort getSerialPort() {
+		return serialPort;
+	}
+
+	public static void setSerialPort(SerialPort serialPort) {
+		Arduino.serialPort = serialPort;
 	}
 
 	public static void setActivo(boolean activo) {
@@ -25,18 +35,17 @@ public class Arduino{
 	}
 
 	public static void initializeSerialPort() {
-    	Arduino.activo = true;
-    	
         SerialPort[] ports = SerialPort.getCommPorts();
         serialPort = null;
 
         for (SerialPort port : ports) {
-        	System.out.println(".");
             if (port.getDescriptivePortName().contains("Arduino")) {
             	serialPort = port;
+            	Arduino.activo = true;
                 break;
             }
         }
+        
 		
 		if (serialPort != null && serialPort.openPort()) {
             System.out.println("Conexión exitosa con Arduino en el puerto: " + serialPort.getSystemPortName());
@@ -46,13 +55,13 @@ public class Arduino{
             
             inputStream = serialPort.getInputStream();
             outputStream = serialPort.getOutputStream();
+            
+            ArduinoDataListener listener = new ArduinoDataListener();
+            serialPort.addDataListener(listener);
         } else {
             System.out.println("No se pudo conectar con Arduino.");
         }
-		
-		ArduinoDataListener listener = new ArduinoDataListener();
-		serialPort.addDataListener(listener);
-		
+	
 		try {
 			Thread.sleep(1500);
 		} catch (InterruptedException e) {
@@ -69,26 +78,26 @@ public class Arduino{
         }
     }
 
-    public String receiveResult() {
-        try {
-            StringBuilder messageBuilder = new StringBuilder(); // Usaremos un StringBuilder para construir el mensaje completo
-            while (true) {
-                if (serialPort.bytesAvailable() > 0) {
-                    byte[] readBuffer = new byte[serialPort.bytesAvailable()];
-                    int numBytes = serialPort.readBytes(readBuffer, readBuffer.length);
-                    String receivedMessage = new String(readBuffer, 0, numBytes); // Convertir bytes a String
-                    messageBuilder.append(receivedMessage); // Agregar el mensaje al StringBuilder
-                    System.out.println(messageBuilder);
-                    if (receivedMessage.contains("stored")) {
-                        return messageBuilder.toString(); // Devolver el mensaje completo
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public String receiveResult() {
+//        try {
+//            StringBuilder messageBuilder = new StringBuilder(); // Usaremos un StringBuilder para construir el mensaje completo
+//            while (true) {
+//                if (serialPort.bytesAvailable() > 0) {
+//                    byte[] readBuffer = new byte[serialPort.bytesAvailable()];
+//                    int numBytes = serialPort.readBytes(readBuffer, readBuffer.length);
+//                    String receivedMessage = new String(readBuffer, 0, numBytes); // Convertir bytes a String
+//                    messageBuilder.append(receivedMessage); // Agregar el mensaje al StringBuilder
+//                    System.out.println(messageBuilder);
+//                    if (receivedMessage.contains("stored")) {
+//                        return messageBuilder.toString(); // Devolver el mensaje completo
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     public static void close() {
         try {
