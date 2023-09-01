@@ -69,15 +69,18 @@ public class ArduinoDataListener implements SerialPortDataListener {
         	registrosDiariosPanel.modificarLabel("Ocurrio un error");
         	mensaje = "";
         	registrosDiariosPanel.verificarHuella();
+        	System.out.println("verificar f");
         } else if(mensaje.contains("n")) {
         	registrosDiariosPanel.modificarLabel("Usuario no encontrado");
         	mensaje = "";
         	registrosDiariosPanel.verificarHuella();
+        	System.out.println("verificar n");
         } else if(Utilidades.isNumber(mensaje.replaceAll("e", ""))) {
         	registrosDiariosPanel.modificarLabel("Usuario encontrado");
         	registrosDiariosPanel.usuarioEncontrado(Integer.parseInt(mensaje.replaceAll("e", "")));
         	mensaje = "";
         	registrosDiariosPanel.verificarHuella();
+        	System.out.println("verificar bien");
         } else if(mensaje.contains("e")) {
         	registrosDiariosPanel.modificarLabel("Coloca tu dedo");
         }

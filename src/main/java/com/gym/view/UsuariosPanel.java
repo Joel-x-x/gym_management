@@ -257,7 +257,7 @@ public class UsuariosPanel extends JPanel {
 	}
 	
 	public void llenarFormulario() {
-		Usuario usuario = usuarioController.consulta(idSeleccionadoUsuario, administrador_id);
+		Usuario usuario = usuarioController.consulta(idSeleccionadoUsuario);
 		textNombre.setText(usuario.getNombre());
 		textApellido.setText(usuario.getApellido());
 		dateChooser.setDate(usuario.getFecha_nacimiento());

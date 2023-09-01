@@ -204,16 +204,15 @@ public class UsuarioDAO {
 		
 	}
 
-	public Usuario consulta(int id, int administrador_id) {
+	public Usuario consulta(int id) {
 		
 		try {
-			String sentencia = "select * from usuario where id = ? and administrador_id = ?";
+			String sentencia = "select * from usuario where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, id);
-				statement.setInt(2, administrador_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				
@@ -238,7 +237,6 @@ public class UsuarioDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
 	}
 	
 	public List<Usuario> consultar(int administrador_id, String nombre) {

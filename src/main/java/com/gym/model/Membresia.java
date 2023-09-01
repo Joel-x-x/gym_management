@@ -367,7 +367,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	
     @Override
 	public String toString() {
-		return this.clase;
+		return this.nombreTipo;
 	}
 	
 }

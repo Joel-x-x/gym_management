@@ -27,8 +27,8 @@ public class UsuarioController {
 		return usuarioDAO.modificar(usuario);
 	}
 
-	public Usuario consulta(int idSeleccionado, int administrador_id) {
-		return usuarioDAO.consulta(idSeleccionado, administrador_id);
+	public Usuario consulta(int idSeleccionado) {
+		return usuarioDAO.consulta(idSeleccionado);
 	}
 	
 	public Membresia consultaMembresia(int usuario_id) {

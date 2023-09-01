@@ -21,13 +21,23 @@ public class MembresiaController {
 	}
 
 	public Object[][] listar(int administrador_id, String buscar) {
-		var listaMembresia = membresiaDAO.listar(administrador_id, buscar);
+		var listaMembresias = membresiaDAO.listar(administrador_id, buscar);
 		
-		for(Membresia membresia : listaMembresia) {
+		for(Membresia membresia : listaMembresias) {
 			membresia.cambiarActivoMembresia();
 		}
 		
-		return new ArrayUtilidades().toMatrizMembresia(listaMembresia);
+		return new ArrayUtilidades().toMatrizMembresia(listaMembresias);
+	}
+	
+	public List<Membresia> listarMembresiasUsuario(int usuario_id) {
+		var listaMembresias = membresiaDAO.listarMembresiasUsuario(usuario_id);
+		
+		for(Membresia membresia : listaMembresias) {
+			membresia.cambiarActivoMembresia();
+		}
+		
+		return listaMembresias;
 	}
 	
 	public Object[][] listarMembresiaFactura(int administrador_id, int factura_id) {
@@ -71,12 +81,6 @@ public class MembresiaController {
 
 	public List<Integer> consultarClases(int usuario_id) {
 		return membresiaDAO.consultarClases(usuario_id);
-	}
-
-	public List<Membresia> listarMembresias(int usuario_id) {
-		var listaMembresias = membresiaDAO.listarMembresias(usuario_id);
-		
-		return listaMembresias;
 	}
 	
 	public Membresia consultaMembresia(int usuario_id, int id) {

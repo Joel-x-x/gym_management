@@ -82,7 +82,7 @@ public class ConfiguracionPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "No has seleccionado ninguna imagen");
 			return;
 		}
-		
+		System.out.println(perfil);
 		if(cuentaController.modificarPerfil(perfil, administrador_id)) {
 			JOptionPane.showMessageDialog(null, "Datos actualizados correctamente, vuelve a ingresar para que se registren los cambios");
 		} else {

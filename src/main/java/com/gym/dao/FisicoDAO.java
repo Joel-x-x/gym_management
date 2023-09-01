@@ -151,4 +151,38 @@ public class FisicoDAO {
 		
 	}
 	
+	public Fisico consultarUltimoFisico(int usuario_id) {
+		
+		Fisico fisico = null;
+		
+		try {
+			String sentencia = "call consultarUltimoFisico(?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					if(resultSet.next())
+						fisico = new Fisico(
+								resultSet.getInt("id"),
+								resultSet.getDouble("peso"),
+								resultSet.getDouble("altura"),
+								resultSet.getString("fecha"),
+								resultSet.getInt("usuario_id"));
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return fisico;
+		
+	}
+	
 }

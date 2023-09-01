@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import com.formdev.flatlaf.json.ParseException;
 import java.time.Duration;
@@ -52,6 +53,16 @@ public class FechasUtilidades {
         return localDateTime;
     }
 	
+    public static String localDateTimeToString(LocalDateTime localDateTime) {
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+
+        String fecha = localDateTime.format(formatter);
+
+        return fecha;
+    }
+
+    
     public static String obtenerTiempoRestante(LocalDateTime fechaFin) {
         LocalDateTime fechaActual = LocalDateTime.now();
 
@@ -75,7 +86,7 @@ public class FechasUtilidades {
     	}
     	
         String formatoEntrada = "yyyy-MM-dd HH:mm:ss";
-        String formatoSalida = "EEE dd MMM yyyy HH:mm";
+        String formatoSalida = "EEEEEEEE dd MMMMMM yyyy HH:mm:ss";
 
         SimpleDateFormat sdfEntrada = new SimpleDateFormat(formatoEntrada);
         SimpleDateFormat sdfSalida = new SimpleDateFormat(formatoSalida);

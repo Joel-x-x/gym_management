@@ -40,6 +40,43 @@ AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+-- === Administrador ===
+-- Crear tabla de auditoría para administrador
+CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_administrador` (
+  `id` INT NOT NULL,
+  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+  `user` VARCHAR(30) NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `nombre` VARCHAR(50) NOT NULL,
+  `apellido` VARCHAR(50) NULL DEFAULT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `cedula` VARCHAR(15) NULL DEFAULT NULL
+) ENGINE = InnoDB;
+
+-- Trigger para auditoría INSERT en administrador
+DELIMITER //
+CREATE TRIGGER auditoria_administrador_insert
+AFTER INSERT ON administrador
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_administrador (id, accion, user, nombre, apellido, email, cedula)
+  VALUES (NEW.id, 'INSERT', (select CURRENT_USER()), NEW.nombre, NEW.apellido, NEW.email, NEW.cedula);
+END;
+//
+DELIMITER ;
+
+-- Trigger para auditoría UPDATE en administrador
+DELIMITER //
+CREATE TRIGGER auditoria_administrador_update
+AFTER UPDATE ON administrador
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_administrador (id, accion, user, nombre, apellido, email, cedula)
+  VALUES (OLD.id, 'UPDATE', (select current_user()), OLD.nombre, OLD.apellido, OLD.email, OLD.cedula);
+END;
+//
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`entrenador`
 -- -----------------------------------------------------
@@ -65,7 +102,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`clase`
@@ -137,6 +173,48 @@ AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+-- === Usuario ===
+-- Modificar tabla de auditoría para usuario
+CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
+  `id` INT NOT NULL,
+  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+  `user` VARCHAR(30) NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `nombre` VARCHAR(50) NOT NULL,
+  `apellido` VARCHAR(50) NOT NULL,
+  `fecha_nacimiento` DATE NULL DEFAULT NULL,
+  `sexo` ENUM('Masculino', 'Femenino') NOT NULL,
+  `email` VARCHAR(100) NULL DEFAULT NULL,
+  `cedula` VARCHAR(15) NULL DEFAULT NULL,
+  `direccion` VARCHAR(300) NULL DEFAULT NULL,
+  `telefono` VARCHAR(15) NOT NULL,
+  `administrador_id` INT NOT NULL
+) ENGINE = InnoDB;
+
+-- Trigger para auditoría INSERT en usuario
+DELIMITER //
+CREATE TRIGGER auditoria_usuario_insert
+AFTER INSERT ON usuario
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_usuario (id, accion, user, nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
+  VALUES (NEW.id, 'INSERT', (select current_user()), NEW.nombre, NEW.apellido, NEW.fecha_nacimiento, NEW.sexo, NEW.email, NEW.cedula, NEW.direccion, NEW.telefono, NEW.administrador_id);
+END;
+//
+DELIMITER ;
+
+-- Trigger para auditoría UPDATE en usuario
+DELIMITER //
+CREATE TRIGGER auditoria_usuario_update
+AFTER UPDATE ON usuario
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_usuario (id, accion, user, nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
+  VALUES (OLD.id, 'UPDATE', (select current_user()), OLD.nombre, OLD.apellido, OLD.fecha_nacimiento, OLD.sexo, OLD.email, OLD.cedula, OLD.direccion, OLD.telefono, OLD.administrador_id);
+END;
+//
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`fisico`
 -- -----------------------------------------------------
@@ -156,6 +234,16 @@ AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+delimiter ..
+drop procedure if exists consultarUltimoFisico..
+create procedure consultarUltimoFisico(in usuarioId int)
+begin 
+    declare maxId int;
+    set maxId = (select max(id) from fisico where usuario_id = usuarioId);
+    
+    select * from fisico where id = maxId;
+end..
+delimiter ;
 
 -- -----------------------------------------------------
 -- Table `bdd_gym`.`tipo_membresia`
@@ -183,6 +271,46 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+-- === Tipo de Membresia ===
+-- Modificar tabla de auditoría para tipo_membresia
+CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
+  `id` INT NOT NULL,
+  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
+  `user` VARCHAR(30) NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `nombre` VARCHAR(30) NOT NULL,
+  `descripcion` VARCHAR(300) DEFAULT '',
+  `precio` DECIMAL(6,2) NOT NULL,
+  `duracion` INT NOT NULL,
+  `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
+  `clase_id` INT NOT NULL,
+  `administrador_id` INT NOT NULL
+) ENGINE = InnoDB;
+
+-- Trigger para auditoría INSERT en tipo_membresia
+DELIMITER //
+CREATE TRIGGER auditoria_tipo_membresia_insert
+AFTER INSERT ON tipo_membresia
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_tipo_membresia (id, accion, user, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (NEW.id, 'INSERT', (select current_user()), NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
+END;
+//
+DELIMITER ;
+
+-- Trigger para auditoría UPDATE en tipo_membresia
+DELIMITER //
+CREATE TRIGGER auditoria_tipo_membresia_update
+AFTER UPDATE ON tipo_membresia
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria_tipo_membresia (id, accion, user, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
+  VALUES (OLD.id, 'UPDATE', (select current_user()), OLD.nombre, OLD.descripcion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
+END;
+//
+DELIMITER ;
 
 -- Trigger para actulizar historial de precios tipo membresia con cada inserción
 delimiter ..
@@ -402,6 +530,22 @@ end..
 delimiter ;
 
 delimiter ..
+drop procedure if exists listarMembresiasUsuario..
+create procedure listarMembresiasUsuario(in usuarioId int)
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.usuario_id = usuarioid
+    order by activo desc, fecha_fin;
+
+end.. 
+delimiter ;
+
+delimiter ..
 drop procedure if exists consultarMembresiasNombre..
 create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
 begin
@@ -516,6 +660,19 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+-- Funcion maximo de factura
+DELIMITER //
+DROP FUNCTION IF EXISTS maxIdFactura//
+CREATE FUNCTION maxIdFactura()
+RETURNS INT
+DETERMINISTIC
+BEGIN
+  DECLARE max_id INT;
+  SELECT MAX(id) INTO max_id FROM factura;
+  RETURN max_id;
+END //
+DELIMITER ;
+
 -- Insertar Factura
 DELIMITER //
 drop procedure if exists insertarFactura//
@@ -617,517 +774,23 @@ begin
 end..
 delimiter ;
 
--- === AUDITORIAS ===
--- === Administrador ===
--- Crear tabla de auditoría para administrador
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_administrador` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre` VARCHAR(50) NOT NULL,
-  `apellido` VARCHAR(50) NULL DEFAULT NULL,
-  `email` VARCHAR(100) NOT NULL,
-  `cedula` VARCHAR(15) NULL DEFAULT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en administrador
-DELIMITER //
-CREATE TRIGGER auditoria_administrador_insert
-AFTER INSERT ON administrador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_administrador (id, accion, nombre, apellido, email, cedula)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.apellido, NEW.email, NEW.cedula);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en administrador
-DELIMITER //
-CREATE TRIGGER auditoria_administrador_update
-AFTER UPDATE ON administrador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_administrador (id, accion, nombre, apellido, email, cedula)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.apellido, NEW.email, NEW.cedula);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en administrador
-DELIMITER //
-CREATE TRIGGER auditoria_administrador_delete
-AFTER DELETE ON administrador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_administrador (id, accion, nombre, apellido, email, cedula)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.apellido, OLD.email, OLD.cedula);
-END;
-//
-DELIMITER ;
-
--- === Entrenador ===
--- Crear tabla de auditoría para entrenador
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_entrenador` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre` VARCHAR(50) NOT NULL,
-  `apellido` VARCHAR(50) NOT NULL,
-  `sexo` ENUM('Masculino', 'Femenino') NOT NULL,
-  `correo` VARCHAR(100) NULL DEFAULT NULL,
-  `telefono` VARCHAR(15) NOT NULL,
-  `cedula` VARCHAR(20) NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en entrenador
-DELIMITER //
-CREATE TRIGGER auditoria_entrenador_insert
-AFTER INSERT ON entrenador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_entrenador (id, accion, nombre, apellido, sexo, correo, telefono, cedula)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.apellido, NEW.sexo, NEW.correo, NEW.telefono, NEW.cedula);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en entrenador
-DELIMITER //
-CREATE TRIGGER auditoria_entrenador_update
-AFTER UPDATE ON entrenador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_entrenador (id, accion, nombre, apellido, sexo, correo, telefono, cedula)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.apellido, NEW.sexo, NEW.correo, NEW.telefono, NEW.cedula);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en entrenador
-DELIMITER //
-CREATE TRIGGER auditoria_entrenador_delete
-AFTER DELETE ON entrenador
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_entrenador (id, accion, nombre, apellido, sexo, correo, telefono, cedula)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.apellido, OLD.sexo, OLD.correo, OLD.telefono, OLD.cedula);
-END;
-//
-DELIMITER ;
-
--- === Clase ===
--- Modificar tabla de auditoría para clase
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_clase` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `clase` VARCHAR(100) NOT NULL,
-  `descripcion` VARCHAR(300) NULL DEFAULT NULL,
-  `entrenador_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en clase
-DELIMITER //
-CREATE TRIGGER auditoria_clase_insert
-AFTER INSERT ON clase
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_clase (id, accion, clase, descripcion, entrenador_id, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.clase, NEW.descripcion, NEW.entrenador_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en clase
-DELIMITER //
-CREATE TRIGGER auditoria_clase_update
-AFTER UPDATE ON clase
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_clase (id, accion, clase, descripcion, entrenador_id, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.clase, NEW.descripcion, NEW.entrenador_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en clase
-DELIMITER //
-CREATE TRIGGER auditoria_clase_delete
-AFTER DELETE ON clase
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_clase (id, accion, clase, descripcion, entrenador_id, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.clase, OLD.descripcion, OLD.entrenador_id, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- === Cuenta ===
--- Modificar tabla de auditoría para cuenta
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_cuenta` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre_empresa` VARCHAR(50) NULL DEFAULT NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_cuenta_insert
-AFTER INSERT ON cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_cuenta (id, accion, nombre_empresa, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre_empresa, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_cuenta_update
-AFTER UPDATE ON cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_cuenta (id, accion, nombre_empresa, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre_empresa, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_cuenta_delete
-AFTER DELETE ON cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_cuenta (id, accion, nombre_empresa, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre_empresa, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- === Usuario ===
--- Modificar tabla de auditoría para usuario
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre` VARCHAR(50) NOT NULL,
-  `apellido` VARCHAR(50) NOT NULL,
-  `fecha_nacimiento` DATE NULL DEFAULT NULL,
-  `sexo` ENUM('Masculino', 'Femenino') NOT NULL,
-  `email` VARCHAR(100) NULL DEFAULT NULL,
-  `cedula` VARCHAR(15) NULL DEFAULT NULL,
-  `direccion` VARCHAR(300) NULL DEFAULT NULL,
-  `telefono` VARCHAR(15) NOT NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en usuario
-DELIMITER //
-CREATE TRIGGER auditoria_usuario_insert
-AFTER INSERT ON usuario
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_usuario (id, accion, nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.apellido, NEW.fecha_nacimiento, NEW.sexo, NEW.email, NEW.cedula, NEW.direccion, NEW.telefono, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en usuario
-DELIMITER //
-CREATE TRIGGER auditoria_usuario_update
-AFTER UPDATE ON usuario
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_usuario (id, accion, nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.apellido, NEW.fecha_nacimiento, NEW.sexo, NEW.email, NEW.cedula, NEW.direccion, NEW.telefono, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en usuario
-DELIMITER //
-CREATE TRIGGER auditoria_usuario_delete
-AFTER DELETE ON usuario
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_usuario (id, accion, nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.apellido, OLD.fecha_nacimiento, OLD.sexo, OLD.email, OLD.cedula, OLD.direccion, OLD.telefono, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- === Fisico ===
--- Modificar tabla de auditoría para fisico
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_fisico` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `altura` DOUBLE NOT NULL,
-  `peso` DOUBLE NOT NULL,
-  `usuario_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en fisico
-DELIMITER //
-CREATE TRIGGER auditoria_fisico_insert
-AFTER INSERT ON fisico
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_fisico (id, accion, altura, peso, usuario_id)
-  VALUES (NEW.id, 'INSERT', NEW.altura, NEW.peso, NEW.usuario_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en fisico
-DELIMITER //
-CREATE TRIGGER auditoria_fisico_update
-AFTER UPDATE ON fisico
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_fisico (id, accion, altura, peso, usuario_id)
-  VALUES (NEW.id, 'UPDATE', NEW.altura, NEW.peso, NEW.usuario_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en fisico
-DELIMITER //
-CREATE TRIGGER auditoria_fisico_delete
-AFTER DELETE ON fisico
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_fisico (id, accion, altura, peso, usuario_id)
-  VALUES (OLD.id, 'DELETE', OLD.altura, OLD.peso, OLD.usuario_id);
-END;
-//
-DELIMITER ;
-
--- === Tipo de Membresia ===
--- Modificar tabla de auditoría para tipo_membresia
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre` VARCHAR(30) NOT NULL,
-  `descripcion` VARCHAR(300) DEFAULT '',
-  `precio` DECIMAL(6,2) NOT NULL,
-  `duracion` INT NOT NULL,
-  `tipo_duracion` ENUM('hour', 'day', 'month', 'year') NOT NULL,
-  `clase_id` INT NOT NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en tipo_membresia
-DELIMITER //
-CREATE TRIGGER auditoria_tipo_membresia_insert
-AFTER INSERT ON tipo_membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en tipo_membresia
-DELIMITER //
-CREATE TRIGGER auditoria_tipo_membresia_update
-AFTER UPDATE ON tipo_membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre, NEW.descripcion, NEW.precio, NEW.duracion, NEW.tipo_duracion, NEW.clase_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en tipo_membresia
-DELIMITER //
-CREATE TRIGGER auditoria_tipo_membresia_delete
-AFTER DELETE ON tipo_membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_tipo_membresia (id, accion, nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre, OLD.descripcion, OLD.precio, OLD.duracion, OLD.tipo_duracion, OLD.clase_id, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- === Membresia ===
--- Modificar tabla de auditoría para membresia
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_membresia` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_inicio` DATETIME NOT NULL,
-  `fecha_fin` DATETIME NULL,
-  `activo` TINYINT NOT NULL,
-  `usuario_id` INT NOT NULL,
+-- === Forma de pago ===
+CREATE TABLE IF NOT EXISTS `bdd_gym`.`forma_pago` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `iva` DECIMAL(6,2) NOT NULL CHECK (iva >= 0),
   `administrador_id` INT NOT NULL,
-  `tipo_membresia_id` INT NOT NULL,
-  `factura_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en membresia
-DELIMITER //
-CREATE TRIGGER auditoria_membresia_insert
-AFTER INSERT ON membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_membresia (id, accion, fecha_inicio, fecha_fin, activo, usuario_id, administrador_id, tipo_membresia_id, factura_id)
-  VALUES (NEW.id, 'INSERT', NEW.fecha_inicio, NEW.fecha_fin, NEW.activo, NEW.usuario_id, NEW.administrador_id, NEW.tipo_membresia_id, NEW.factura_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en membresia
-DELIMITER //
-CREATE TRIGGER auditoria_membresia_update
-AFTER UPDATE ON membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_membresia (id, accion, fecha_inicio, fecha_fin, activo, usuario_id, administrador_id, tipo_membresia_id, factura_id)
-  VALUES (NEW.id, 'UPDATE', NEW.fecha_inicio, NEW.fecha_fin, NEW.activo, NEW.usuario_id, NEW.administrador_id, NEW.tipo_membresia_id, NEW.factura_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en membresia
-DELIMITER //
-CREATE TRIGGER auditoria_membresia_delete
-AFTER DELETE ON membresia
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_membresia (id, accion, fecha_inicio, fecha_fin, activo, usuario_id, administrador_id, tipo_membresia_id, factura_id)
-  VALUES (OLD.id, 'DELETE', OLD.fecha_inicio, OLD.fecha_fin, OLD.activo, OLD.usuario_id, OLD.administrador_id, OLD.tipo_membresia_id, OLD.factura_id);
-END;
-//
-DELIMITER ;
-
--- === Recuperacion Cuenta ===
--- Modificar tabla de auditoría para recuperacion_cuenta
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_recuperacion_cuenta` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `nombre_amigo` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
-  `nombre_mascota` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
-  `color_favorito` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en recuperacion_cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_recuperacion_cuenta_insert
-AFTER INSERT ON recuperacion_cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_recuperacion_cuenta (id, accion, nombre_amigo, nombre_mascota, color_favorito, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.nombre_amigo, NEW.nombre_mascota, NEW.color_favorito, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en recuperacion_cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_recuperacion_cuenta_update
-AFTER UPDATE ON recuperacion_cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_recuperacion_cuenta (id, accion, nombre_amigo, nombre_mascota, color_favorito, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.nombre_amigo, NEW.nombre_mascota, NEW.color_favorito, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en recuperacion_cuenta
-DELIMITER //
-CREATE TRIGGER auditoria_recuperacion_cuenta_delete
-AFTER DELETE ON recuperacion_cuenta
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_recuperacion_cuenta (id, accion, nombre_amigo, nombre_mascota, color_favorito, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.nombre_amigo, OLD.nombre_mascota, OLD.color_favorito, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- === Factura ===
--- Modificar tabla de auditoría para factura
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_factura` (
-  `id` INT NOT NULL,
-  `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `numero_factura` VARCHAR(10) DEFAULT NULL,
-  `descuento_porcentaje` DOUBLE DEFAULT 0.0,
-  `descuento` DECIMAL(6,2) DEFAULT 0.0,
-  `subtotal` DECIMAL(6,2) DEFAULT NULL,
-  `iva` DECIMAL(6,2) DEFAULT NULL,
-  `total` DECIMAL(6,2) DEFAULT NULL,
-  `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
-  `fecha_factura` DATETIME NOT NULL,
-  `establecimiento` VARCHAR(3) DEFAULT '001',
-  `punto_emision` VARCHAR(3) DEFAULT '001',
-  `usuario_id` INT DEFAULT NULL,
-  `administrador_id` INT NOT NULL
-) ENGINE = InnoDB;
-
--- Trigger para auditoría INSERT en factura
-DELIMITER //
-CREATE TRIGGER auditoria_factura_insert
-AFTER INSERT ON factura
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_factura (id, accion, numero_factura, descuento_porcentaje, descuento, subtotal, iva, total, forma_pago, fecha_factura, establecimiento, punto_emision, usuario_id, administrador_id)
-  VALUES (NEW.id, 'INSERT', NEW.numero_factura, NEW.descuento_porcentaje, NEW.descuento, NEW.subtotal, NEW.iva, NEW.total, NEW.forma_pago, NEW.fecha, NEW.establecimiento, NEW.punto_emision, NEW.usuario_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría UPDATE en factura
-DELIMITER //
-CREATE TRIGGER auditoria_factura_update
-AFTER UPDATE ON factura
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_factura (id, accion, numero_factura, descuento_porcentaje, descuento, subtotal, iva, total, forma_pago, fecha_factura, establecimiento, punto_emision, usuario_id, administrador_id)
-  VALUES (NEW.id, 'UPDATE', NEW.numero_factura, NEW.descuento_porcentaje, NEW.descuento, NEW.subtotal, NEW.iva, NEW.total, NEW.forma_pago, NEW.fecha, NEW.establecimiento, NEW.punto_emision, NEW.usuario_id, NEW.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Trigger para auditoría DELETE en factura
-DELIMITER //
-CREATE TRIGGER auditoria_factura_delete
-AFTER DELETE ON factura
-FOR EACH ROW
-BEGIN
-  INSERT INTO auditoria_factura (id, accion, numero_factura, descuento_porcentaje, descuento, subtotal, iva, total, forma_pago, fecha_factura, establecimiento, punto_emision, usuario_id, administrador_id)
-  VALUES (OLD.id, 'DELETE', OLD.numero_factura, OLD.descuento_porcentaje, OLD.descuento, OLD.subtotal, OLD.iva, OLD.total, OLD.forma_pago, OLD.fecha, OLD.establecimiento, OLD.punto_emision, OLD.usuario_id, OLD.administrador_id);
-END;
-//
-DELIMITER ;
-
--- Funcion maximo de factura
-DELIMITER //
-DROP FUNCTION IF EXISTS maxIdFactura//
-CREATE FUNCTION maxIdFactura()
-RETURNS INT
-DETERMINISTIC
-BEGIN
-  DECLARE max_id INT;
-  SELECT MAX(id) INTO max_id FROM factura;
-  RETURN max_id;
-END //
-DELIMITER ;
+  PRIMARY KEY (`id`),
+  INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
+  CONSTRAINT `fk_administrador_id_iva`
+	FOREIGN KEY (`administrador_id`)
+    REFERENCES `bdd_gym`.`administrador`(id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 -- Datos de la Base de Datos
 -- Insertar un administrador
@@ -1166,12 +829,10 @@ VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day',
 INSERT INTO iva(iva, administrador_id) values(12, 1);
 
 -- Insertar una factura
-CALL insertarFactura(1);
+-- CALL insertarFactura(1);
 
 -- Insertar una membresía
 -- call insertarMembresia(1,1,1,1);
-
-select iva from iva where id = (select obtenerIdIva(1));
  
 
 

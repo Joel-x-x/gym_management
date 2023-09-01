@@ -4,14 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.gym.controller.FisicoController;
 import com.gym.controller.MembresiaController;
 import com.gym.controller.RegistroController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Arduino;
 import com.gym.model.ArduinoDataListener;
+import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.Usuario;
+import com.gym.utilidades.FechasUtilidades;
+import com.gym.utilidades.Utilidades;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.event.ComponentAdapter;
@@ -21,7 +25,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
@@ -31,6 +40,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	UsuarioController usuarioController;
 	RegistroController registroController;
 	MembresiaController membresiaController;
+	FisicoController fisicoController;
 	private int administrador_id; 
 	private JComboBox<Membresia> comboBoxMembresia = new JComboBox<>();
 	private DefaultComboBoxModel<Membresia> comboBoxModelMembresia = new DefaultComboBoxModel<>();
@@ -69,6 +79,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
     private JLabel lblNewLabel_4;
     private JLabel lblNewLabel_5;
     private JButton btn_registrar;
+    private JLabel labelCedula;
     
 	public void verificarHuella() {
 		try {
@@ -85,7 +96,8 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	}
 	
 	public void usuarioEncontrado(int id) {
-		JOptionPane.showMessageDialog(null, id);
+		usuario_id = id;
+		llenarFormularioUsuario();
 	}
 	
 	public void registrar() {
@@ -125,22 +137,56 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	}
 
 	@Override
-	public void usuarioSeleccionado(Usuario usuario) {
-		usuario_id = usuario.getId();
+	public void usuarioSeleccionado(Usuario usuarioLista) {
+		usuario_id = usuarioLista.getId();
 		
-		System.out.println(usuario_id);
+		llenarFormularioUsuario();
 		
+	}
+	
+	public void llenarFormularioUsuario() {
+		Usuario usuario = usuarioController.consulta(usuario_id);
+		
+		// Llenar campos de usuario
+		textNombre.setText("   " + usuario.getNombre());
+		textApellido.setText("   " + usuario.getApellido());
+		labelCedula.setText("CI. " + usuario.getCedula());
+		labelDesde.setText("Miembro desde el " + FechasUtilidades.cambiarFormatoFecha(usuario.getFecha_creacion()));
+		
+		// Llenar campos fisico
+		Fisico fisico = fisicoController.consultarUltimoFisico(usuario_id);
+		
+		if(fisico != null) {
+			textEstatura.setText("         " + fisico.getAltura());
+			textPeso.setText("         " + fisico.getPeso());
+		} else {
+			textEstatura.setText("");
+			textPeso.setText("");
+		}
+		
+		// Llenar campos membresias
+		List<Membresia> membresias = membresiaController.listarMembresiasUsuario(usuario_id);
+		
+		// No tiene membresias activas
+		if(membresias.size() == 0) {
+			textVencimiento.setText("   No tiene membresías activas");
+			return;
+		}
+		
+		comboBoxModelMembresia.addAll(membresias);
+		comboBoxMembresia.setModel(comboBoxModelMembresia);
+		comboBoxMembresia.setSelectedIndex(0);
+		
+		if(membresias.size() == 1) {
+			String finaliza = FechasUtilidades.obtenerTiempoRestante(FechasUtilidades.stringToLocalDateTime(membresias.get(0).getFecha_fin()));
+			textVencimiento.setText("   Vence en " + finaliza);
+		} else {
+			textVencimiento.setText("   Selecciona una membresía y registrala");
+		}
 	}
 	
 	public int getIdClaseComboBox() {
 		return ((Membresia) comboBoxMembresia.getSelectedItem()).getId();
-	}
-	
-	private void listarClases() {
-		comboBoxModelMembresia.removeAllElements();
-		comboBoxModelMembresia.addAll(membresiaController.listarMembresias(idSeleccionadoUsuario));
-		comboBoxMembresia.setModel(comboBoxModelMembresia);
-		comboBoxMembresia.setSelectedIndex(0);
 	}
 	
 	public void validarRegistros() {
@@ -199,6 +245,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		 usuarioController = new UsuarioController();
 		 registroController = new RegistroController(); 
 		 membresiaController = new MembresiaController();
+		 fisicoController = new FisicoController();
 		 administrador_id = new Administrador().getId();
 		 
 		 Arduino.initializeSerialPort();
@@ -353,7 +400,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel.add(lblApellido);
         
         textNombre = new JTextField();
-        textNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
         textNombre.setBorder(null);
         textNombre.setEditable(false);
         textNombre.setBounds(110, 29, 250, 25);
@@ -361,14 +408,14 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textNombre.setColumns(10);
         
         textApellido = new JTextField();
-        textApellido.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textApellido.setFont(new Font("Tahoma", Font.BOLD, 14));
         textApellido.setEditable(false);
         textApellido.setColumns(10);
         textApellido.setBorder(null);
         textApellido.setBounds(110, 70, 250, 25);
         panel.add(textApellido);
         
-        JLabel labelCedula = new JLabel("CI. 1850038314");
+        labelCedula = new JLabel("CI. 1850038314");
         labelCedula.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelCedula.setBounds(420, 11, 142, 30);
         panel.add(labelCedula);
@@ -380,7 +427,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel.add(lblEstatura);
         
         textEstatura = new JTextField();
-        textEstatura.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textEstatura.setFont(new Font("Tahoma", Font.BOLD, 14));
         textEstatura.setEditable(false);
         textEstatura.setColumns(10);
         textEstatura.setBorder(null);
@@ -394,7 +441,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel.add(lblPeso);
         
         textPeso = new JTextField();
-        textPeso.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textPeso.setFont(new Font("Tahoma", Font.BOLD, 14));
         textPeso.setEditable(false);
         textPeso.setColumns(10);
         textPeso.setBorder(null);
@@ -403,7 +450,6 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         
         textVencimiento = new JTextField();
         textVencimiento.setFont(new Font("Tahoma", Font.BOLD, 14));
-        textVencimiento.setText("Vence en 15 días 3 horas y 4 minutos");
         textVencimiento.setEditable(false);
         textVencimiento.setColumns(10);
         textVencimiento.setBorder(null);
@@ -452,7 +498,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel_2 = new JPanel();
         panel_2.setLayout(null);
         panel_2.setBackground(new Color(23, 159, 38));
-        panel_2.setBounds(416, 530, 250, 76);
+        panel_2.setBounds(694, 530, 250, 76);
         add(panel_2);
         
         lblNewLabel_2 = new JLabel("Si el usuario tiene más de una");
@@ -483,6 +529,16 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         add(btn_registrar);
         
         verificarHuella(); 
+        
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        Runnable intervalo = () -> {
+            labelFechaHoy.setText("Hoy es " + FechasUtilidades.cambiarFormatoFecha(FechasUtilidades.localDateTimeToString(LocalDateTime.now())));
+        };
+
+        // Ejecutar el intervalo cada segundo
+        scheduler.scheduleAtFixedRate(intervalo, 0, 1, TimeUnit.SECONDS);        
+
     }
 
 	@Override
