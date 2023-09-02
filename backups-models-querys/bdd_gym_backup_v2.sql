@@ -159,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`usuario` (
   `direccion` VARCHAR(300) NULL DEFAULT NULL,
   `telefono` VARCHAR(15) NOT NULL,
   `huella` TINYINT DEFAULT 0,
+  `estado` TINYINT DEFAULT 1,
   `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `administrador_id` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -530,6 +531,21 @@ end..
 delimiter ;
 
 delimiter ..
+drop procedure if exists consultarMembresia..
+create procedure consultarMembresia(in idMembresia int)
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.id = idMembresia;
+
+end.. 
+delimiter ;
+
+delimiter ..
 drop procedure if exists listarMembresiasUsuario..
 create procedure listarMembresiasUsuario(in usuarioId int)
 begin
@@ -775,16 +791,15 @@ end..
 delimiter ;
 
 -- === Forma de pago ===
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`forma_pago` (
+CREATE TABLE IF NOT EXISTS bdd_gym.`forma_pago` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `iva` DECIMAL(6,2) NOT NULL CHECK (iva >= 0),
-  `administrador_id` INT NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
-  CONSTRAINT `fk_administrador_id_iva`
-	FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador`(id)
+  `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
+  `factura_id` INT NOT NULL,
+  PRIMARY KEY (id),
+  INDEX fk_factura_id_idx (factura_id ASC) VISIBLE,
+  CONSTRAINT fk_factura_id_iva
+    FOREIGN KEY (factura_id)
+    REFERENCES bdd_gym.factura(id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -833,6 +848,8 @@ INSERT INTO iva(iva, administrador_id) values(12, 1);
 
 -- Insertar una membresía
 -- call insertarMembresia(1,1,1,1);
+
+select * from membresia;
  
 
 

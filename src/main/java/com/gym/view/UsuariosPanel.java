@@ -233,10 +233,13 @@ public class UsuariosPanel extends JPanel {
 	
 	// Registrar Huella
 	public void registrarHuella() {
+		AgregarHuellaFrame frameHuella = null;
 		try {
-			new AgregarHuellaFrame(idSeleccionadoUsuario);
+			frameHuella = new AgregarHuellaFrame(idSeleccionadoUsuario);
+			frameHuella.setVisible(true);
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
+			frameHuella.setVisible(false);
 		}
 	}
 	

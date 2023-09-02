@@ -1,5 +1,8 @@
 package com.gym.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 import com.gym.controller.MembresiaController;
@@ -87,16 +90,6 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	}
 	
 	// Anterior borrar si no sirven
-
-	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
-			float valor_extra, float valor_total) {
-		this.id = id;
-		this.fecha_inicio = fecha_inicio;
-		this.fecha_fin = fecha_fin;
-		this.usuario_id = usuario_id;
-		this.tipo_membresia_id = plan_id;
-		this.clase_id = clase_id;
-	}
 	
 	// Consulta Membresia
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int activo, int anticipacion) {
@@ -327,7 +320,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	    Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, - 5);
+	    calendar.add(Calendar.DAY_OF_MONTH, - 2);
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();
@@ -340,6 +333,16 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	    	System.out.println("false");
 	        return false;
 	    }
+	}
+	
+	public int caducaDias() {
+	    LocalDateTime fechaActual = LocalDateTime.now();
+	    LocalDateTime fechaFin = FechasUtilidades.stringToLocalDateTime(this.fecha_fin);
+
+	    // Calcula la diferencia en días entre la fecha actual y la fecha de vencimiento
+	    long diasRestantes = ChronoUnit.DAYS.between(fechaActual, fechaFin);
+
+	    return Math.max(0, (int) diasRestantes);
 	}
 	
 	// Valida si la membresia es vigente y actualiza el activo

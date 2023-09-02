@@ -19,9 +19,7 @@ public class RegistroDAO {
 			this.con  = con;
 		}
 	
-		public boolean registrar(int usuario_id, int id) {
-			
-			var membresia = this.consultaMembresia(usuario_id, id);
+		public boolean registrar(int usuario_id, int membresia_id) {
 			
 			try {
 				String sentencia = "insert into registro(usuario_id, membresia_id) values(?, ?)";
@@ -30,14 +28,15 @@ public class RegistroDAO {
 				
 				try(statement) {
 					statement.setInt(1, usuario_id);
-					statement.setInt(2, membresia.getId());
+					statement.setInt(2, membresia_id);
 					
 					// Transforma el 0 o 1 a booleano
 					return  new Utilidades().toBoolean(statement.executeUpdate());
 				}
 				
 			} catch(SQLException e) {
-				throw new RuntimeException(e);
+				e.printStackTrace();
+				return false;
 			}
 			
 		}

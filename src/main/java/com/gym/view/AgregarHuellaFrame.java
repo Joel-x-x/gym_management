@@ -43,7 +43,6 @@ public class AgregarHuellaFrame extends JFrame {
 		setResizable(false);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
-		setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

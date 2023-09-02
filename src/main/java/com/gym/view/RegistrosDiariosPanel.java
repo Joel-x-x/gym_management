@@ -80,6 +80,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
     private JLabel lblNewLabel_5;
     private JButton btn_registrar;
     private JLabel labelCedula;
+    private JPanel panelUsuario;
     
 	public void verificarHuella() {
 		try {
@@ -173,6 +174,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 			return;
 		}
 		
+		// LLenar el combo box membresía
 		comboBoxModelMembresia.addAll(membresias);
 		comboBoxMembresia.setModel(comboBoxModelMembresia);
 		comboBoxMembresia.setSelectedIndex(0);
@@ -180,11 +182,42 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		if(membresias.size() == 1) {
 			String finaliza = FechasUtilidades.obtenerTiempoRestante(FechasUtilidades.stringToLocalDateTime(membresias.get(0).getFecha_fin()));
 			textVencimiento.setText("   Vence en " + finaliza);
+			// Registrar
+			
+			// Asignar color en base a en cuanto caduca
+			colorMembresia(membresias.get(0));
 		} else {
 			textVencimiento.setText("   Selecciona una membresía y registrala");
 		}
 	}
 	
+	public void registrarUsuario(int usuario_id, Membresia membresia) {
+		if(registroController.registrar(usuario_id, membresia.getId())) {
+			System.out.println("Registrado");
+		} else {
+			JOptionPane.showMessageDialog(null, "Ocurrio un error intentando registrar");
+		}
+	}
+	
+	// Cambiar el color del panel dependiendo de los dias faltantes para que caduque
+	public void colorMembresia(Membresia membresia) {
+		if(membresia.caducaDias() == 0) {
+			panelUsuario.setBackground(new Color(238, 93, 47)); // Naranja caducara en menos de 24h
+		} else if(membresia.caducaDias() < 3) {
+			panelUsuario.setBackground(new Color(220, 205, 69)); // Caducara pronto
+		}
+		if(membresia.caducaDias() > 3) {
+			panelUsuario.setBackground(new Color(23, 159, 78)); // Todo bien
+		}
+	}
+	
+	public void registrarMembresiaSeleccionada() {
+		Membresia membresia = membresiaController.consulta(getIdClaseComboBox());
+		
+		colorMembresia(membresia);
+	}
+	
+	// Obtener el combo box seleccionado
 	public int getIdClaseComboBox() {
 		return ((Membresia) comboBoxMembresia.getSelectedItem()).getId();
 	}
@@ -383,28 +416,28 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         btn_entrada_2.setBounds(538, 653, 200, 30);
         add(btn_entrada_2);
         
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(255, 255, 255));
-        panel.setBounds(240, 156, 600, 300);
-        add(panel);
-        panel.setLayout(null);
+        panelUsuario = new JPanel();
+        panelUsuario.setBackground(new Color(255, 255, 255));
+        panelUsuario.setBounds(240, 156, 600, 300);
+        add(panelUsuario);
+        panelUsuario.setLayout(null);
         
         lblNombre = new JLabel("Nombre");
         lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNombre.setBounds(29, 24, 87, 30);
-        panel.add(lblNombre);
+        panelUsuario.add(lblNombre);
         
         lblApellido = new JLabel("Apellido");
         lblApellido.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblApellido.setBounds(29, 65, 87, 30);
-        panel.add(lblApellido);
+        panelUsuario.add(lblApellido);
         
         textNombre = new JTextField();
         textNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
         textNombre.setBorder(null);
         textNombre.setEditable(false);
         textNombre.setBounds(110, 29, 250, 25);
-        panel.add(textNombre);
+        panelUsuario.add(textNombre);
         textNombre.setColumns(10);
         
         textApellido = new JTextField();
@@ -413,18 +446,18 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textApellido.setColumns(10);
         textApellido.setBorder(null);
         textApellido.setBounds(110, 70, 250, 25);
-        panel.add(textApellido);
+        panelUsuario.add(textApellido);
         
         labelCedula = new JLabel("CI. 1850038314");
         labelCedula.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelCedula.setBounds(420, 11, 142, 30);
-        panel.add(labelCedula);
+        panelUsuario.add(labelCedula);
         
         JLabel lblEstatura = new JLabel("Estatura");
         lblEstatura.setHorizontalAlignment(SwingConstants.CENTER);
         lblEstatura.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblEstatura.setBounds(62, 106, 100, 30);
-        panel.add(lblEstatura);
+        panelUsuario.add(lblEstatura);
         
         textEstatura = new JTextField();
         textEstatura.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -432,13 +465,13 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textEstatura.setColumns(10);
         textEstatura.setBorder(null);
         textEstatura.setBounds(62, 133, 100, 25);
-        panel.add(textEstatura);
+        panelUsuario.add(textEstatura);
         
         lblPeso = new JLabel("Peso");
         lblPeso.setHorizontalAlignment(SwingConstants.CENTER);
         lblPeso.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblPeso.setBounds(181, 106, 100, 30);
-        panel.add(lblPeso);
+        panelUsuario.add(lblPeso);
         
         textPeso = new JTextField();
         textPeso.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -446,7 +479,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textPeso.setColumns(10);
         textPeso.setBorder(null);
         textPeso.setBounds(181, 133, 100, 25);
-        panel.add(textPeso);
+        panelUsuario.add(textPeso);
         
         textVencimiento = new JTextField();
         textVencimiento.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -454,17 +487,17 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textVencimiento.setColumns(10);
         textVencimiento.setBorder(null);
         textVencimiento.setBounds(29, 196, 331, 30);
-        panel.add(textVencimiento);
+        panelUsuario.add(textVencimiento);
         
         labelDesde = new JLabel("Miembro desde el 30 de Septiembre del 2022");
         labelDesde.setFont(new Font("Tahoma", Font.PLAIN, 12));
         labelDesde.setBounds(29, 259, 399, 30);
-        panel.add(labelDesde);
+        panelUsuario.add(labelDesde);
         
         lblNewLabel_1 = new JLabel("");
         lblNewLabel_1.setIcon(new ImageIcon(RegistrosDiariosPanel.class.getResource("/com/gym/resources/negro.png")));
         lblNewLabel_1.setBounds(432, 100, 100, 100);
-        panel.add(lblNewLabel_1);
+        panelUsuario.add(lblNewLabel_1);
         
         JLabel lblInicio_1_1 = new JLabel("Registro automático");
         lblInicio_1_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -520,6 +553,11 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel_2.add(lblNewLabel_5);
         
         btn_registrar = new JButton("Registrar");
+        btn_registrar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		registrarMembresiaSeleccionada();
+        	}
+        });
         btn_registrar.setForeground(Color.WHITE);
         btn_registrar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_registrar.setFocusPainted(false);

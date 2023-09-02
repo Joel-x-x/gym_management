@@ -91,7 +91,7 @@ public class UsuarioDAO {
 		int item = 0;
 		
 		try {
-			String sentencia = "delete from usuario where id = ?";
+			String sentencia = "update usuario set estado = 0 where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -169,7 +169,7 @@ public class UsuarioDAO {
 	public List<Usuario> listar(int administrador_id) {
 		
 		try {
-			String sentencia = "select * from usuario where administrador_id = ?";
+			String sentencia = "select * from usuario where administrador_id = ? and estado = 1";
 			List<Usuario> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
@@ -245,9 +245,9 @@ public class UsuarioDAO {
 			String sentencia = "";
 			
 			if(!nombre.equals("")) {
-				sentencia = "select * from usuario where administrador_id = ? and nombre like ?";
+				sentencia = "select * from usuario where administrador_id = ? and nombre like ? and estado = 1";
 			} else {
-				sentencia = "select * from usuario where administrador_id = ?";
+				sentencia = "select * from usuario where administrador_id = ? and estado = 1";
 			}
 			
 			List<Usuario> resultado = new ArrayList<>();

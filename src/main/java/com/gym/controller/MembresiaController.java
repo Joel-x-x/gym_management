@@ -53,14 +53,16 @@ public class MembresiaController {
 	public boolean crearMembresia(int administrador_id, int usuario_id, int factura_id, int tipo_membresia_id) {
 		return membresiaDAO.crearMembresia(administrador_id, usuario_id, factura_id, tipo_membresia_id);
 	}
-
-	public Membresia consulta(int id, int usuario_id) {
-		return membresiaDAO.consulta(id, usuario_id);
-	}
 	
 	public Membresia consultaUltimaMembresia(int usuario_id) {
 		return membresiaDAO.consultaUltimaMembresia(usuario_id);
 	}
+	
+	public Membresia consulta(int id) {
+		return membresiaDAO.consulta(id);
+	}
+	
+	// hasta aqui vale
 	
 	// Consulta si ese usuario ya tiene una membresia activa
 	public boolean consultaActivo(int usuario_id, int id) {
