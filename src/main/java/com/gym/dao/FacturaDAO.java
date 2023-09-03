@@ -110,7 +110,8 @@ public class FacturaDAO {
 			                    resultSet.getString("f.punto_emision"),
 			                    resultSet.getInt("f.usuario_id"),
 			                    resultSet.getInt("f.administrador_id"),
-			                    resultSet.getString("u.nombre")
+			                    resultSet.getString("u.nombre"),
+			                    resultSet.getString("u.cedula")
 								));
 					}
 					
@@ -390,6 +391,84 @@ public class FacturaDAO {
 								resultSet.getDouble("iva"),
 								resultSet.getInt("administrador_id"),
 								resultSet.getString("fecha")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+		
+	}
+	
+	public boolean agregarFormaPago(String forma_pago, Double monto_pagado, String factura_numero) {
+		
+		try {
+			String sentencia = "insert into forma_pago(forma_pago, monto_pagado, factura_numero) values(?,?,?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setString(1, forma_pago);
+				statement.setDouble(2, monto_pagado);
+				statement.setString(3, factura_numero);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean borrarFormaPago(int id) {
+		
+		try {
+			String sentencia = "delete from forma_pago where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setInt(1, id);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public List<Factura> listarFormaPago(String factura_numero) {
+		
+		List<Factura> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from forma_pago where factura_numero = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, factura_numero);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Factura(
+								resultSet.getInt("id"),
+								resultSet.getString("forma_pago"),
+								resultSet.getDouble("monto_pagado"),
+								resultSet.getDate("fecha")
 								));
 					}
 				}

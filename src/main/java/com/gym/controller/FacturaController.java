@@ -55,4 +55,18 @@ public class FacturaController {
 	public List<Factura> listarIvas(int administrador_id) {
 		return facturaDAO.listarIvas(administrador_id);
 	}
+	
+	public boolean agregarFormaPago(String forma_pago, Double monto, String factura_numero) {
+		return facturaDAO.agregarFormaPago(forma_pago, monto, factura_numero);
+	}
+	
+	public boolean borrarFormaPago(int id) {
+		return facturaDAO.borrarFormaPago(id);
+	}
+	
+	public Object[][] listarFormaPago(String factura_numero) {
+		var listaFormaPago = facturaDAO.listarFormaPago(factura_numero);
+		
+		return new ArrayUtilidades().toMatrizFormaPago(listaFormaPago);
+	}
 }

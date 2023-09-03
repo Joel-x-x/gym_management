@@ -25,11 +25,11 @@ public class Factura {
 	// Iva
 	private double ivaPorcentaje;
 	private String fechaIva;
-
+	
 	// Listar y Consultar Facturas
 	public Factura(int id, String numero_factura, double descuento_porcentaje, double descuento, double subtotal,
 			double iva, double total, String forma_pago, Date fecha, String establecimiento, String punto_emision,
-			int usuario_id, int administrador_id, String nombreUsuario) {
+			int usuario_id, int administrador_id, String nombreUsuario, String cedulaUsuario) {
 		this.id = id;
 		this.numero_factura = numero_factura;
 		this.descuento_porcentaje = descuento_porcentaje;
@@ -44,6 +44,7 @@ public class Factura {
 		this.usuario_id = usuario_id;
 		this.administrador_id = administrador_id;
 		this.nombreUsuario = nombreUsuario;
+		this.cedulaUsuario = cedulaUsuario;
 	}
 	
 	// Consultar factura clase
@@ -91,9 +92,18 @@ public class Factura {
 		this.usuario_id = usuario_id;
 	}
 	
+	//  IVA
 	public Factura(double ivaPorcentaje, int administrador_id, String fechaIva) {
 		this.ivaPorcentaje = ivaPorcentaje;
 		this.fechaIva = fechaIva;
+	}
+	
+	// Forma de pago
+	public Factura(int id, String forma_pago, double total, Date fecha) {
+		this.id = id;
+		this.forma_pago = forma_pago;
+		this.fecha = fecha;
+		this.total = total;
 	}
 
 	public int getId() {

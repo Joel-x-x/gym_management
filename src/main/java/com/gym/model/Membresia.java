@@ -20,6 +20,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
     
     // Usuario
     private String nombreUsuario;
+    private String apellidoUsuario;
     private String cedula;
     private String fecha_entrada;
     private String fecha_salida;
@@ -79,10 +80,11 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	}
     
 	// Listar Registros Diarios
-	public Membresia(int id, String nombreUsuario, String cedula, String fecha_entrada, String fecha_salida,
+	public Membresia(int id, String nombreUsuario, String apellidoUsuario, String cedula, String fecha_entrada, String fecha_salida,
 			String nombreTipo) {
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
+		this.apellidoUsuario = apellidoUsuario;
 		this.cedula = cedula;
 		this.fecha_entrada = fecha_entrada;
 		this.fecha_salida = fecha_salida;
@@ -304,7 +306,13 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.administrador_id = administrador_id;
 	}
 	
-	
+	public String getApellidoUsuario() {
+		return apellidoUsuario;
+	}
+
+	public void setApellidoUsuario(String apellidoUsuario) {
+		this.apellidoUsuario = apellidoUsuario;
+	}
 
 	public boolean validarMembresia() {
 		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());

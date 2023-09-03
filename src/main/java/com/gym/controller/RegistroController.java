@@ -11,14 +11,12 @@ public class RegistroController {
 	public RegistroController() {
 		registroDAO = new RegistroDAO( ConnectionFactory.conectar());
 	}
-	public boolean registrar(int usuario_id, int id) {
-		return registroDAO.registrar(usuario_id, id);
+	public boolean registrar(int usuario_id, int membresia_id) {
+		return registroDAO.registrar(usuario_id, membresia_id);
 	}
 	
 	public Object[][] consultar(int administrador_id) {
 		var listaRegistros = registroDAO.consultar(administrador_id);
-		
-		listaRegistros.forEach(x -> System.out.println(x.getNombreUsuario()));
 		
 		return new ArrayUtilidades().toMatrizMembresiaRegistro(listaRegistros);
 	}
@@ -30,10 +28,11 @@ public class RegistroController {
 	public boolean registrarSalida(int id) {
 		return registroDAO.registrarSalida(id);
 	}
-//	public Object[][] consultarFecha(int usuario_id, Date fechaInicioSQL, Date fechaFinSQL) {
-//		var listaRegistros = registroDAO.consultarFecha(usuario_id, fechaInicioSQL, fechaFinSQL);
-//		
-//		return new ArrayUtilidades().toMatrizMembresiaRegistro(listaRegistros);
-//	}
+	
+	public Object[][] consultarFecha(int administrador_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		var listaRegistros = registroDAO.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
+		
+		return new ArrayUtilidades().toMatrizMembresiaRegistro(listaRegistros);
+	}
 
 }

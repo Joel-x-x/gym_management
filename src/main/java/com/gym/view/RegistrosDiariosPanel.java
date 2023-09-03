@@ -48,15 +48,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	private static final long serialVersionUID = 1L;
     private int idSeleccionadoUsuario = 0;
     private int idUltimoRegistro;
-    private JButton btn_entrada;
-    private JButton btn_salida;
     public static DefaultTableModel modelo;
-    private JDateChooser dateChooserFin;
-    private JDateChooser dateChooserInicio;
-    private Calendar fechaInicio;
-    private Calendar fechaFin;
-    private JButton btnBuscarFecha;
-    private JButton btnListar;
     private JButton btn_entrada_1;
     private JLabel lblInicio_1;
     private JButton btn_entrada_2;
@@ -77,7 +69,6 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
     private JPanel panel_2;
     private JLabel lblNewLabel_2;
     private JLabel lblNewLabel_4;
-    private JLabel lblNewLabel_5;
     private JButton btn_registrar;
     private JLabel labelCedula;
     private JPanel panelUsuario;
@@ -101,35 +92,9 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		llenarFormularioUsuario();
 	}
 	
-	public void registrar() {
-
-		if(idSeleccionadoUsuario == 0) {
-			JOptionPane.showMessageDialog(null, "Selecciona un usuario");
-			return;
-		}
-		
-		if(getIdClaseComboBox() == 0) {
-			JOptionPane.showMessageDialog(null, "Selecciona una clase si no tiene, crea una nueva membresia");
-			return;
-		}
-		
-		if(!membresiaController.consultaActivo(idSeleccionadoUsuario, getIdClaseComboBox())) {
-			JOptionPane.showMessageDialog(null, "La membresia de este usuario a caducado o no tiene membresias");
-			return;
-		}
-		
-		Membresia membresia = membresiaController.consultaMembresia(idSeleccionadoUsuario, getIdClaseComboBox());
-		
-		System.out.println(membresia.notificarMembresia() + "membresia");
-		
-		if(membresia.notificarMembresia()) {
-			JOptionPane.showMessageDialog(null, "La membresia caducara pronto");
-		}
-		
-		registroController.registrar(idSeleccionadoUsuario, getIdClaseComboBox());
-		validarRegistros();
+	public void listarRegistros() {
+		new RegistrosDiariosFrame();
 	}
-	
 
 	@Override
 	public void listarUsuarios() {
@@ -171,10 +136,13 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		// No tiene membresias activas
 		if(membresias.size() == 0) {
 			textVencimiento.setText("   No tiene membresías activas");
+			panelUsuario.setBackground(Color.WHITE);
+			comboBoxModelMembresia.removeAllElements();
 			return;
 		}
 		
 		// LLenar el combo box membresía
+		comboBoxModelMembresia.removeAllElements();
 		comboBoxModelMembresia.addAll(membresias);
 		comboBoxMembresia.setModel(comboBoxModelMembresia);
 		comboBoxMembresia.setSelectedIndex(0);
@@ -183,7 +151,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 			String finaliza = FechasUtilidades.obtenerTiempoRestante(FechasUtilidades.stringToLocalDateTime(membresias.get(0).getFecha_fin()));
 			textVencimiento.setText("   Vence en " + finaliza);
 			// Registrar
-			
+			registrarUsuario(usuario.getId(), membresias.get(0));
 			// Asignar color en base a en cuanto caduca
 			colorMembresia(membresias.get(0));
 		} else {
@@ -213,7 +181,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	
 	public void registrarMembresiaSeleccionada() {
 		Membresia membresia = membresiaController.consulta(getIdClaseComboBox());
-		
+		registrarUsuario(usuario_id, membresia);
 		colorMembresia(membresia);
 	}
 	
@@ -221,58 +189,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	public int getIdClaseComboBox() {
 		return ((Membresia) comboBoxMembresia.getSelectedItem()).getId();
 	}
-	
-	public void validarRegistros() {
-		boolean salida = false;
-		
-		for(int i=0;i<registroController.consultar(idSeleccionadoUsuario).length;i++) {
-			
-			if(registroController.consultar(idSeleccionadoUsuario)[i][3]==null) {
-				salida = true;
-				System.out.println(salida);
-				idUltimoRegistro = registroController.consultarLista(idSeleccionadoUsuario).get(i).getId();
-			}
-		}
-		
-		if(salida) {
-			btn_salida.setEnabled(true);
-			btn_entrada.setEnabled(false);
-		}else {
-			btn_entrada.setEnabled(true);
-			btn_salida.setEnabled(false);
-		}
-		
-	}
 
-	public void bloquearBotones(){
-		btn_entrada.setEnabled(false);
-		btn_salida.setEnabled(false);
-	}
-	
-//	public void buscarRegistros() {
-//		fechaInicio = dateChooserInicio.getCalendar();
-//		fechaFin = dateChooserFin.getCalendar();
-//		
-//		if(fechaInicio == null) {
-//			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
-//			return;
-//		}
-//		
-//		if(fechaFin == null) {
-//			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
-//			return;
-//		}
-//		
-//		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
-//		
-//        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
-//        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
-//		
-//		String[] cabeceras = {"Id","Nombre", "Fecha de entrada","Fecha de salida", "Plan", "Clase", "Membresia"};
-//		
-//		modelo = new DefaultTableModel(registroController.consultarFecha(idSeleccionadoUsuario, fechaInicioSQL, fechaFinSQL ),cabeceras);
-//		table.setModel(modelo);
-//	}
     
 	public RegistrosDiariosPanel(int panelAncho, int panelAlto) {
 		 usuarioController = new UsuarioController();
@@ -287,45 +204,11 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         setBackground(new Color(244, 244, 244));
         setLayout(null);
         
-        JLabel lblNewLabel = new JLabel("REGISTRO");
-        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel.setBounds(30, 501, 113, 39);
-        add(lblNewLabel);
-        
         JLabel lblInicio = new JLabel("Registro de usuarios");
 
         lblInicio.setFont(new Font("Tahoma", Font.PLAIN, 25));
         lblInicio.setBounds(30, 30, 281, 49);
         add(lblInicio);
-        
-        btn_entrada = new JButton("Registrar Entrada");
-        btn_entrada.setFocusPainted(false);
-        btn_entrada.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		registrar();
-        	}
-        });
-        btn_entrada.setForeground(Color.WHITE);
-        btn_entrada.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btn_entrada.setBorder(null);
-        btn_entrada.setBackground(new Color(31, 33, 38));
-        btn_entrada.setBounds(30, 551, 150, 30);
-        add(btn_entrada);
-        
-        btn_salida = new JButton("Registrar Salida");
-        btn_salida.setFocusPainted(false);
-        btn_salida.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		registroController.registrarSalida(idUltimoRegistro);
-        		validarRegistros();
-        	}
-        });
-        btn_salida.setForeground(Color.WHITE);
-        btn_salida.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btn_salida.setBorder(null);
-        btn_salida.setBackground(new Color(203, 39, 39));
-        btn_salida.setBounds(190, 551, 150, 30);
-        add(btn_salida);
         
         comboBoxMembresia = new JComboBox<Membresia>();
         comboBoxMembresia.setBackground(new Color(255, 255, 255));
@@ -336,56 +219,6 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel_3.setBounds(289, 467, 95, 14);
         add(lblNewLabel_3);
-        
-        dateChooserInicio = new JDateChooser();
-        dateChooserInicio.setBounds(30, 610, 138, 30);
-        add(dateChooserInicio);
-        
-        dateChooserFin = new JDateChooser();
-        dateChooserFin.setBounds(178, 610, 138, 30);
-        add(dateChooserFin);
-        
-        btnBuscarFecha = new JButton("Buscar");
-        btnBuscarFecha.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {	
-        	}
-        });
-        btnBuscarFecha.setForeground(Color.WHITE);
-        btnBuscarFecha.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btnBuscarFecha.setFocusPainted(false);
-        btnBuscarFecha.setBorder(null);
-        btnBuscarFecha.setBackground(new Color(46, 56, 64));
-        btnBuscarFecha.setBounds(86, 664, 100, 30);
-        add(btnBuscarFecha);
-        
-        JLabel lblNewLabel_2_1_1 = new JLabel("Fecha inicio");
-        lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_1_1.setBounds(30, 592, 131, 14);
-        add(lblNewLabel_2_1_1);
-        
-        JLabel lblNewLabel_2_1_1_1 = new JLabel("Fecha fin");
-        lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lblNewLabel_2_1_1_1.setBounds(178, 592, 131, 14);
-        add(lblNewLabel_2_1_1_1);
-        
-        btnListar = new JButton("Listar");
-        btnListar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		dateChooserInicio.setDate(null);
-        		dateChooserFin.setDate(null);
-        		
-        	}
-        });
-        btnListar.setForeground(Color.WHITE);
-        btnListar.setFont(new Font("Tahoma", Font.BOLD, 11));
-        btnListar.setFocusPainted(false);
-        btnListar.setBorder(null);
-        btnListar.setBackground(new Color(46, 56, 64));
-        btnListar.setBounds(196, 664, 100, 30);
-        add(btnListar);
-        
-        btnBuscarFecha.setEnabled(false);
-        btnListar.setEnabled(false);
         
         btn_entrada_1 = new JButton("Escoger usuario");
         btn_entrada_1.addActionListener(new ActionListener() {
@@ -408,6 +241,11 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         add(lblInicio_1);
         
         btn_entrada_2 = new JButton("Listar registros");
+        btn_entrada_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		listarRegistros();
+        	}
+        });
         btn_entrada_2.setForeground(Color.WHITE);
         btn_entrada_2.setFont(new Font("Tahoma", Font.BOLD, 11));
         btn_entrada_2.setFocusPainted(false);
@@ -531,26 +369,20 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         panel_2 = new JPanel();
         panel_2.setLayout(null);
         panel_2.setBackground(new Color(23, 159, 38));
-        panel_2.setBounds(694, 530, 250, 76);
+        panel_2.setBounds(339, 526, 399, 54);
         add(panel_2);
         
-        lblNewLabel_2 = new JLabel("Si el usuario tiene más de una");
+        lblNewLabel_2 = new JLabel("Si el usuario tiene más de una membresía vigente");
         lblNewLabel_2.setForeground(new Color(255, 255, 255));
         lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblNewLabel_2.setBounds(10, 11, 230, 14);
+        lblNewLabel_2.setBounds(10, 0, 379, 26);
         panel_2.add(lblNewLabel_2);
         
-        lblNewLabel_4 = new JLabel("membresía vigente tienes que ");
+        lblNewLabel_4 = new JLabel("tienes que seleccionar la que vaya a tomar.");
         lblNewLabel_4.setForeground(new Color(255, 255, 255));
         lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblNewLabel_4.setBounds(10, 29, 230, 14);
+        lblNewLabel_4.setBounds(10, 29, 379, 14);
         panel_2.add(lblNewLabel_4);
-        
-        lblNewLabel_5 = new JLabel("seleccionar la que vaya a tomar.");
-        lblNewLabel_5.setForeground(new Color(255, 255, 255));
-        lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblNewLabel_5.setBounds(10, 48, 230, 14);
-        panel_2.add(lblNewLabel_5);
         
         btn_registrar = new JButton("Registrar");
         btn_registrar.addActionListener(new ActionListener() {

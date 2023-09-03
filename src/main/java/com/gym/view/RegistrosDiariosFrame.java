@@ -7,8 +7,12 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 //import java.util.Calendar;
+import java.sql.Date;
+import java.util.Calendar;
 
 import javax.swing.SwingConstants;
 
@@ -20,27 +24,58 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RegistrosDiariosFrame extends JFrame {
+	private int administrador_id; 
 	UsuarioController usuarioController;
 	RegistroController registroController;
 	MembresiaController membresiaController;
-	private int administrador_id; 
 	
     public static DefaultTableModel modelo;
+    private Calendar fechaInicio;
+    private Calendar fechaFin;
 
 	private static final long serialVersionUID = 7524007015900934327L;
 	private JPanel contentPane;
 	private JTable table;
+	private JDateChooser dateChooserInicio;
+	private JDateChooser dateChooserFin;
 
 	public static void main(String[] args) {
 		new RegistrosDiariosFrame();
 	}
 	
 	public void listarRegistros() {
-		String[] cabeceras = {"Nombre", "Cedula", "Fecha de entrada", "Fecha de salida", "Membresia"};
+		String[] cabeceras = {"Nombre", "Cedula", "Fecha de entrada", "Membresia"};
 		
 		modelo = new DefaultTableModel(registroController.consultar(administrador_id),cabeceras);
+		table.setModel(modelo);
+	}
+	
+	public void buscarRegistros() {
+		fechaInicio = dateChooserInicio.getCalendar();
+		fechaFin = dateChooserFin.getCalendar();
+		
+		if(fechaInicio == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
+			return;
+		}
+		
+		if(fechaFin == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
+			return;
+		}
+		
+		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
+		
+        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
+        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
+		
+		String[] cabeceras = {"Nombre", "Cedula", "Fecha de entrada", "Membresia"};
+		
+		modelo = new DefaultTableModel(registroController.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL ),cabeceras);
 		table.setModel(modelo);
 	}
 
@@ -84,7 +119,7 @@ public class RegistrosDiariosFrame extends JFrame {
 		lblNewLabel_2_1_1.setBounds(10, 59, 131, 14);
 		panel.add(lblNewLabel_2_1_1);
 		
-		JDateChooser dateChooserInicio = new JDateChooser();
+		dateChooserInicio = new JDateChooser();
 		dateChooserInicio.setBounds(10, 77, 138, 30);
 		panel.add(dateChooserInicio);
 		
@@ -93,25 +128,32 @@ public class RegistrosDiariosFrame extends JFrame {
 		lblNewLabel_2_1_1_1.setBounds(158, 59, 131, 14);
 		panel.add(lblNewLabel_2_1_1_1);
 		
-		JDateChooser dateChooserFin = new JDateChooser();
+		dateChooserFin = new JDateChooser();
 		dateChooserFin.setBounds(158, 77, 138, 30);
 		panel.add(dateChooserFin);
 		
 		JButton btnBuscarFecha = new JButton("Buscar");
+		btnBuscarFecha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscarRegistros();
+			}
+		});
 		btnBuscarFecha.setForeground(Color.WHITE);
 		btnBuscarFecha.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscarFecha.setFocusPainted(false);
-		btnBuscarFecha.setEnabled(false);
 		btnBuscarFecha.setBorder(null);
 		btnBuscarFecha.setBackground(new Color(46, 56, 64));
 		btnBuscarFecha.setBounds(306, 77, 100, 30);
 		panel.add(btnBuscarFecha);
 		
 		JButton btnListar = new JButton("Listar");
+		btnListar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listarRegistros();
+			}
+		});
 		btnListar.setForeground(Color.WHITE);
 		btnListar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnListar.setFocusPainted(false);
-		btnListar.setEnabled(false);
 		btnListar.setBorder(null);
 		btnListar.setBackground(new Color(46, 56, 64));
 		btnListar.setBounds(416, 77, 100, 30);

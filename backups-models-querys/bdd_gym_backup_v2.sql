@@ -555,7 +555,7 @@ begin
 	join clase c on c.id = t.clase_id
 	join entrenador e on e.id = c.entrenador_id
 	join factura f on f.id = m.factura_id
-    where m.usuario_id = usuarioid
+    where m.usuario_id = usuarioid and m.activo <> 0
     order by activo desc, fecha_fin;
 
 end.. 
@@ -790,22 +790,22 @@ begin
 end..
 delimiter ;
 
--- === Forma de pago ===
-CREATE TABLE IF NOT EXISTS bdd_gym.`forma_pago` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
-  `factura_id` INT NOT NULL,
-  PRIMARY KEY (id),
-  INDEX fk_factura_id_idx (factura_id ASC) VISIBLE,
-  CONSTRAINT fk_factura_id_iva
-    FOREIGN KEY (factura_id)
-    REFERENCES bdd_gym.factura(id)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+-- == Detalles de pago ==
+CREATE TABLE `bdd_gym`.`forma_pago` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
+    `monto_pagado` DECIMAL(6, 2) check(monto_pagado > 0),
+    `fecha` DATETIME DEFAULT current_timestamp,
+    `usuario_cedula` VARCHAR(15) DEFAULT NULL,
+    `factura_numero` VARCHAR(10) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX idx_factura_numero_fk (factura_numero),
+    INDEX idx_usuario_cedula_fk (usuario_cedula),
+    CONSTRAINT fk_factura_numero FOREIGN KEY (factura_numero) 
+    REFERENCES factura(numero_factura),
+    CONSTRAINT fk_usuario_cedula FOREIGN KEY (usuario_cedula) 
+    REFERENCES usuario(cedula)
+);
 
 -- Datos de la Base de Datos
 -- Insertar un administrador

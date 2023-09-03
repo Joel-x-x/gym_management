@@ -66,7 +66,7 @@ public class ArduinoDataListener implements SerialPortDataListener {
 	public void verificarHuella() {
 		// Procesar respuesta
         if(mensaje.contains("f")) {
-        	registrosDiariosPanel.modificarLabel("Ocurrio un error");
+//        	registrosDiariosPanel.modificarLabel("Ocurrio un error");
         	mensaje = "";
         	registrosDiariosPanel.verificarHuella();
         	System.out.println("verificar f");
