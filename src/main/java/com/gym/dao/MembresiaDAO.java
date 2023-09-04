@@ -69,7 +69,10 @@ public class MembresiaDAO {
 					        resultSet.getString("c.clase"),
 					        resultSet.getInt("c.entrenador_id"),
 					        resultSet.getString("e.nombre"),
-					        resultSet.getString("f.numero_factura")
+					        resultSet.getString("f.numero_factura"),
+					        resultSet.getInt("m.caducada_notificar"),
+					        resultSet.getInt("m.caducando_notificar"),
+					        resultSet.getString("u.email")
 					    ));
 					}
 				}
@@ -115,7 +118,10 @@ public class MembresiaDAO {
 					        resultSet.getString("c.clase"),
 					        resultSet.getInt("c.entrenador_id"),
 					        resultSet.getString("e.nombre"),
-					        resultSet.getString("f.numero_factura")
+					        resultSet.getString("f.numero_factura"),
+					        resultSet.getInt("m.caducada_notificar"),
+					        resultSet.getInt("m.caducando_notificar"),
+					        resultSet.getString("u.email")
 						    ));
 					}
 				}
@@ -160,7 +166,10 @@ public class MembresiaDAO {
 						        resultSet.getString("c.clase"),
 						        resultSet.getInt("c.entrenador_id"),
 						        resultSet.getString("e.nombre"),
-						        resultSet.getString("f.numero_factura")
+						        resultSet.getString("f.numero_factura"),
+						        resultSet.getInt("m.caducada_notificar"),
+						        resultSet.getInt("m.caducando_notificar"),
+						        resultSet.getString("u.email")
 							    );
 				}
 			}
@@ -276,59 +285,6 @@ public class MembresiaDAO {
 		}
 	}
 	
-	public Membresia consultaUltimaMembresia(int usuario_id) {
-
-		try {
-			
-			System.out.println(usuario_id);
-			
-			String sentencia = "select m.*, p.nombre, c.clase"
-					+ " from membresia m"
-					+ " join plan p ON p.id = m.plan_id"
-					+ " join clase c ON c.id = m.clase_id"
-					+ " where m.id = ("
-					+ "    select max(id) from membresia where usuario_id = ?"
-					+ ")"
-					+ " and m.usuario_id = ?"
-					+ " group by m.id, p.nombre, c.clase;";
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setInt(1, usuario_id);
-				statement.setInt(2, usuario_id);
-				
-				final ResultSet resultSet = statement.executeQuery();
-				
-				try(resultSet) {
-					
-					resultSet.next();
-					
-						return new Membresia(
-								resultSet.getInt("m.id"),
-								resultSet.getString("m.fecha_inicio"),
-								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
-								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
-								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
-								);
-				}
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-
 	public boolean eliminar(int id) {
 		
 		try {
@@ -383,6 +339,48 @@ public class MembresiaDAO {
 			
 			try(statement) {
 				statement.setInt(1, activo);
+				statement.setFloat(2, id);
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean modificarCaducando(int id, int caducando) {
+
+		try {
+			String sentencia = "update membresia set caducando_notificar = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, caducando);
+				statement.setFloat(2, id);
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean modificarCaducada(int id, int caducada) {
+
+		try {
+			String sentencia = "update membresia set caducada_notificar = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, caducada);
 				statement.setFloat(2, id);
 					
 					return toBoolean(statement.executeUpdate());

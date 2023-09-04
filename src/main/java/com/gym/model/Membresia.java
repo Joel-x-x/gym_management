@@ -1,12 +1,12 @@
 package com.gym.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 import com.gym.controller.MembresiaController;
 import com.gym.utilidades.FechasUtilidades;
+import com.gym.utilidades.Utilidades;
 
 public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase, Entrenador, No Factura, Estado
     private int id;
@@ -17,11 +17,14 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
     private int administrador_id;
     private int tipo_membresia_id;
     private int factura_id;
+    private int caducada_notificar; // Membresia caducada notificar
+    private int caducando_notificar; // Por caducar notificar
     
     // Usuario
     private String nombreUsuario;
     private String apellidoUsuario;
     private String cedula;
+    private String email;
     private String fecha_entrada;
     private String fecha_salida;
     
@@ -51,7 +54,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int activo, int usuario_id,
 			int tipo_membresia_id, int factura_id, String nombreUsuario, String cedula,
 			String nombreTipo, int clase_id, String clase, int entrenador_id, String entrenador,
-			String numeroFactura) {
+			String numeroFactura, int caducada_notificar, int caducando_notificar, String email) {
 		this.id = id;
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
@@ -67,6 +70,9 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.entrenador_id = entrenador_id;
 		this.entrenador = entrenador;
 		this.numeroFactura = numeroFactura;
+		this.caducada_notificar = caducada_notificar;
+		this.caducando_notificar = caducando_notificar;
+		this.email = email;
 	}
 	
 	// Listar membresias en factura
@@ -313,6 +319,30 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	public void setApellidoUsuario(String apellidoUsuario) {
 		this.apellidoUsuario = apellidoUsuario;
 	}
+	
+	public int getCaducada_notificar() {
+		return caducada_notificar;
+	}
+
+	public void setCaducada_notificar(int caducada_notificar) {
+		this.caducada_notificar = caducada_notificar;
+	}
+
+	public int getCaducando_notificar() {
+		return caducando_notificar;
+	}
+
+	public void setCaducando_notificar(int caducando_notificar) {
+		this.caducando_notificar = caducando_notificar;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public boolean validarMembresia() {
 		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
@@ -328,19 +358,46 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	    Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, - 2);
+	    calendar.add(Calendar.DAY_OF_MONTH, - 3);
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();
 
 	    // Comparar la fecha resultante con la fecha actual
 	    if (calendar.before(fechaActual)) {
-	    	System.out.println("true");
+
+    		// Notificamos al usuario por correo una sola ves en vase a su atributo caducando notificar
+    		if(new Utilidades().toBoolean(this.getCaducando_notificar())) {
+    			Email email = new Email(this.getEmail(), "System Gym", "Hola " + this.getNombreUsuario() + ", tu membresía caducara pronto.");
+    			if(!email.sendEmail()) {
+    				System.out.println("Ocurrio un error");
+    			} else {
+    				// Una enviado el email cambiamos el valor a 0 para que no se envien mas notificaciones
+    				membresiaController.modificarCaducando(this.getId(), 0);
+    			}
+    		}
+    		
 	        return true;
 	    } else {
-	    	System.out.println("false");
 	        return false;
 	    }
+	}
+	
+	public void membresiaCaducada() {
+		if(this.getActivo() == 1) {
+			return;
+		}
+		
+		// Notificamos al usuario por correo una sola ves en vase a su atributo caducado notificar
+		if(new Utilidades().toBoolean(this.getCaducada_notificar())) {
+			Email email = new Email(this.getEmail(), "System Gym", "Hola " + this.getNombreUsuario() + ", tu membresía ha caducado");
+			if(!email.sendEmail()) {
+				System.out.println("Ocurrio un error");
+			} else {
+				// Una enviado el email cambiamos el valor a 0 para que no se envien mas notificaciones
+				membresiaController.modificarCaducada(this.getId(), 0);
+			}
+		}
 	}
 	
 	public int caducaDias() {

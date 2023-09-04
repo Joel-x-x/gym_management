@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.FacturaController;
+import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
 import com.gym.model.TipoMembresia;
@@ -48,6 +49,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private String cedula;
 	private Double total;
 	private FacturaController facturaController;
+	private UsuarioController usuarioController;
 	private DefaultTableModel modelo;
 	private int factura_imprimir;
 	
@@ -126,7 +128,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	}
 	
 	public void formaPago() {
-		new FormaPagoFrame(numero_factura, cedula, total);
+		new FormaPagoFrame(numero_factura, cedula, total, idSeleccionado, usuarioController.consultarUsuarioId(cedula));
 	}
 	
 	public void bloquearBotones() {
@@ -154,6 +156,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
+		usuarioController = new UsuarioController();
 		
 		setLayout(null);
 		setFocusTraversalPolicyProvider(true);

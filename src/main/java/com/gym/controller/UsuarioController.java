@@ -31,6 +31,10 @@ public class UsuarioController {
 		return usuarioDAO.consulta(idSeleccionado);
 	}
 	
+	public int consultarUsuarioId(String cedula) {
+		return usuarioDAO.consultarUsuarioId(cedula);
+	}
+	
 	public Membresia consultaMembresia(int usuario_id) {
 		return usuarioDAO.consultaMembresia(usuario_id);
 	}

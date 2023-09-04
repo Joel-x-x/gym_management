@@ -239,6 +239,32 @@ public class UsuarioDAO {
 		}
 	}
 	
+	public int consultarUsuarioId(String cedula) {
+		
+		try {
+			String sentencia = "select * from usuario where cedula = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, cedula);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					return resultSet.getInt("id");
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
 	public List<Usuario> consultar(int administrador_id, String nombre) {
 		
 		try {

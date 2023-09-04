@@ -404,10 +404,10 @@ public class FacturaDAO {
 		
 	}
 	
-	public boolean agregarFormaPago(String forma_pago, Double monto_pagado, String factura_numero) {
+	public boolean agregarFormaPago(String forma_pago, Double monto_pagado, int usuario_id, int factura_id) {
 		
 		try {
-			String sentencia = "insert into forma_pago(forma_pago, monto_pagado, factura_numero) values(?,?,?)";
+			String sentencia = "insert into forma_pago(forma_pago, monto_pagado, usuario_id, factura_id) values(?,?,?,?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -415,7 +415,8 @@ public class FacturaDAO {
 				
 				statement.setString(1, forma_pago);
 				statement.setDouble(2, monto_pagado);
-				statement.setString(3, factura_numero);
+				statement.setInt(3, usuario_id);
+				statement.setInt(4, factura_id);
 				
 				return new Utilidades().toBoolean(statement.executeUpdate());
 	
@@ -446,18 +447,18 @@ public class FacturaDAO {
 		}
 	}
 	
-	public List<Factura> listarFormaPago(String factura_numero) {
+	public List<Factura> listarFormaPago(int factura_id) {
 		
 		List<Factura> resultado = new ArrayList<>();
 		
 		try {
 			
-			String sentencia = "select * from forma_pago where factura_numero = ?";
+			String sentencia = "select * from forma_pago where factura_id = ?";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
-				statement.setString(1, factura_numero);
+				statement.setInt(1, factura_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

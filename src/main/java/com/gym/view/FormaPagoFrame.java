@@ -36,6 +36,8 @@ import java.awt.event.WindowEvent;
 public class FormaPagoFrame extends JFrame {
 	private static DefaultTableModel modelo;
 	private FacturaController facturaController;
+	private int factura_id;
+	private int usuario_id;
 	private String factura_numero;
 	private String cedula;
 	private Double total;
@@ -57,7 +59,7 @@ public class FormaPagoFrame extends JFrame {
 	public void listar() {
 		String[] cabeceras = {"Id", "Forma de pago", "Monto", "Fecha"};
 		
-		modelo = new DefaultTableModel(facturaController.listarFormaPago(factura_numero),cabeceras);
+		modelo = new DefaultTableModel(facturaController.listarFormaPago(factura_id),cabeceras);
 		table.setModel(modelo);
 		
 		textNumero.setText(factura_numero);
@@ -83,7 +85,7 @@ public class FormaPagoFrame extends JFrame {
 			return;
 		}
 		
-		if(facturaController.agregarFormaPago(forma_pago, monto, factura_numero)) {
+		if(facturaController.agregarFormaPago(forma_pago, monto, usuario_id, factura_id)) {
 			listar();
 		} else {
 			JOptionPane.showMessageDialog(null, "Ocurrio un error");
@@ -105,7 +107,7 @@ public class FormaPagoFrame extends JFrame {
 		btnBorrar.setEnabled(true);
 	}
 
-	public FormaPagoFrame(String factura_numero, String cedula, Double total) {
+	public FormaPagoFrame(String factura_numero, String cedula, Double total, int factura_id, int usuario_id) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -124,6 +126,8 @@ public class FormaPagoFrame extends JFrame {
 	            }
 			}
 		});
+		this.factura_id = factura_id;
+		this.usuario_id = usuario_id;
 		this.factura_numero = factura_numero;
 		this.cedula = cedula;
 		this.total = total;

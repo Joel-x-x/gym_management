@@ -11,6 +11,7 @@ import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Arduino;
 import com.gym.model.ArduinoDataListener;
+import com.gym.model.Email;
 import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.Usuario;
@@ -165,6 +166,13 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		} else {
 			JOptionPane.showMessageDialog(null, "Ocurrio un error intentando registrar");
 		}
+		
+	    // Crear y ejecutar un nuevo hilo para notificar la membresía en segundo plano.
+	    Thread notificarThread = new Thread(() -> {
+	        membresia.notificarMembresia();
+	    });
+
+	    notificarThread.start();
 	}
 	
 	// Cambiar el color del panel dependiendo de los dias faltantes para que caduque

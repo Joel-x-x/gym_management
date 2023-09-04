@@ -151,7 +151,6 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	
 	public void actulizarFactura() {
 		Factura factura = llenarFactura();
-		
 		// Validar si existen membresias agregadas
 		if(labelTotal.getText().equals("0.0")) {
 			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");

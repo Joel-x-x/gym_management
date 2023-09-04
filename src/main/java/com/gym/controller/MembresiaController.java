@@ -25,6 +25,12 @@ public class MembresiaController {
 		
 		for(Membresia membresia : listaMembresias) {
 			membresia.cambiarActivoMembresia();
+			
+		    Thread notificarThread = new Thread(() -> {
+		        membresia.membresiaCaducada();
+		    });
+
+		    notificarThread.start();
 		}
 		
 		return new ArrayUtilidades().toMatrizMembresia(listaMembresias);
@@ -54,10 +60,6 @@ public class MembresiaController {
 		return membresiaDAO.crearMembresia(administrador_id, usuario_id, factura_id, tipo_membresia_id);
 	}
 	
-	public Membresia consultaUltimaMembresia(int usuario_id) {
-		return membresiaDAO.consultaUltimaMembresia(usuario_id);
-	}
-	
 	public Membresia consulta(int id) {
 		return membresiaDAO.consulta(id);
 	}
@@ -71,6 +73,14 @@ public class MembresiaController {
 	
 	public boolean modificarActivo(int id, int activo) {
 		return membresiaDAO.modificarActivo(id, activo);
+	}
+	
+	public boolean modificarCaducando(int id, int caducando) {
+		return membresiaDAO.modificarCaducando(id, caducando);
+	}
+	
+	public boolean modificarCaducada(int id, int caducado) {
+		return membresiaDAO.modificarCaducada(id, caducado);
 	}
 
 	public boolean eliminar(int id) {

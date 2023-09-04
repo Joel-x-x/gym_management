@@ -362,6 +362,8 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`membresia` (
   `fecha_inicio` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_fin` DATETIME NULL DEFAULT NULL,
   `activo` TINYINT NOT NULL,
+  `caducada_notificar` TINYINT NOT NULL DEFAULT 1,
+  `caducando_notificar` TINYINT NOT NULL DEFAULT 1,
   `usuario_id` INT NOT NULL,
   `administrador_id` INT NOT NULL,
   `tipo_membresia_id` INT NOT NULL,
@@ -518,7 +520,7 @@ delimiter ..
 drop procedure if exists listarMembresias..
 create procedure listarMembresias(in administradorId int)
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id
@@ -534,7 +536,7 @@ delimiter ..
 drop procedure if exists consultarMembresia..
 create procedure consultarMembresia(in idMembresia int)
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id
@@ -549,7 +551,7 @@ delimiter ..
 drop procedure if exists listarMembresiasUsuario..
 create procedure listarMembresiasUsuario(in usuarioId int)
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id
@@ -560,7 +562,7 @@ begin
 
 end.. 
 delimiter ;
-
+select * from membresia;
 delimiter ..
 drop procedure if exists consultarMembresiasNombre..
 create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
@@ -716,6 +718,8 @@ begin
 	update factura set descuento_porcentaje = descuentoPorcentaje,
     descuento = descuentoIn, subtotal = subtotalIn, iva = ivaIn, total = totalIn,
     forma_pago = formaPago, fecha = fechaIn, usuario_id = usuarioid  where id = idIn;
+    
+    insert into forma_pago(forma_pago, monto_pagado, usuario_id, factura_id) values(formaPago, totalIn, usuarioId, idIn);
 end ..
 delimiter ;
 
@@ -796,15 +800,15 @@ CREATE TABLE `bdd_gym`.`forma_pago` (
     `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
     `monto_pagado` DECIMAL(6, 2) check(monto_pagado > 0),
     `fecha` DATETIME DEFAULT current_timestamp,
-    `usuario_cedula` VARCHAR(15) DEFAULT NULL,
-    `factura_numero` VARCHAR(10) NOT NULL,
+    `usuario_id` INT NOT NULL,
+    `factura_id` INT NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX idx_factura_numero_fk (factura_numero),
-    INDEX idx_usuario_cedula_fk (usuario_cedula),
-    CONSTRAINT fk_factura_numero FOREIGN KEY (factura_numero) 
-    REFERENCES factura(numero_factura),
-    CONSTRAINT fk_usuario_cedula FOREIGN KEY (usuario_cedula) 
-    REFERENCES usuario(cedula)
+    INDEX idx_factura_id_fk (factura_id),
+    INDEX idx_usuario_id_fk (usuario_id),
+    CONSTRAINT fk_factura_id_forma_pago FOREIGN KEY (factura_id) 
+    REFERENCES factura(id),
+    CONSTRAINT fk_usuario_id_forma_pago FOREIGN KEY (usuario_id) 
+    REFERENCES usuario(id)
 );
 
 -- Datos de la Base de Datos
