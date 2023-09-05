@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.gym.dao.MembresiaDAO;
@@ -21,13 +22,29 @@ public class MembresiaController {
 	}
 
 	public Object[][] listar(int administrador_id, String buscar) {
-		var listaMembresia = membresiaDAO.listar(administrador_id, buscar);
+		var listaMembresias = membresiaDAO.listar(administrador_id, buscar);
 		
-		for(Membresia membresia : listaMembresia) {
+		for(Membresia membresia : listaMembresias) {
+			membresia.cambiarActivoMembresia();
+			
+		    Thread notificarThread = new Thread(() -> {
+		        membresia.membresiaCaducada();
+		    });
+
+		    notificarThread.start();
+		}
+		
+		return new ArrayUtilidades().toMatrizMembresia(listaMembresias);
+	}
+	
+	public List<Membresia> listarMembresiasUsuario(int usuario_id) {
+		var listaMembresias = membresiaDAO.listarMembresiasUsuario(usuario_id);
+		
+		for(Membresia membresia : listaMembresias) {
 			membresia.cambiarActivoMembresia();
 		}
 		
-		return new ArrayUtilidades().toMatrizMembresia(listaMembresia);
+		return listaMembresias;
 	}
 	
 	public Object[][] listarMembresiaFactura(int administrador_id, int factura_id) {
@@ -43,14 +60,12 @@ public class MembresiaController {
 	public boolean crearMembresia(int administrador_id, int usuario_id, int factura_id, int tipo_membresia_id) {
 		return membresiaDAO.crearMembresia(administrador_id, usuario_id, factura_id, tipo_membresia_id);
 	}
-
-	public Membresia consulta(int id, int usuario_id) {
-		return membresiaDAO.consulta(id, usuario_id);
+	
+	public Membresia consulta(int id) {
+		return membresiaDAO.consulta(id);
 	}
 	
-	public Membresia consultaUltimaMembresia(int usuario_id) {
-		return membresiaDAO.consultaUltimaMembresia(usuario_id);
-	}
+	// hasta aqui vale
 	
 	// Consulta si ese usuario ya tiene una membresia activa
 	public boolean consultaActivo(int usuario_id, int id) {
@@ -59,6 +74,14 @@ public class MembresiaController {
 	
 	public boolean modificarActivo(int id, int activo) {
 		return membresiaDAO.modificarActivo(id, activo);
+	}
+	
+	public boolean modificarCaducando(int id, int caducando) {
+		return membresiaDAO.modificarCaducando(id, caducando);
+	}
+	
+	public boolean modificarCaducada(int id, int caducado) {
+		return membresiaDAO.modificarCaducada(id, caducado);
 	}
 
 	public boolean eliminar(int id) {
@@ -72,14 +95,12 @@ public class MembresiaController {
 	public List<Integer> consultarClases(int usuario_id) {
 		return membresiaDAO.consultarClases(usuario_id);
 	}
-
-	public List<Membresia> listarMembresias(int usuario_id) {
-		var listaMembresias = membresiaDAO.listarMembresias(usuario_id);
-		
-		return listaMembresias;
-	}
 	
 	public Membresia consultaMembresia(int usuario_id, int id) {
 		return membresiaDAO.consultaMembresia(usuario_id, id);
+	}
+
+	public List<Membresia> consultarFecha(int administrador_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		return membresiaDAO.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
 	}
 }

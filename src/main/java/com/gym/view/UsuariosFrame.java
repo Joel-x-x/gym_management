@@ -19,6 +19,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class UsuariosFrame extends JFrame {
 	private int administrador_id, idSeleccionadoUsuario;
@@ -28,13 +30,13 @@ public class UsuariosFrame extends JFrame {
 	
 	private static final long serialVersionUID = 4154039692586232154L;	
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField textBuscar;
 	private JTable tableUsuarios;
 
 	private void listar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
-		modelo = new DefaultTableModel(usuarioController.listar(administrador_id), cabeceras);
+		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, textBuscar.getText()), cabeceras);
 		tableUsuarios.setModel(modelo);
 	}
 	
@@ -87,10 +89,15 @@ public class UsuariosFrame extends JFrame {
 		lblNewLabel_1_4_2.setBounds(10, 94, 99, 14);
 		panel.add(lblNewLabel_1_4_2);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(119, 88, 137, 25);
-		panel.add(textField);
+		textBuscar = new JTextField();
+		textBuscar.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				listar();
+			}
+		});
+		textBuscar.setColumns(10);
+		textBuscar.setBounds(119, 88, 137, 25);
+		panel.add(textBuscar);
 		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setForeground(Color.WHITE);

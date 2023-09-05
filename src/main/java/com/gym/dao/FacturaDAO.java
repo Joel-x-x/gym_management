@@ -68,7 +68,7 @@ public class FacturaDAO {
 	}
 
 	
-	public List<Factura> listarFactura(int administrador_id, String nombre) {
+	public List<Factura> listarFactura(int administrador_id, String buscar) {
 		
 		List<Factura> resultado = new ArrayList<>();
 //		int elementosPorPagina = 10; 
@@ -78,18 +78,19 @@ public class FacturaDAO {
 			
 			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and total <> 0.0";
 			
-			if(!nombre.equals("")) {
-				sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ? and total <> 0.0";
-			}
+			// Cedula
+			if(Utilidades.isNumber(buscar)) sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and cedula like ? and total <> 0.0";
+			
+			// Nombre
+			if(!Utilidades.isNumber(buscar) && !buscar.equals("")) sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ? and total <> 0.0";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, administrador_id);
 				
-				if(!nombre.equals("")) {
-					statement.setString(2, nombre + "%");
-				}
+				// Consultar
+				if(!buscar.equals("")) statement.setString(2, buscar + "%");
 				
 				final ResultSet resultSet = statement.executeQuery();
 				
@@ -110,7 +111,8 @@ public class FacturaDAO {
 			                    resultSet.getString("f.punto_emision"),
 			                    resultSet.getInt("f.usuario_id"),
 			                    resultSet.getInt("f.administrador_id"),
-			                    resultSet.getString("u.nombre")
+			                    resultSet.getString("u.nombre"),
+			                    resultSet.getString("u.cedula")
 								));
 					}
 					
@@ -390,6 +392,85 @@ public class FacturaDAO {
 								resultSet.getDouble("iva"),
 								resultSet.getInt("administrador_id"),
 								resultSet.getString("fecha")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+		
+	}
+	
+	public boolean agregarFormaPago(String forma_pago, Double monto_pagado, int usuario_id, int factura_id) {
+		
+		try {
+			String sentencia = "insert into forma_pago(forma_pago, monto_pagado, usuario_id, factura_id) values(?,?,?,?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setString(1, forma_pago);
+				statement.setDouble(2, monto_pagado);
+				statement.setInt(3, usuario_id);
+				statement.setInt(4, factura_id);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean borrarFormaPago(int id) {
+		
+		try {
+			String sentencia = "delete from forma_pago where id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement){
+				
+				statement.setInt(1, id);
+				
+				return new Utilidades().toBoolean(statement.executeUpdate());
+	
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public List<Factura> listarFormaPago(int factura_id) {
+		
+		List<Factura> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "select * from forma_pago where factura_id = ?";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, factura_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Factura(
+								resultSet.getInt("id"),
+								resultSet.getString("forma_pago"),
+								resultSet.getDouble("monto_pagado"),
+								resultSet.getDate("fecha")
 								));
 					}
 				}

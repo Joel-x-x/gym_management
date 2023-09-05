@@ -1,9 +1,12 @@
 package com.gym.model;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 import com.gym.controller.MembresiaController;
 import com.gym.utilidades.FechasUtilidades;
+import com.gym.utilidades.Utilidades;
 
 public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase, Entrenador, No Factura, Estado
     private int id;
@@ -14,10 +17,14 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
     private int administrador_id;
     private int tipo_membresia_id;
     private int factura_id;
+    private int caducada_notificar; // Membresia caducada notificar
+    private int caducando_notificar; // Por caducar notificar
     
     // Usuario
     private String nombreUsuario;
+    private String apellidoUsuario;
     private String cedula;
+    private String email;
     private String fecha_entrada;
     private String fecha_salida;
     
@@ -47,7 +54,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int activo, int usuario_id,
 			int tipo_membresia_id, int factura_id, String nombreUsuario, String cedula,
 			String nombreTipo, int clase_id, String clase, int entrenador_id, String entrenador,
-			String numeroFactura) {
+			String numeroFactura, int caducada_notificar, int caducando_notificar, String email) {
 		this.id = id;
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
@@ -63,6 +70,9 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.entrenador_id = entrenador_id;
 		this.entrenador = entrenador;
 		this.numeroFactura = numeroFactura;
+		this.caducada_notificar = caducada_notificar;
+		this.caducando_notificar = caducando_notificar;
+		this.email = email;
 	}
 	
 	// Listar membresias en factura
@@ -76,10 +86,11 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	}
     
 	// Listar Registros Diarios
-	public Membresia(int id, String nombreUsuario, String cedula, String fecha_entrada, String fecha_salida,
+	public Membresia(int id, String nombreUsuario, String apellidoUsuario, String cedula, String fecha_entrada, String fecha_salida,
 			String nombreTipo) {
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
+		this.apellidoUsuario = apellidoUsuario;
 		this.cedula = cedula;
 		this.fecha_entrada = fecha_entrada;
 		this.fecha_salida = fecha_salida;
@@ -87,16 +98,6 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	}
 	
 	// Anterior borrar si no sirven
-
-	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int plan_id, int clase_id,
-			float valor_extra, float valor_total) {
-		this.id = id;
-		this.fecha_inicio = fecha_inicio;
-		this.fecha_fin = fecha_fin;
-		this.usuario_id = usuario_id;
-		this.tipo_membresia_id = plan_id;
-		this.clase_id = clase_id;
-	}
 	
 	// Consulta Membresia
 	public Membresia(int id, String fecha_inicio, String fecha_fin, int usuario_id, int activo, int anticipacion) {
@@ -311,7 +312,37 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		this.administrador_id = administrador_id;
 	}
 	
+	public String getApellidoUsuario() {
+		return apellidoUsuario;
+	}
+
+	public void setApellidoUsuario(String apellidoUsuario) {
+		this.apellidoUsuario = apellidoUsuario;
+	}
 	
+	public int getCaducada_notificar() {
+		return caducada_notificar;
+	}
+
+	public void setCaducada_notificar(int caducada_notificar) {
+		this.caducada_notificar = caducada_notificar;
+	}
+
+	public int getCaducando_notificar() {
+		return caducando_notificar;
+	}
+
+	public void setCaducando_notificar(int caducando_notificar) {
+		this.caducando_notificar = caducando_notificar;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public boolean validarMembresia() {
 		Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
@@ -327,19 +358,69 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	    Calendar calendar = FechasUtilidades.stringToCalendar(this.getFecha_fin());
 	    
 	    // Restar días a la fecha fin membresía
-	    calendar.add(Calendar.DAY_OF_MONTH, - 5);
+	    calendar.add(Calendar.DAY_OF_MONTH, - 3);
 	    
 	    // Obtener la fecha actual
 	    Calendar fechaActual = Calendar.getInstance();
 
 	    // Comparar la fecha resultante con la fecha actual
 	    if (calendar.before(fechaActual)) {
-	    	System.out.println("true");
+
+    		// Notificamos al usuario por correo una sola ves en vase a su atributo caducando notificar
+    		if(new Utilidades().toBoolean(this.getCaducando_notificar())) {
+    			Email email = new Email(this.getEmail(), "System Gym",
+    					"<h1>Membresía por caducar</h1>\r\n"
+    							+ "    <p>Hola " + this.getNombreUsuario() + ", esperamos que te encuentres bien. Queremos informarte que tu membresía en el Gimnasio Xtream esta por caducar. Agradecemos sinceramente tu apoyo y tu compromiso con nosotros durante este tiempo.</p>\r\n"
+    							+ "    <p>Si estás interesado/a en renovar tu membresía y continuar disfrutando de nuestros servicios, por favor, comunícate con nuestro equipo de membresías lo antes posible. Estaremos encantados de ayudarte con el proceso de renovación y responder a cualquier pregunta que puedas tener.</p>\r\n"
+    							+ "    <h3>Atentamente,</h3>\r\n"
+    							+ "    <h3>El Equipo de Xtream Gym</h3>");
+    			if(!email.sendEmail()) {
+    				System.out.println("Ocurrio un error");
+    			} else {
+    				// Una enviado el email cambiamos el valor a 0 para que no se envien mas notificaciones
+    				membresiaController.modificarCaducando(this.getId(), 0);
+    			}
+    		}
+    		
 	        return true;
 	    } else {
-	    	System.out.println("false");
 	        return false;
 	    }
+	}
+	
+	public void membresiaCaducada() {
+		if(this.getActivo() == 1) {
+			return;
+		}
+		
+		// Notificamos al usuario por correo una sola ves en vase a su atributo caducado notificar
+		if(new Utilidades().toBoolean(this.getCaducada_notificar())) {
+			Email email = new Email(this.getEmail(), "System Gym", 
+					"   <h1>Membresía caducada </h1>\r\n"
+					+ "    <p>Hola " + this.getNombreUsuario() + ", esperamos que te encuentres bien. Queremos informarte que tu membresía en el Gimnasio Xtream ha caducado. Agradecemos sinceramente tu apoyo y tu compromiso con nosotros durante este tiempo.</p>\r\n"
+					+ "    <p>Si estás interesado/a en renovar tu membresía y continuar disfrutando de nuestros servicios, por favor, comunícate con nuestro equipo de membresías lo antes posible. Estaremos encantados de ayudarte con el proceso de renovación y responder a cualquier pregunta que puedas tener.</p>\r\n"
+					+ "    <p>Si has decidido no renovar tu membresía en este momento, agradecemos igualmente tu confianza en nosotros y esperamos que hayas disfrutado de tu tiempo en Xtream Gym. </p>\r\n"
+					+ "    <h3>Una vez más, agradecemos tu apoyo y esperamos verte de nuevo en Xtream Gym en el futuro.</h3>\r\n"
+					+ "\r\n"
+					+ "    <h3>Atentamente,</h3>\r\n"
+					+ "    <h3>El Equipo de Xtream Gym</h3>");
+			if(!email.sendEmail()) {
+				System.out.println("Ocurrio un error");
+			} else {
+				// Una enviado el email cambiamos el valor a 0 para que no se envien mas notificaciones
+				membresiaController.modificarCaducada(this.getId(), 0);
+			}
+		}
+	}
+	
+	public int caducaDias() {
+	    LocalDateTime fechaActual = LocalDateTime.now();
+	    LocalDateTime fechaFin = FechasUtilidades.stringToLocalDateTime(this.fecha_fin);
+
+	    // Calcula la diferencia en días entre la fecha actual y la fecha de vencimiento
+	    long diasRestantes = ChronoUnit.DAYS.between(fechaActual, fechaFin);
+
+	    return Math.max(0, (int) diasRestantes);
 	}
 	
 	// Valida si la membresia es vigente y actualiza el activo
@@ -367,7 +448,7 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 	
     @Override
 	public String toString() {
-		return this.clase;
+		return this.nombreTipo;
 	}
 	
 }

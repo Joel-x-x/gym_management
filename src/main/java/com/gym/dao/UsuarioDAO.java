@@ -1,6 +1,7 @@
 package com.gym.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -49,7 +50,8 @@ public class UsuarioDAO {
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			return false;
 		}
 		
 	}
@@ -91,7 +93,7 @@ public class UsuarioDAO {
 		int item = 0;
 		
 		try {
-			String sentencia = "delete from usuario where id = ?";
+			String sentencia = "update usuario set estado = 0 where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -168,9 +170,9 @@ public class UsuarioDAO {
 	
 	public List<Usuario> listar(int administrador_id) {
 		
+		List<Usuario> resultado = new ArrayList<>();
 		try {
-			String sentencia = "select * from usuario where administrador_id = ?";
-			List<Usuario> resultado = new ArrayList<>();
+			String sentencia = "select * from usuario where administrador_id = ? and estado = 1";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -194,26 +196,67 @@ public class UsuarioDAO {
 								resultSet.getString("fecha_creacion")));
 					}
 					
-					return resultado;
 				}
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
+		
+		return resultado;
+		
+	}
+	
+	public List<Usuario> consultarUsuariosFecha(int administrador_id, Date fechaInicio, Date fechaFin) {
+		
+		List<Usuario> resultado = new ArrayList<>();
+		
+		try {
+			String sentencia = "call consultarUsuariosFecha(?,?,?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				statement.setDate(2, fechaInicio);
+				statement.setDate(3, fechaFin);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Usuario(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getDate("fecha_nacimiento"),
+								resultSet.getString("sexo"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula"),
+								resultSet.getString("direccion"),
+								resultSet.getString("telefono"),
+								resultSet.getString("fecha_creacion")));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
 		
 	}
 
-	public Usuario consulta(int id, int administrador_id) {
+	public Usuario consulta(int id) {
 		
 		try {
-			String sentencia = "select * from usuario where id = ? and administrador_id = ?";
+			String sentencia = "select * from usuario where id = ?";
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, id);
-				statement.setInt(2, administrador_id);
 				
 				final ResultSet resultSet = statement.executeQuery();
 				
@@ -238,7 +281,32 @@ public class UsuarioDAO {
 		} catch(SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public int consultarUsuarioId(String cedula) {
 		
+		try {
+			String sentencia = "select * from usuario where cedula = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setString(1, cedula);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+					return resultSet.getInt("id");
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 	
 	public List<Usuario> consultar(int administrador_id, String nombre) {
@@ -247,9 +315,9 @@ public class UsuarioDAO {
 			String sentencia = "";
 			
 			if(!nombre.equals("")) {
-				sentencia = "select * from usuario where administrador_id = ? and nombre like ?";
+				sentencia = "select * from usuario where administrador_id = ? and nombre like ? and estado = 1";
 			} else {
-				sentencia = "select * from usuario where administrador_id = ?";
+				sentencia = "select * from usuario where administrador_id = ? and estado = 1";
 			}
 			
 			List<Usuario> resultado = new ArrayList<>();

@@ -52,6 +52,21 @@ public class ArrayUtilidades {
     	return matrizUsuarios;
 	}
 	
+	public Object[][] toMatrizFormaPago(List<Factura> lista) {
+		int contador = 0;
+		Object[][] matrizFormaPago=  new Object[lista.size()][4];
+    	
+    	for(Factura factura : lista) {
+    		matrizFormaPago[contador][0] = factura.getId();
+    		matrizFormaPago[contador][1] = factura.getForma_pago();
+    		matrizFormaPago[contador][2] = factura.getTotal();
+    		matrizFormaPago[contador][3] = factura.getFecha();
+
+    		contador++;
+    	}
+    	return matrizFormaPago;
+	}
+	
 	public Object[][] toMatrizFisico(List<Fisico> lista) {
 		int contador = 0;
 		Object[][] matrizFisico =  new Object[lista.size()][4];
@@ -157,15 +172,14 @@ public class ArrayUtilidades {
 	
 	public Object[][] toMatrizMembresiaRegistro(List<Membresia> lista) {
 		int contador = 0;
-		Object[][] matrizMembresia =  new Object[lista.size()][5];
+		Object[][] matrizMembresia =  new Object[lista.size()][4];
     	
     	for(Membresia membresia : lista) {
     			
-    		matrizMembresia[contador][0] = membresia.getNombreUsuario();
+    		matrizMembresia[contador][0] = membresia.getNombreUsuario() + " " + membresia.getApellidoUsuario();
     		matrizMembresia[contador][1] = membresia.getCedula();
     		matrizMembresia[contador][2] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_entrada());
-    		matrizMembresia[contador][3] = FechasUtilidades.cambiarFormatoFecha(membresia.getFecha_salida());
-    		matrizMembresia[contador][4] = membresia.getNombreTipo();
+    		matrizMembresia[contador][3] = membresia.getNombreTipo();
 
     		contador++;
     	}
@@ -213,19 +227,20 @@ public class ArrayUtilidades {
 	
 	public Object[][] toMatrizFactura(List<Factura> lista) {
 	    int contador = 0;
-	    Object[][] matrizFacturas = new Object[lista.size()][10];  // Cambiar el tamaño de la matriz según el número de campos en Factura
+	    Object[][] matrizFacturas = new Object[lista.size()][11];  // Cambiar el tamaño de la matriz según el número de campos en Factura
 
 	    for (Factura factura : lista) {
 	        matrizFacturas[contador][0] = factura.getId();
 	        matrizFacturas[contador][1] = factura.getNumero_factura();
 	        matrizFacturas[contador][2] = factura.getNombreUsuario();
-	        matrizFacturas[contador][3] = factura.getSubtotal();
-	        matrizFacturas[contador][4] = factura.getIva();
-	        matrizFacturas[contador][5] = factura.getTotal();
-	        matrizFacturas[contador][6] = factura.getForma_pago();
-	        matrizFacturas[contador][7] = factura.getFecha();
-	        matrizFacturas[contador][8] = factura.getEstablecimiento();
-	        matrizFacturas[contador][9] = factura.getPunto_emision();
+	        matrizFacturas[contador][3] = factura.getCedulaUsuario();
+	        matrizFacturas[contador][4] = factura.getSubtotal();
+	        matrizFacturas[contador][5] = factura.getIva();
+	        matrizFacturas[contador][6] = factura.getTotal();
+	        matrizFacturas[contador][7] = factura.getForma_pago();
+	        matrizFacturas[contador][8] = factura.getFecha();
+	        matrizFacturas[contador][9] = factura.getEstablecimiento();
+	        matrizFacturas[contador][10] = factura.getPunto_emision();
 
 	        contador++;
 	    }

@@ -21,6 +21,10 @@ public class FisicoController {
 	public Fisico consulta(int id, int usuario_id) {
 		return fisicoDAO.consulta(id, usuario_id);
 	}
+	
+	public Fisico consultarUltimoFisico(int usuario_id) {
+		return fisicoDAO.consultarUltimoFisico(usuario_id);
+	}
 
 	public boolean guardar(Fisico fisico) {
 		return fisicoDAO.guardar(fisico);

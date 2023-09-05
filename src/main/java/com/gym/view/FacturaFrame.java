@@ -151,7 +151,6 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	
 	public void actulizarFactura() {
 		Factura factura = llenarFactura();
-		
 		// Validar si existen membresias agregadas
 		if(labelTotal.getText().equals("0.0")) {
 			JOptionPane.showMessageDialog(null, "No tienes ninguna membresía agregada");
@@ -524,7 +523,6 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 				//Generar factura 
 				try {
 					
-					
 					nro_factura = labelNumeroFactura.getText();
 					cliente_factura = textCliente.getText();
 					subtotal_factura = labelSubtotal.getText();
@@ -548,7 +546,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 					documento.add(parrafo);
 					
 					documento.add(new Paragraph("   CLIENTE: " + cliente_factura));
-					documento.add(new Paragraph("   ESTABLECIMIENTO: " +establecimiento));
+					documento.add(new Paragraph("   ESTABLECIMIENTO: " + establecimiento));
 					documento.add(new Paragraph("   FECHA DE EMISION: "+ fecha));
 					documento.add(new Paragraph("   FORMA DE PAGO: " + forma_pago));
 					documento.add(new Paragraph("------------------------------------------------------------------"));
@@ -559,6 +557,7 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 						documento.add(new Paragraph("   "+table.getValueAt(i, 1)+ "                             " 
 															+table.getValueAt(i, 4)));
 					}
+					
 					documento.add(new Paragraph("------------------------------------------------------------------"));
 					documento.add(new Paragraph("      SUBTOTAL:"+"                                "+ subtotal_factura));
 					documento.add(new Paragraph("   DESCUENTO %:"+"                                "+ descuento));

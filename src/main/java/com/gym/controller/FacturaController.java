@@ -14,8 +14,8 @@ public class FacturaController {
 		facturaDAO = new FacturaDAO(ConnectionFactory.conectar());
 	}
 	
-	public Object[][] listarFactura(int administrador_id, String nombre) {
-		var listaFactura = facturaDAO.listarFactura(administrador_id, nombre);
+	public Object[][] listarFactura(int administrador_id, String buscar) {
+		var listaFactura = facturaDAO.listarFactura(administrador_id, buscar);
 		
 		return new ArrayUtilidades().toMatrizFactura(listaFactura);
 	}
@@ -54,5 +54,19 @@ public class FacturaController {
 	
 	public List<Factura> listarIvas(int administrador_id) {
 		return facturaDAO.listarIvas(administrador_id);
+	}
+	
+	public boolean agregarFormaPago(String forma_pago, Double monto, int usuario_id, int factura_id) {
+		return facturaDAO.agregarFormaPago(forma_pago, monto, usuario_id, factura_id);
+	}
+	
+	public boolean borrarFormaPago(int id) {
+		return facturaDAO.borrarFormaPago(id);
+	}
+	
+	public Object[][] listarFormaPago(int factura_id) {
+		var listaFormaPago = facturaDAO.listarFormaPago(factura_id);
+		
+		return new ArrayUtilidades().toMatrizFormaPago(listaFormaPago);
 	}
 }

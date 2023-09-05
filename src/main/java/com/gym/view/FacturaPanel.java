@@ -18,9 +18,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.FacturaController;
+import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
-import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -37,30 +37,31 @@ import javax.swing.event.CaretEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 
 public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private int administrador_id;
 	private int idSeleccionado;
+	private String numero_factura;
+	private String cedula;
+	private Double total;
 	private FacturaController facturaController;
+	private UsuarioController usuarioController;
 	private DefaultTableModel modelo;
-	private int factura_imprimir;
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField textBuscar;
 	private JTable table;
-	private JTextField textField_1;
 	private JButton btnNuevo;
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JButton btnRefrescar;
 	private JButton btnNewButton_3;
+	private JButton btnFormaPago;
 	
 	
 	public void listar() {
-		String[] cabecera = {"Id" , "No Factura", "Cliente", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
+		String[] cabecera = {"Id" , "No Factura", "Cliente", "Cedula", "Subtotal", "IVA", "Total", "Forma de pago", "Fecha", "Establecimiento", "Punto de Emisión"};
 		
 		modelo = new DefaultTableModel(facturaController.listarFactura(administrador_id, textBuscar.getText()), cabecera);
 		
@@ -122,15 +123,20 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         new IvaFrame(listModel);
 	}
 	
+	public void formaPago() {
+		new FormaPagoFrame(numero_factura, cedula, total, idSeleccionado, usuarioController.consultarUsuarioId(cedula));
+	}
+	
 	public void bloquearBotones() {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
+		btnFormaPago.setEnabled(false);
 	}
 	
 	public void activarBotones() {
 		btnModificar.setEnabled(true);
 		btnEliminar.setEnabled(true);
-		
+		btnFormaPago.setEnabled(true);
 	}
 	
 	@Override
@@ -146,6 +152,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
+		usuarioController = new UsuarioController();
 		
 		setLayout(null);
 		setFocusTraversalPolicyProvider(true);
@@ -209,11 +216,11 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		JLabel lblFactura = new JLabel("FACTURA");
 		lblFactura.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblFactura.setBounds(40, 11, 1000, 46);
+		lblFactura.setBounds(10, 11, 1060, 46);
 		add(lblFactura);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Buscar Nombre/Cedula:");
-		lblNewLabel_2_1.setBounds(659, 102, 160, 22);
+		lblNewLabel_2_1.setBounds(763, 102, 160, 22);
 		add(lblNewLabel_2_1);
 		
 		textBuscar = new JTextField();
@@ -222,7 +229,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 				listar();
 			}
 		});
-		textBuscar.setBounds(803, 101, 237, 25);
+		textBuscar.setBounds(900, 101, 140, 25);
 		add(textBuscar);
 		textBuscar.setColumns(10);
 		
@@ -243,20 +250,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		scrollPane.setViewportView(table);
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
-        
-        JButton btnNewButton = new JButton(">>");
-        btnNewButton.setBounds(503, 683, 49, 23);
-        add(btnNewButton);
-        
-        JButton btnNewButton_1 = new JButton("<<");
-        btnNewButton_1.setBounds(421, 683, 49, 23);
-        add(btnNewButton_1);
-        
-        textField_1 = new JTextField();
-        textField_1.setText("1");
-        textField_1.setBounds(472, 684, 30, 20);
-        add(textField_1);
-        textField_1.setColumns(10);
         
         JButton btnNewButton_2 = new JButton("Imprimir");
         btnNewButton_2.addActionListener(new ActionListener() {
@@ -294,6 +287,23 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         btnNewButton_3.setBackground(new Color(46, 56, 64));
         btnNewButton_3.setBounds(940, 60, 100, 30);
         add(btnNewButton_3);
+        
+        btnFormaPago = new JButton("Forma de pago");
+        btnFormaPago.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		numero_factura = (String) table.getValueAt(table.getSelectedRow(), 1);
+        		cedula = (String) table.getValueAt(table.getSelectedRow(), 3);
+        		total = (Double) table.getValueAt(table.getSelectedRow(), 6);
+        		formaPago();
+        	}
+        });
+        btnFormaPago.setForeground(Color.WHITE);
+        btnFormaPago.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnFormaPago.setFocusPainted(false);
+        btnFormaPago.setBorder(null);
+        btnFormaPago.setBackground(new Color(46, 56, 64));
+        btnFormaPago.setBounds(590, 98, 100, 30);
+        add(btnFormaPago);
         
         listar();
         bloquearBotones();

@@ -1,5 +1,8 @@
 package com.gym.controller;
 
+import java.sql.Date;
+import java.util.List;
+
 import com.gym.dao.UsuarioDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Membresia;
@@ -22,13 +25,21 @@ public class UsuarioController {
 		
 		return new ArrayUtilidades().toMatrizUsuario(listaUsuarios);
 	}
+	
+	public List<Usuario> consultarUsuariosFecha(int administrador_id, Date fechaInicio, Date fechaFin) {
+		return usuarioDAO.consultarUsuariosFecha(administrador_id, fechaInicio, fechaFin);
+	}
 
 	public boolean modificar(Usuario usuario) {
 		return usuarioDAO.modificar(usuario);
 	}
 
-	public Usuario consulta(int idSeleccionado, int administrador_id) {
-		return usuarioDAO.consulta(idSeleccionado, administrador_id);
+	public Usuario consulta(int idSeleccionado) {
+		return usuarioDAO.consulta(idSeleccionado);
+	}
+	
+	public int consultarUsuarioId(String cedula) {
+		return usuarioDAO.consultarUsuarioId(cedula);
 	}
 	
 	public Membresia consultaMembresia(int usuario_id) {

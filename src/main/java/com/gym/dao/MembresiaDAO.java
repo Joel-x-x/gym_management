@@ -1,6 +1,7 @@
 package com.gym.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +10,6 @@ import java.util.List;
 
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
-import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 
 public class MembresiaDAO {
@@ -41,7 +41,7 @@ public class MembresiaDAO {
 			// Nombre
 			if(!Utilidades.isNumber(buscar) && !buscar.equals("")) sentencia = "call consultarMembresiasNombre(?, ?)";
 			
-			PreparedStatement statement = con.prepareStatement(sentencia);
+			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				
@@ -69,7 +69,10 @@ public class MembresiaDAO {
 					        resultSet.getString("c.clase"),
 					        resultSet.getInt("c.entrenador_id"),
 					        resultSet.getString("e.nombre"),
-					        resultSet.getString("f.numero_factura")
+					        resultSet.getString("f.numero_factura"),
+					        resultSet.getInt("m.caducada_notificar"),
+					        resultSet.getInt("m.caducando_notificar"),
+					        resultSet.getString("u.email")
 					    ));
 					}
 				}
@@ -80,6 +83,101 @@ public class MembresiaDAO {
 		}
 		
 		return resultado;
+	}
+	
+	public List<Membresia> listarMembresiasUsuario(int usuario_id) {
+
+		List<Membresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call listarMembresiasUsuario(?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, usuario_id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+					    resultado.add(new Membresia(
+					        resultSet.getInt("m.id"),
+					        resultSet.getString("m.fecha_inicio"),
+					        resultSet.getString("m.fecha_fin"),
+					        resultSet.getInt("m.activo"),
+					        resultSet.getInt("m.usuario_id"),
+					        resultSet.getInt("m.tipo_membresia_id"),
+					        resultSet.getInt("m.factura_id"),
+					        resultSet.getString("u.nombre"),
+					        resultSet.getString("u.cedula"),
+					        resultSet.getString("t.nombre"),
+					        resultSet.getInt("t.clase_id"),
+					        resultSet.getString("c.clase"),
+					        resultSet.getInt("c.entrenador_id"),
+					        resultSet.getString("e.nombre"),
+					        resultSet.getString("f.numero_factura"),
+					        resultSet.getInt("m.caducada_notificar"),
+					        resultSet.getInt("m.caducando_notificar"),
+					        resultSet.getString("u.email")
+						    ));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	
+	public Membresia consulta(int id) {
+
+		try {
+			String sentencia = "call consultarMembresia(?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, id);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					resultSet.next();
+					
+						return new Membresia(
+						        resultSet.getInt("m.id"),
+						        resultSet.getString("m.fecha_inicio"),
+						        resultSet.getString("m.fecha_fin"),
+						        resultSet.getInt("m.activo"),
+						        resultSet.getInt("m.usuario_id"),
+						        resultSet.getInt("m.tipo_membresia_id"),
+						        resultSet.getInt("m.factura_id"),
+						        resultSet.getString("u.nombre"),
+						        resultSet.getString("u.cedula"),
+						        resultSet.getString("t.nombre"),
+						        resultSet.getInt("t.clase_id"),
+						        resultSet.getString("c.clase"),
+						        resultSet.getInt("c.entrenador_id"),
+						        resultSet.getString("e.nombre"),
+						        resultSet.getString("f.numero_factura"),
+						        resultSet.getInt("m.caducada_notificar"),
+						        resultSet.getInt("m.caducando_notificar"),
+						        resultSet.getString("u.email")
+							    );
+				}
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 	public List<Membresia> listarMembresiaFactura(int administrador_id, int factura_id) {
@@ -186,105 +284,7 @@ public class MembresiaDAO {
 			throw new RuntimeException(e);
 		}
 	}
-
-	public Membresia consulta(int id, int usuario_id) {
-
-		try {
-			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
-					+ " join plan p on p.id = m.plan_id"
-					+ " join clase c on c.id = m.clase_id"
-					+ " where m.id = ? and m.usuario_id = ?";
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setInt(1, id);
-				statement.setInt(2, usuario_id);
-				
-				final ResultSet resultSet = statement.executeQuery();
-				
-				try(resultSet) {
-					
-					resultSet.next();
-					
-						return new Membresia(
-								resultSet.getInt("m.id"),
-								resultSet.getString("m.fecha_inicio"),
-								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
-								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
-								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
-								);
-				}
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
 	
-	public Membresia consultaUltimaMembresia(int usuario_id) {
-
-		try {
-			
-			System.out.println(usuario_id);
-			
-			String sentencia = "select m.*, p.nombre, c.clase"
-					+ " from membresia m"
-					+ " join plan p ON p.id = m.plan_id"
-					+ " join clase c ON c.id = m.clase_id"
-					+ " where m.id = ("
-					+ "    select max(id) from membresia where usuario_id = ?"
-					+ ")"
-					+ " and m.usuario_id = ?"
-					+ " group by m.id, p.nombre, c.clase;";
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setInt(1, usuario_id);
-				statement.setInt(2, usuario_id);
-				
-				final ResultSet resultSet = statement.executeQuery();
-				
-				try(resultSet) {
-					
-					resultSet.next();
-					
-						return new Membresia(
-								resultSet.getInt("m.id"),
-								resultSet.getString("m.fecha_inicio"),
-								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
-								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
-								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
-								);
-				}
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-
 	public boolean eliminar(int id) {
 		
 		try {
@@ -339,6 +339,48 @@ public class MembresiaDAO {
 			
 			try(statement) {
 				statement.setInt(1, activo);
+				statement.setFloat(2, id);
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean modificarCaducando(int id, int caducando) {
+
+		try {
+			String sentencia = "update membresia set caducando_notificar = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, caducando);
+				statement.setFloat(2, id);
+					
+					return toBoolean(statement.executeUpdate());
+			}
+			
+		} catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	public boolean modificarCaducada(int id, int caducada) {
+
+		try {
+			String sentencia = "update membresia set caducada_notificar = ?"
+					+ " where id = ?";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, caducada);
 				statement.setFloat(2, id);
 					
 					return toBoolean(statement.executeUpdate());
@@ -431,53 +473,6 @@ public class MembresiaDAO {
 		return clasesActivas;
 	}
 
-	public List<Membresia> listarMembresias(int usuario_id) {
-
-		try {
-			String sentencia = "select m.*, p.nombre, c.clase from membresia m"
-					+ " join plan p on p.id = m.plan_id"
-					+ " join clase c on c.id = m.clase_id"
-					+ " where usuario_id = ? and activo <> 0";
-			
-			List<Membresia> resultado = new ArrayList<>();
-			
-			PreparedStatement statement = con.prepareStatement(sentencia);
-			
-			try(statement) {
-				
-				statement.setInt(1, usuario_id);
-				
-				final ResultSet resultSet = statement.executeQuery();
-				try(resultSet) {
-					
-					while(resultSet.next()) {
-						resultado.add(new Membresia(
-								resultSet.getInt("m.id"),
-								resultSet.getString("m.fecha_inicio"),
-								resultSet.getString("m.fecha_fin"),
-								resultSet.getInt("m.usuario_id"),
-								resultSet.getInt("m.plan_id"),
-								resultSet.getInt("m.clase_id"),
-								resultSet.getFloat("m.valor_extra"),
-								resultSet.getFloat("m.valor_total"),
-								resultSet.getInt("m.administrador_id"),
-								resultSet.getString("p.nombre"),
-								resultSet.getString("c.clase"),
-								resultSet.getInt("m.activo"),
-								resultSet.getInt("m.anticipacion")
-								));
-					}
-					
-					return resultado;
-				}
-			}
-			
-		} catch(SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-
 	public Membresia consultaMembresia(int usuario_id, int id) {
 		Membresia membresia = null;
 		
@@ -523,6 +518,57 @@ public class MembresiaDAO {
 		
 		return membresia;
 		
+	}
+
+	public List<Membresia> consultarFecha(int administrador_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		List<Membresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call consultarMembresiasFecha(?,?,?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				statement.setDate(2, fechaInicioSQL);
+				statement.setDate(3, fechaFinSQL);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Membresia(
+						        resultSet.getInt("m.id"),
+						        resultSet.getString("m.fecha_inicio"),
+						        resultSet.getString("m.fecha_fin"),
+						        resultSet.getInt("m.activo"),
+						        resultSet.getInt("m.usuario_id"),
+						        resultSet.getInt("m.tipo_membresia_id"),
+						        resultSet.getInt("m.factura_id"),
+						        resultSet.getString("u.nombre"),
+						        resultSet.getString("u.cedula"),
+						        resultSet.getString("t.nombre"),
+						        resultSet.getInt("t.clase_id"),
+						        resultSet.getString("c.clase"),
+						        resultSet.getInt("c.entrenador_id"),
+						        resultSet.getString("e.nombre"),
+						        resultSet.getString("f.numero_factura"),
+						        resultSet.getInt("m.caducada_notificar"),
+						        resultSet.getInt("m.caducando_notificar"),
+						        resultSet.getString("u.email")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
 	}
 	
 }

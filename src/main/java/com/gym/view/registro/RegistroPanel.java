@@ -34,12 +34,12 @@ public class RegistroPanel extends JPanel {
     private RegistroFrame registroFrame;
     private JLabel iniciarSesionButton;
     private JTextField textEmail;
-    private JTextField txt_Password;
+    private JPasswordField txt_Password;
+    private JPasswordField txt_confirmar_contraseña;
     private JTextField textClave;
     private JTextField textNombre;
     private JLabel lbl_verificador_contraseña;
     private JLabel lbl_coincidencia_contraseñas;
-    private JTextField txt_confirmar_contraseña;
     
     public void registrar() {
 		Administrador administrador = llenarAdministrador();
@@ -132,25 +132,25 @@ public class RegistroPanel extends JPanel {
         textEmail.setBounds(250, 253, 350, 40);
         add(textEmail);
         
-        txt_confirmar_contraseña = new JTextField();
+        txt_confirmar_contraseña = new JPasswordField();
         txt_confirmar_contraseña.addCaretListener(new CaretListener() {
         	
 			public void caretUpdate(CaretEvent e) {
-        		if(!txt_confirmar_contraseña.getText().equals(txt_Password.getText())) {
+        		if(!String.valueOf(txt_confirmar_contraseña.getPassword()).equals(String.valueOf(txt_Password.getPassword()))) {
                 	lbl_coincidencia_contraseñas.setText("Sin coincidencias");
-                }else if(txt_confirmar_contraseña.getText().equals(txt_Password.getText())){
+                }else if(String.valueOf(txt_confirmar_contraseña.getPassword()).equals(String.valueOf(txt_Password.getPassword()))){
                 	lbl_coincidencia_contraseñas.setText("");
                 }
         	}
         });
         
-        txt_Password = new JTextField();
+        txt_Password = new JPasswordField();
         txt_Password.addCaretListener(new CaretListener() {
         	String contraseña= "";
         	String contraseña_array [];
         	
         	public void caretUpdate(CaretEvent e) {
-        		contraseña = String.valueOf(txt_Password.getText());
+        		contraseña = String.valueOf(txt_Password.getPassword());
         		contraseña_array = new String[contraseña.length()];
         		
         		for(int i = 0; i<contraseña.length(); i++) {
