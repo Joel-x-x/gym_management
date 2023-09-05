@@ -837,20 +837,20 @@ CREATE TABLE `bdd_gym`.`forma_pago` (
 select * from bdd_gym.membresia;
 -- Datos de la Base de Datos
 -- Insertar un administrador
-INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, clave, direccion)
-VALUES ('NombreAdmin', 'ApellidoAdmin', 'wacho@gmail.com', '123456789', '123456789', 'random', 0, 1, 'claveadmin', 'DirecciónAdmin');
+INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, direccion)
+VALUES ('Admin', 'Admin', 'wacho@gmail.com', '1850043849', '123456789', 'random', 0, 1, 'DirecciónAdmin');
 
 -- Insertar un entrenador
 INSERT INTO entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id)
-VALUES ('NombreEntrenador', 'ApellidoEntrenador', 'Masculino', 'entrenador@example.com', '123456789', '987654321', 1);
+VALUES ('Marco', 'Polo', 'Masculino', 'marco2000@gmail.com', '0948573485', '1803453849', 1);
 
 -- Insertar una clase
 INSERT INTO clase (clase, descripcion, entrenador_id, administrador_id)
-VALUES ('Clase de Ejemplo', 'Descripción de la clase', 1, 1);
+VALUES ('Entrenamiento', 'Uso de las instalaciones', 1, 1);
 
 -- Insertar una cuenta
 INSERT INTO cuenta (nombre_empresa, administrador_id)
-VALUES ('Mi Empresa', 1);
+VALUES ('Xtream', 1);
 
 -- Insertar recuperacion cuenta
 INSERT INTO recuperacion_cuenta(nombre_amigo, nombre_mascota, color_favorito, administrador_id) 
@@ -858,7 +858,7 @@ VALUES("Nombre Amigo", "Nombre mascota", "Verde", 1);
 
 -- Insertar un usuario
 INSERT INTO usuario (nombre, apellido, fecha_nacimiento, sexo, email, cedula, direccion, telefono, administrador_id)
-VALUES ('NombreUsuario', 'ApellidoUsuario', '1990-01-01', 'Masculino', 'usuario@example.com', '123456789', 'DirecciónUsuario', '987654321', 1);
+VALUES ('Lucho', 'Teneda', '2003-01-01', 'Masculino', 'lucho2312@gmail.com', '1834567893', 'Dirección', '0987654321', 1);
 
 -- Insertar un físico
 INSERT INTO fisico (altura, peso, usuario_id)
@@ -866,7 +866,7 @@ VALUES (170.5, 70.0, 1);
 
 -- Insertar un tipo de membresía
 INSERT INTO tipo_membresia (nombre, descripcion, precio, duracion, tipo_duracion, clase_id, administrador_id)
-VALUES ('Membresía Mensual', 'Descripción de la membresía', 50.00, 30, 'day', 1, 1);
+VALUES ('Membresía Mensual', 'Descripción de la membresía', 25.00, 1, 'month', 1, 1);
 
 -- Insertar iva por defecto
 INSERT INTO iva(iva, administrador_id) values(12, 1);

@@ -328,8 +328,8 @@ if (path.exists()) {
 			frameHuella = new AgregarHuellaFrame(idSeleccionadoUsuario);
 			frameHuella.setVisible(true);
 		} catch(Exception e) {
-			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
 			frameHuella.setVisible(false);
+			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
 		}
 	}
 	
