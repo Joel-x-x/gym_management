@@ -1,5 +1,8 @@
 package com.gym.controller;
 
+import java.sql.Date;
+import java.util.List;
+
 import com.gym.dao.UsuarioDAO;
 import com.gym.factory.ConnectionFactory;
 import com.gym.model.Membresia;
@@ -21,6 +24,10 @@ public class UsuarioController {
 		var listaUsuarios = usuarioDAO.listar(administrador_id);
 		
 		return new ArrayUtilidades().toMatrizUsuario(listaUsuarios);
+	}
+	
+	public List<Usuario> consultarUsuariosFecha(int administrador_id, Date fechaInicio, Date fechaFin) {
+		return usuarioDAO.consultarUsuariosFecha(administrador_id, fechaInicio, fechaFin);
 	}
 
 	public boolean modificar(Usuario usuario) {

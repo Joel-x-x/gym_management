@@ -1,6 +1,7 @@
 package com.gym.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +10,6 @@ import java.util.List;
 
 import com.gym.model.Clase;
 import com.gym.model.Membresia;
-import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 
 public class MembresiaDAO {
@@ -41,7 +41,7 @@ public class MembresiaDAO {
 			// Nombre
 			if(!Utilidades.isNumber(buscar) && !buscar.equals("")) sentencia = "call consultarMembresiasNombre(?, ?)";
 			
-			PreparedStatement statement = con.prepareStatement(sentencia);
+			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				
@@ -518,6 +518,57 @@ public class MembresiaDAO {
 		
 		return membresia;
 		
+	}
+
+	public List<Membresia> consultarFecha(int administrador_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		List<Membresia> resultado = new ArrayList<>();
+		
+		try {
+			
+			String sentencia = "call consultarMembresiasFecha(?,?,?)";
+			
+			final PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				
+				statement.setInt(1, administrador_id);
+				statement.setDate(2, fechaInicioSQL);
+				statement.setDate(3, fechaFinSQL);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Membresia(
+						        resultSet.getInt("m.id"),
+						        resultSet.getString("m.fecha_inicio"),
+						        resultSet.getString("m.fecha_fin"),
+						        resultSet.getInt("m.activo"),
+						        resultSet.getInt("m.usuario_id"),
+						        resultSet.getInt("m.tipo_membresia_id"),
+						        resultSet.getInt("m.factura_id"),
+						        resultSet.getString("u.nombre"),
+						        resultSet.getString("u.cedula"),
+						        resultSet.getString("t.nombre"),
+						        resultSet.getInt("t.clase_id"),
+						        resultSet.getString("c.clase"),
+						        resultSet.getInt("c.entrenador_id"),
+						        resultSet.getString("e.nombre"),
+						        resultSet.getString("f.numero_factura"),
+						        resultSet.getInt("m.caducada_notificar"),
+						        resultSet.getInt("m.caducando_notificar"),
+						        resultSet.getString("u.email")
+								));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
 	}
 	
 }

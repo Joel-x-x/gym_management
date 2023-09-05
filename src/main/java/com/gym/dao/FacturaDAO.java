@@ -68,7 +68,7 @@ public class FacturaDAO {
 	}
 
 	
-	public List<Factura> listarFactura(int administrador_id, String nombre) {
+	public List<Factura> listarFactura(int administrador_id, String buscar) {
 		
 		List<Factura> resultado = new ArrayList<>();
 //		int elementosPorPagina = 10; 
@@ -78,18 +78,19 @@ public class FacturaDAO {
 			
 			String sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and total <> 0.0";
 			
-			if(!nombre.equals("")) {
-				sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ? and total <> 0.0";
-			}
+			// Cedula
+			if(Utilidades.isNumber(buscar)) sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and cedula like ? and total <> 0.0";
+			
+			// Nombre
+			if(!Utilidades.isNumber(buscar) && !buscar.equals("")) sentencia = "select * from factura f, usuario u where f.administrador_id = ? and f.usuario_id = u.id and nombre like ? and total <> 0.0";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
 			try(statement) {
 				statement.setInt(1, administrador_id);
 				
-				if(!nombre.equals("")) {
-					statement.setString(2, nombre + "%");
-				}
+				// Consultar
+				if(!buscar.equals("")) statement.setString(2, buscar + "%");
 				
 				final ResultSet resultSet = statement.executeQuery();
 				

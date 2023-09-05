@@ -14,8 +14,8 @@ public class FacturaController {
 		facturaDAO = new FacturaDAO(ConnectionFactory.conectar());
 	}
 	
-	public Object[][] listarFactura(int administrador_id, String nombre) {
-		var listaFactura = facturaDAO.listarFactura(administrador_id, nombre);
+	public Object[][] listarFactura(int administrador_id, String buscar) {
+		var listaFactura = facturaDAO.listarFactura(administrador_id, buscar);
 		
 		return new ArrayUtilidades().toMatrizFactura(listaFactura);
 	}

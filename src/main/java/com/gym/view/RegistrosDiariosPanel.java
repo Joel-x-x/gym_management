@@ -376,7 +376,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         
         panel_2 = new JPanel();
         panel_2.setLayout(null);
-        panel_2.setBackground(new Color(23, 159, 38));
+        panel_2.setBackground(new Color(0, 128, 192));
         panel_2.setBounds(339, 526, 399, 54);
         add(panel_2);
         

@@ -174,6 +174,15 @@ AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+delimiter ..
+drop procedure if exists consultarUsuariosFecha..
+create procedure consultarUsuariosFecha(in administradorId int, in fechaInicio date, in fechaFin date)
+begin
+	select * from usuario
+    where administrador_id = administradorId and fecha_creacion between fechaInicio and fechaFin;
+end.. 
+delimiter ;
+
 -- === Usuario ===
 -- Modificar tabla de auditoría para usuario
 CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
@@ -567,7 +576,7 @@ delimiter ..
 drop procedure if exists consultarMembresiasNombre..
 create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id
@@ -583,7 +592,7 @@ delimiter ..
 drop procedure if exists consultarMembresiasFecha..
 create procedure consultarMembresiasFecha(in administradorId int, in fechaInicio date, in fechaFin date)
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id
@@ -593,13 +602,12 @@ begin
     order by activo desc, fecha_fin;
 end.. 
 delimiter ;
-call consultarMembresiasFecha(1, curdate(), curdate());
-select * from membresia;
+
 delimiter ..
 drop procedure if exists consultarMembresiasCedula..
 create procedure consultarMembresiasCedula(in administradorId int, in buscar varchar(20))
 begin
-	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	select m.*, u.nombre, u.cedula, u.email, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
 	join usuario u on u.id = m.usuario_id
 	join tipo_membresia t on t.id = m.tipo_membresia_id
 	join clase c on c.id = t.clase_id

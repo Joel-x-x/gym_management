@@ -7,8 +7,16 @@ import javax.swing.JPanel;
 
 import com.gym.controller.MembresiaController;
 import com.gym.model.Administrador;
+import com.gym.model.Membresia;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -16,11 +24,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+import javax.swing.JButton;
+import com.toedter.calendar.JDateChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MembresiasPanel extends JPanel {
 	private int administrador_id;
 	private MembresiaController membresiaController;
 	private DefaultTableModel modelo;
+	
+    private Calendar fechaInicio;
+    private Calendar fechaFin;
+    private JDateChooser dateChooserInicio;
+    private JDateChooser dateChooserFin;
 	
 	private static final long serialVersionUID = 2171384064364316402L;
 	private JTable table;
@@ -62,6 +79,30 @@ public class MembresiasPanel extends JPanel {
             return component;
         }
     };
+    
+	public void buscarMembresiasFecha() {
+		fechaInicio = dateChooserInicio.getCalendar();
+		fechaFin = dateChooserFin.getCalendar();
+		
+		if(fechaInicio == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
+			return;
+		}
+		
+		if(fechaFin == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
+			return;
+		}
+		
+		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
+		
+        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
+        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
+		
+        List<Membresia> listaMembresias = membresiaController.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
+        
+        listaMembresias.forEach(x -> System.out.println(x.getFecha_inicio()));
+	}
 
 	public MembresiasPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
@@ -101,6 +142,38 @@ public class MembresiasPanel extends JPanel {
         textBuscar.setColumns(10);
         textBuscar.setBounds(163, 98, 200, 25);
         add(textBuscar);
+        
+        JButton btnNewButton_2 = new JButton("Generar reporte");
+        btnNewButton_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		buscarMembresiasFecha();
+        	}
+        });
+        btnNewButton_2.setForeground(Color.WHITE);
+        btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnNewButton_2.setFocusPainted(false);
+        btnNewButton_2.setBorder(null);
+        btnNewButton_2.setBackground(new Color(46, 56, 64));
+        btnNewButton_2.setBounds(877, 93, 159, 30);
+        add(btnNewButton_2);
+        
+        JLabel lblNewLabel_2_1_1 = new JLabel("Fecha inicio");
+        lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1.setBounds(581, 75, 131, 14);
+        add(lblNewLabel_2_1_1);
+        
+        dateChooserInicio = new JDateChooser();
+        dateChooserInicio.setBounds(581, 93, 138, 30);
+        add(dateChooserInicio);
+        
+        JLabel lblNewLabel_2_1_1_1 = new JLabel("Fecha fin");
+        lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1_1.setBounds(729, 75, 131, 14);
+        add(lblNewLabel_2_1_1_1);
+        
+        dateChooserFin = new JDateChooser();
+        dateChooserFin.setBounds(729, 93, 138, 30);
+        add(dateChooserFin);
         
         listar();
 	}

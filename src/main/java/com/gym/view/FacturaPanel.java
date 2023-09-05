@@ -21,7 +21,6 @@ import com.gym.controller.FacturaController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
-import com.gym.model.TipoMembresia;
 import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -38,8 +37,6 @@ import javax.swing.event.CaretEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 
 public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
@@ -51,7 +48,6 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private FacturaController facturaController;
 	private UsuarioController usuarioController;
 	private DefaultTableModel modelo;
-	private int factura_imprimir;
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField textBuscar;

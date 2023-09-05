@@ -1,5 +1,6 @@
 package com.gym.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.gym.dao.MembresiaDAO;
@@ -97,5 +98,9 @@ public class MembresiaController {
 	
 	public Membresia consultaMembresia(int usuario_id, int id) {
 		return membresiaDAO.consultaMembresia(usuario_id, id);
+	}
+
+	public List<Membresia> consultarFecha(int administrador_id, Date fechaInicioSQL, Date fechaFinSQL) {
+		return membresiaDAO.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
 	}
 }

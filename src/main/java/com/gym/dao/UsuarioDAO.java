@@ -1,6 +1,7 @@
 package com.gym.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -49,7 +50,8 @@ public class UsuarioDAO {
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			return false;
 		}
 		
 	}
@@ -168,9 +170,9 @@ public class UsuarioDAO {
 	
 	public List<Usuario> listar(int administrador_id) {
 		
+		List<Usuario> resultado = new ArrayList<>();
 		try {
 			String sentencia = "select * from usuario where administrador_id = ? and estado = 1";
-			List<Usuario> resultado = new ArrayList<>();
 			
 			PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -194,13 +196,55 @@ public class UsuarioDAO {
 								resultSet.getString("fecha_creacion")));
 					}
 					
-					return resultado;
 				}
 			}
 			
 		} catch(SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
+		
+		return resultado;
+		
+	}
+	
+	public List<Usuario> consultarUsuariosFecha(int administrador_id, Date fechaInicio, Date fechaFin) {
+		
+		List<Usuario> resultado = new ArrayList<>();
+		
+		try {
+			String sentencia = "call consultarUsuariosFecha(?,?,?)";
+			
+			PreparedStatement statement = con.prepareStatement(sentencia);
+			
+			try(statement) {
+				statement.setInt(1, administrador_id);
+				statement.setDate(2, fechaInicio);
+				statement.setDate(3, fechaFin);
+				
+				final ResultSet resultSet = statement.executeQuery();
+				try(resultSet) {
+					
+					while(resultSet.next()) {
+						resultado.add(new Usuario(
+								resultSet.getInt("id"),
+								resultSet.getString("nombre"),
+								resultSet.getString("apellido"),
+								resultSet.getDate("fecha_nacimiento"),
+								resultSet.getString("sexo"),
+								resultSet.getString("email"),
+								resultSet.getString("cedula"),
+								resultSet.getString("direccion"),
+								resultSet.getString("telefono"),
+								resultSet.getString("fecha_creacion")));
+					}
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
 		
 	}
 

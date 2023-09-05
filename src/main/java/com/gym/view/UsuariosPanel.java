@@ -7,7 +7,9 @@ import com.gym.controller.FisicoController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Arduino;
+import com.gym.model.Email;
 import com.gym.model.Fisico;
+import com.gym.model.Membresia;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
 import com.toedter.calendar.JDateChooser;
@@ -19,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
@@ -30,6 +33,11 @@ public class UsuariosPanel extends JPanel {
 	private FisicoController fisicoController;
 	private int idSeleccionadoUsuario;
 	private int idSeleccionadoFisico;
+	
+    private Calendar fechaInicio;
+    private Calendar fechaFin;
+	private JDateChooser dateChooserInicio;
+	private JDateChooser dateChooserFin;
 	
 	private static final long serialVersionUID = 6939534476162663420L;
 	private JTextField textNombre;
@@ -58,8 +66,6 @@ public class UsuariosPanel extends JPanel {
 	private Calendar fecha;
 	private JButton btnAgregarHuella;
 	
-
-	
 	private void listar() {
 		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
 		
@@ -85,6 +91,21 @@ public class UsuariosPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Guardado con Exito!");
 			listar();
 			limpiarFormularioUsuario();
+		    // Crear y ejecutar un nuevo hilo para notificar la membresía en segundo plano.
+		    Thread notificarThread = new Thread(() -> {
+	    		// Notificamos al usuario por correo una sola ves en vase a su atributo caducando notificar
+	    			Email email = new Email(usuario.getEmail(), "System Gym",
+	    					" <h1>Bienvenido</h1>\r\n"
+	    					+ "    <p>Hola " + usuario.getNombre() + ", nos complace que seas parte de nuestra familia de Xtream Gym. Estamos listos para ayudarte a comenzar tu emocionante viaje hacia una vida más saludable.</p>\r\n"
+	    					+ "    <h3>¡Bienvenido/a a la comunidad de Xtream Gym!</h3>\r\n"
+	    					+ "    <h3>Atentamente,</h3>\r\n"
+	    					+ "    <h3>El Equipo de Xtream Gym</h3>");
+	    			if(!email.sendEmail()) {
+	    				System.out.println("Ocurrio un error");
+	    			}
+		    });
+
+		    notificarThread.start();
 		} else {
 			JOptionPane.showMessageDialog(null, "No se pudo Guardar");
 		}
@@ -191,6 +212,30 @@ public class UsuariosPanel extends JPanel {
 							textEmail.getText(), textCedula.getText(), 
 							textDireccion.getText(), textTelefono.getText(),
 							administrador_id);
+	}
+	
+	public void buscarUsuariosFecha() {
+		fechaInicio = dateChooserInicio.getCalendar();
+		fechaFin = dateChooserFin.getCalendar();
+		
+		if(fechaInicio == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha inicio no puede ir vacio");
+			return;
+		}
+		
+		if(fechaFin == null) {
+			JOptionPane.showMessageDialog(null, "El campo fecha fin no puede ir vacio");
+			return;
+		}
+		
+		fechaFin.add(Calendar.DAY_OF_MONTH, 1);
+		
+        Date fechaInicioSQL = new Date(fechaInicio.getTimeInMillis());
+        Date fechaFinSQL = new Date(fechaFin.getTimeInMillis());
+		
+        List<Usuario> listaUsuarios = usuarioController.consultarUsuariosFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
+        
+        listaUsuarios.forEach(x -> System.out.println(x.getFecha_creacion()));
 	}
 	
 	public boolean validarCampos() {
@@ -440,7 +485,7 @@ public class UsuariosPanel extends JPanel {
         btnAgregarUsuario.setForeground(new Color(255, 255, 255));
         btnAgregarUsuario.setBorder(null);
         btnAgregarUsuario.setBackground(new Color(46, 56, 64));
-        btnAgregarUsuario.setBounds(30, 353, 150, 30);
+        btnAgregarUsuario.setBounds(30, 338, 150, 30);
         add(btnAgregarUsuario);
         
         btnModificarUsuario = new JButton("Modificar");
@@ -454,7 +499,7 @@ public class UsuariosPanel extends JPanel {
         btnModificarUsuario.setForeground(new Color(255, 255, 255));
         btnModificarUsuario.setBorder(null);
         btnModificarUsuario.setBackground(new Color(46, 56, 64));
-        btnModificarUsuario.setBounds(190, 353, 150, 30);
+        btnModificarUsuario.setBounds(190, 338, 150, 30);
         add(btnModificarUsuario);
         
         btnEliminarUsuario = new JButton("Eliminar");
@@ -468,7 +513,7 @@ public class UsuariosPanel extends JPanel {
         btnEliminarUsuario.setForeground(new Color(255, 255, 255));
         btnEliminarUsuario.setBorder(null);
         btnEliminarUsuario.setBackground(new Color(46, 56, 64));
-        btnEliminarUsuario.setBounds(350, 353, 150, 30);
+        btnEliminarUsuario.setBounds(350, 338, 150, 30);
         add(btnEliminarUsuario);
         
         btnAgregarFisico = new JButton("Agregar");
@@ -538,7 +583,7 @@ public class UsuariosPanel extends JPanel {
         JScrollPane scrollPane_1 = new JScrollPane();
         scrollPane_1.setBorder(null);
         scrollPane_1.setAutoscrolls(true);
-        scrollPane_1.setBounds(527, 179, 475, 204);
+        scrollPane_1.setBounds(527, 179, 475, 189);
         add(scrollPane_1);
         
         tableFisico = new JTable();
@@ -561,7 +606,7 @@ public class UsuariosPanel extends JPanel {
         	}
         });
         textBuscar.setColumns(10);
-        textBuscar.setBounds(139, 394, 137, 25);
+        textBuscar.setBounds(139, 394, 100, 25);
         add(textBuscar);
         
         JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");
@@ -593,7 +638,7 @@ public class UsuariosPanel extends JPanel {
         btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnBuscar.setBorder(null);
         btnBuscar.setBackground(new Color(46, 56, 64));
-        btnBuscar.setBounds(286, 394, 89, 25);
+        btnBuscar.setBounds(249, 394, 89, 25);
         add(btnBuscar);
         
         JButton btnLimpiar = new JButton("Limpiar");
@@ -607,7 +652,7 @@ public class UsuariosPanel extends JPanel {
         btnLimpiar.setFont(new Font("Tahoma", Font.BOLD, 11));
         btnLimpiar.setBorder(null);
         btnLimpiar.setBackground(new Color(46, 56, 64));
-        btnLimpiar.setBounds(385, 394, 89, 25);
+        btnLimpiar.setBounds(348, 394, 89, 25);
         add(btnLimpiar);
         
         lblNewLabel_5 = new JLabel("Selecciona un usuario");
@@ -631,8 +676,40 @@ public class UsuariosPanel extends JPanel {
         btnAgregarHuella.setFocusPainted(false);
         btnAgregarHuella.setBorder(null);
         btnAgregarHuella.setBackground(new Color(46, 56, 64));
-        btnAgregarHuella.setBounds(484, 394, 147, 25);
+        btnAgregarHuella.setBounds(447, 394, 100, 25);
         add(btnAgregarHuella);
+        
+        JButton btnGenerarReporte = new JButton("Generar reporte");
+        btnGenerarReporte.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		buscarUsuariosFecha();
+        	}
+        });
+        btnGenerarReporte.setForeground(Color.WHITE);
+        btnGenerarReporte.setFont(new Font("Tahoma", Font.BOLD, 11));
+        btnGenerarReporte.setFocusPainted(false);
+        btnGenerarReporte.setBorder(null);
+        btnGenerarReporte.setBackground(new Color(46, 56, 64));
+        btnGenerarReporte.setBounds(872, 394, 130, 25);
+        add(btnGenerarReporte);
+        
+        JLabel lblNewLabel_2_1_1 = new JLabel("Fecha inicio");
+        lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1.setBounds(604, 379, 123, 14);
+        add(lblNewLabel_2_1_1);
+        
+        dateChooserInicio = new JDateChooser();
+        dateChooserInicio.setBounds(604, 394, 123, 25);
+        add(dateChooserInicio);
+        
+        JLabel lblNewLabel_2_1_1_1 = new JLabel("Fecha fin");
+        lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_2_1_1_1.setBounds(737, 379, 125, 14);
+        add(lblNewLabel_2_1_1_1);
+        
+        dateChooserFin = new JDateChooser();
+        dateChooserFin.setBounds(737, 394, 125, 25);
+        add(dateChooserFin);
         
         // Listar Usuarios
         listar();

@@ -368,7 +368,12 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 
     		// Notificamos al usuario por correo una sola ves en vase a su atributo caducando notificar
     		if(new Utilidades().toBoolean(this.getCaducando_notificar())) {
-    			Email email = new Email(this.getEmail(), "System Gym", "Hola " + this.getNombreUsuario() + ", tu membresía caducara pronto.");
+    			Email email = new Email(this.getEmail(), "System Gym",
+    					"<h1>Membresía por caducar</h1>\r\n"
+    							+ "    <p>Hola " + this.getNombreUsuario() + ", esperamos que te encuentres bien. Queremos informarte que tu membresía en el Gimnasio Xtream esta por caducar. Agradecemos sinceramente tu apoyo y tu compromiso con nosotros durante este tiempo.</p>\r\n"
+    							+ "    <p>Si estás interesado/a en renovar tu membresía y continuar disfrutando de nuestros servicios, por favor, comunícate con nuestro equipo de membresías lo antes posible. Estaremos encantados de ayudarte con el proceso de renovación y responder a cualquier pregunta que puedas tener.</p>\r\n"
+    							+ "    <h3>Atentamente,</h3>\r\n"
+    							+ "    <h3>El Equipo de Xtream Gym</h3>");
     			if(!email.sendEmail()) {
     				System.out.println("Ocurrio un error");
     			} else {
@@ -390,7 +395,15 @@ public class Membresia { // Id, Membresia, Nombre, Cedula, Finalización, Clase,
 		
 		// Notificamos al usuario por correo una sola ves en vase a su atributo caducado notificar
 		if(new Utilidades().toBoolean(this.getCaducada_notificar())) {
-			Email email = new Email(this.getEmail(), "System Gym", "Hola " + this.getNombreUsuario() + ", tu membresía ha caducado");
+			Email email = new Email(this.getEmail(), "System Gym", 
+					"   <h1>Membresía caducada </h1>\r\n"
+					+ "    <p>Hola " + this.getNombreUsuario() + ", esperamos que te encuentres bien. Queremos informarte que tu membresía en el Gimnasio Xtream ha caducado. Agradecemos sinceramente tu apoyo y tu compromiso con nosotros durante este tiempo.</p>\r\n"
+					+ "    <p>Si estás interesado/a en renovar tu membresía y continuar disfrutando de nuestros servicios, por favor, comunícate con nuestro equipo de membresías lo antes posible. Estaremos encantados de ayudarte con el proceso de renovación y responder a cualquier pregunta que puedas tener.</p>\r\n"
+					+ "    <p>Si has decidido no renovar tu membresía en este momento, agradecemos igualmente tu confianza en nosotros y esperamos que hayas disfrutado de tu tiempo en Xtream Gym. </p>\r\n"
+					+ "    <h3>Una vez más, agradecemos tu apoyo y esperamos verte de nuevo en Xtream Gym en el futuro.</h3>\r\n"
+					+ "\r\n"
+					+ "    <h3>Atentamente,</h3>\r\n"
+					+ "    <h3>El Equipo de Xtream Gym</h3>");
 			if(!email.sendEmail()) {
 				System.out.println("Ocurrio un error");
 			} else {
