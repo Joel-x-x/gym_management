@@ -29,7 +29,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.event.CaretListener;
@@ -254,7 +253,8 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
         JButton btnNewButton_2 = new JButton("Imprimir");
         btnNewButton_2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-				File path = new File(table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
+        		String ruta = System.getProperty("user.home");
+				File path = new File(ruta +"/Downloads/"+table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
 				System.out.println(path);
 				
 				if (path.exists()) {

@@ -2,12 +2,17 @@ package com.gym.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 
 import javax.swing.JPanel;
 
 import com.gym.controller.MembresiaController;
 import com.gym.model.Administrador;
 import com.gym.model.Membresia;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,6 +32,10 @@ import javax.swing.event.CaretEvent;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class MembresiasPanel extends JPanel {
@@ -102,6 +111,45 @@ public class MembresiasPanel extends JPanel {
         List<Membresia> listaMembresias = membresiaController.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
         
         listaMembresias.forEach(x -> System.out.println(x.getFecha_inicio()));
+try {
+			
+			
+			String ruta = System.getProperty("user.home");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaFinSQL +".pdf");
+			Document documento = new Document();
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+			
+			Paragraph parrafo = new Paragraph("REPORTE MEMBRESIAS");
+			parrafo.setAlignment(1);
+			documento.add(parrafo);
+			for (int i = 0; i < listaMembresias.size(); i++) {
+	            String elemento = listaMembresias.get(i).getFecha_inicio();
+	            documento.add(new Paragraph(elemento));
+	        }
+			
+			documento.close();
+			
+		} catch ( FileNotFoundException e1) {
+			
+			System.out.println(e1);
+		} catch (DocumentException e1) {
+			
+			e1.printStackTrace();
+		}
+		String ruta = System.getProperty("user.home");
+		File path = new File(ruta +"/Downloads/"+fechaFinSQL+ ".pdf");
+		System.out.println(path);
+
+		if (path.exists()) {
+    try {
+        Desktop.getDesktop().open(path);
+    } catch (IOException e1) {
+        e1.printStackTrace();
+    }
+}
+        
+
 	}
 
 	public MembresiasPanel(int panelAncho, int panelAlto) {
