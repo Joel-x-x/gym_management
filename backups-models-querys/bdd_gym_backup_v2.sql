@@ -562,7 +562,7 @@ begin
 
 end.. 
 delimiter ;
-select * from membresia;
+
 delimiter ..
 drop procedure if exists consultarMembresiasNombre..
 create procedure consultarMembresiasNombre(in administradorId int, in buscar varchar(30))
@@ -579,6 +579,22 @@ begin
 end.. 
 delimiter ;
 
+delimiter ..
+drop procedure if exists consultarMembresiasFecha..
+create procedure consultarMembresiasFecha(in administradorId int, in fechaInicio date, in fechaFin date)
+begin
+	select m.*, u.nombre, u.cedula, t.nombre, t.clase_id, c.clase, c.entrenador_id, e.nombre, f.numero_factura from membresia m
+	join usuario u on u.id = m.usuario_id
+	join tipo_membresia t on t.id = m.tipo_membresia_id
+	join clase c on c.id = t.clase_id
+	join entrenador e on e.id = c.entrenador_id
+	join factura f on f.id = m.factura_id
+    where m.administrador_id = administradorId and m.fecha_inicio between fechaInicio and fechaFin
+    order by activo desc, fecha_fin;
+end.. 
+delimiter ;
+call consultarMembresiasFecha(1, curdate(), curdate());
+select * from membresia;
 delimiter ..
 drop procedure if exists consultarMembresiasCedula..
 create procedure consultarMembresiasCedula(in administradorId int, in buscar varchar(20))
@@ -810,7 +826,7 @@ CREATE TABLE `bdd_gym`.`forma_pago` (
     CONSTRAINT fk_usuario_id_forma_pago FOREIGN KEY (usuario_id) 
     REFERENCES usuario(id)
 );
-
+select * from bdd_gym.membresia;
 -- Datos de la Base de Datos
 -- Insertar un administrador
 INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, clave, direccion)
