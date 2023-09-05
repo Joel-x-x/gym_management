@@ -12,6 +12,10 @@ import com.gym.model.Fisico;
 import com.gym.model.Membresia;
 import com.gym.model.Usuario;
 import com.gym.utilidades.Utilidades;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.*;
@@ -19,6 +23,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -236,6 +244,43 @@ public class UsuariosPanel extends JPanel {
         List<Usuario> listaUsuarios = usuarioController.consultarUsuariosFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
         
         listaUsuarios.forEach(x -> System.out.println(x.getFecha_creacion()));
+try {
+			
+			
+			String ruta = System.getProperty("user.home");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaFinSQL +".pdf");
+			Document documento = new Document();
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+			
+			Paragraph parrafo = new Paragraph("REPORTE MEMBRESIAS");
+			parrafo.setAlignment(1);
+			documento.add(parrafo);
+			for (int i = 0; i < listaUsuarios.size(); i++) {
+	            String elemento = listaUsuarios.get(i).getFecha_creacion();
+	            documento.add(new Paragraph(elemento));
+	        }
+			
+			documento.close();
+			
+		} catch ( FileNotFoundException e1) {
+			
+			System.out.println(e1);
+		} catch (DocumentException e1) {
+			
+			e1.printStackTrace();
+		}
+String ruta = System.getProperty("user.home");
+File path = new File(ruta +"/Downloads/"+fechaFinSQL+ ".pdf");
+System.out.println(path);
+
+if (path.exists()) {
+    try {
+        Desktop.getDesktop().open(path);
+    } catch (IOException e1) {
+        e1.printStackTrace();
+    }
+}
 	}
 	
 	public boolean validarCampos() {
