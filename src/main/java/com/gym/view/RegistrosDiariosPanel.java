@@ -294,7 +294,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textApellido.setBounds(110, 70, 250, 25);
         panelUsuario.add(textApellido);
         
-        labelCedula = new JLabel("CI. 1850038314");
+        labelCedula = new JLabel("");
         labelCedula.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelCedula.setBounds(420, 11, 142, 30);
         panelUsuario.add(labelCedula);
@@ -335,7 +335,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         textVencimiento.setBounds(29, 196, 331, 30);
         panelUsuario.add(textVencimiento);
         
-        labelDesde = new JLabel("Miembro desde el 30 de Septiembre del 2022");
+        labelDesde = new JLabel("");
         labelDesde.setFont(new Font("Tahoma", Font.PLAIN, 12));
         labelDesde.setBounds(29, 259, 399, 30);
         panelUsuario.add(labelDesde);
@@ -368,7 +368,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         add(panel_1);
         panel_1.setLayout(null);
         
-        labelMensaje = new JLabel("Coloca tu dedo");
+        labelMensaje = new JLabel("");
         labelMensaje.setHorizontalAlignment(SwingConstants.CENTER);
         labelMensaje.setFont(new Font("Tahoma", Font.PLAIN, 16));
         labelMensaje.setBounds(0, 23, 200, 49);
