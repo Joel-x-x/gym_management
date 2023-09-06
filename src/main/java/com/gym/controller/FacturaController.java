@@ -19,9 +19,6 @@ public class FacturaController {
 		
 		return new ArrayUtilidades().toMatrizFactura(listaFactura);
 	}
-	public Factura consultarFacturaPDF(int id) {
-		return facturaDAO.consultarFacturaPDF(id);
-	}
 	
 	public Factura consultarFactura(int id) {
 		return facturaDAO.consultarFactura(id);

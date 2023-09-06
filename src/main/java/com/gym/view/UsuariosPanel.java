@@ -15,6 +15,9 @@ import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.toedter.calendar.JDateChooser;
 
@@ -222,6 +225,83 @@ public class UsuariosPanel extends JPanel {
 							administrador_id);
 	}
 	
+public void generarPdfReporte(Date fechaInicioSQL, Date fechaFinSQL, List<Usuario> listaUsuarios) {
+		
+		try {
+			String ruta = System.getProperty("user.home");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaInicioSQL + "-hasta-" + fechaFinSQL +".pdf");
+			Document documento = new Document();
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+			
+            // Crea un objeto Font con estilo negrita
+            com.itextpdf.text.Font fuenteTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            
+            com.itextpdf.text.Font fuenteEncabezadoTabla = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+            // Crea un Paragraph y aplica el estilo de fuente negrita
+            Paragraph parrafo = new Paragraph("Reporte de usuarios", fuenteTitulo);
+            
+			parrafo.setAlignment(1);
+			documento.add(parrafo);
+			
+			documento.add(new Paragraph("\n"));
+			documento.add(new Paragraph("Fecha: Desde " + fechaInicioSQL + " hasta " + fechaFinSQL));
+			documento.add(new Paragraph("\n"));
+			
+//			documento.add(new Paragraph("Membresía                    Cliente          Cédula          Clase          Entrenador          NoFactura"));
+			
+			PdfPTable tabla = new PdfPTable(6);
+			
+            float[] anchosColumnas = {200f, 190f, 200f, 190f, 200f, 200f}; // Ejemplo de anchos de columnas
+            tabla.setTotalWidth(anchosColumnas);
+            tabla.setWidths(anchosColumnas);
+			
+            tabla.addCell(new PdfPCell(new Phrase("Nombre", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Apellido", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Cédula", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Correo", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Sexo", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Teléfono", fuenteEncabezadoTabla)));
+            
+            tabla.completeRow();
+			
+			listaUsuarios.forEach(x -> {
+				tabla.addCell(new PdfPCell(new Phrase(x.getNombre())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getApellido())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getCedula())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getEmail())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getSexo())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getTelefono())));
+				
+				tabla.completeRow();
+				
+			});
+			
+			documento.add(tabla);
+			
+			documento.close();
+			
+		} catch ( FileNotFoundException e1) {
+			
+			System.out.println(e1);
+		} catch (DocumentException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+		String ruta = System.getProperty("user.home");
+		File path = new File(ruta + "/Downloads/"+ fechaInicioSQL + "-hasta-" + fechaFinSQL +".pdf");
+		System.out.println(path);
+
+		if (path.exists()) {
+	    try {
+	        Desktop.getDesktop().open(path);
+	    } catch (IOException e1) {
+	        e1.printStackTrace();
+	    }
+		}
+	}
 	public void buscarUsuariosFecha() {
 		fechaInicio = dateChooserInicio.getCalendar();
 		fechaFin = dateChooserFin.getCalendar();
@@ -243,44 +323,8 @@ public class UsuariosPanel extends JPanel {
 		
         List<Usuario> listaUsuarios = usuarioController.consultarUsuariosFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
         
-        listaUsuarios.forEach(x -> System.out.println(x.getFecha_creacion()));
-try {
-			
-			
-			String ruta = System.getProperty("user.home");
-			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaFinSQL +".pdf");
-			Document documento = new Document();
-			PdfWriter.getInstance(documento, archivo);
-			documento.open();
-			
-			Paragraph parrafo = new Paragraph("REPORTE MEMBRESIAS");
-			parrafo.setAlignment(1);
-			documento.add(parrafo);
-			for (int i = 0; i < listaUsuarios.size(); i++) {
-	            String elemento = listaUsuarios.get(i).getFecha_creacion();
-	            documento.add(new Paragraph(elemento));
-	        }
-			
-			documento.close();
-			
-		} catch ( FileNotFoundException e1) {
-			
-			System.out.println(e1);
-		} catch (DocumentException e1) {
-			
-			e1.printStackTrace();
-		}
-String ruta = System.getProperty("user.home");
-File path = new File(ruta +"/Downloads/"+fechaFinSQL+ ".pdf");
-System.out.println(path);
+        generarPdfReporte(fechaInicioSQL, fechaFinSQL, listaUsuarios);
 
-if (path.exists()) {
-    try {
-        Desktop.getDesktop().open(path);
-    } catch (IOException e1) {
-        e1.printStackTrace();
-    }
-}
 	}
 	
 	public boolean validarCampos() {

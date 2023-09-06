@@ -18,9 +18,11 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import com.gym.controller.FacturaController;
+import com.gym.controller.MembresiaController;
 import com.gym.controller.UsuarioController;
 import com.gym.model.Administrador;
 import com.gym.model.Factura;
+import com.gym.model.Membresia;
 import com.gym.utilidades.Utilidades;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -47,6 +49,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	private FacturaController facturaController;
 	private UsuarioController usuarioController;
 	private DefaultTableModel modelo;
+	private MembresiaController membresiaController;
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField textBuscar;
@@ -147,11 +150,75 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 	public void setIdSeleccionado(int idSeleccionado) {
 		this.idSeleccionado = idSeleccionado;
 	}
+	
+	public void generarPDF() {
+		
+		try {
+			Factura factura = facturaController.consultarFactura(idSeleccionado);
+			List<Membresia> membresias =  membresiaController.listarMembresiaFacturaList(administrador_id, factura.getId());
+			String ruta = System.getProperty("user.home");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/" +factura.getNumero_factura()+".pdf");
+			Document documento = new Document();
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+			
+			Paragraph parrafo = new Paragraph("NÚMERO DE FACTURA: " + factura.getNumero_factura());
+			parrafo.setAlignment(1);
+			documento.add(parrafo);
+			
+			
+			documento.add(new Paragraph("   CLIENTE: " + factura.getNombreUsuario()));
+			documento.add(new Paragraph("   CEDULA: " + factura.getCedulaUsuario()));
+			documento.add(new Paragraph("   ESTABLECIMIENTO: " + factura.getEstablecimiento()));
+			documento.add(new Paragraph("   FECHA DE EMISION: "+ factura.getFecha()));
+			documento.add(new Paragraph("   FORMA DE PAGO: " + factura.getForma_pago()));
+			documento.add(new Paragraph("------------------------------------------------------------------"));
+			documento.add(new Paragraph("	CANT.DESCRIPCIÓN"+"                             "+"P.TOTAL")); //8-tabs
+			documento.add(new Paragraph("------------------------------------------------------------------"));
+			
+			membresias.forEach(x-> {
+				try {
+					documento.add(new Paragraph(x.getNombreTipo()));
+				} catch (DocumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			
+			documento.add(new Paragraph("------------------------------------------------------------------"));
+			documento.add(new Paragraph("      SUBTOTAL:"+"                                "+ factura.getSubtotal()));
+			documento.add(new Paragraph("   DESCUENTO %:"+"                                "+ factura.getDescuento()));
+			documento.add(new Paragraph("       IVA 12%:"+"                                "+ factura.getIva()));
+			documento.add(new Paragraph("   VALOR TOTAL:"+"                                "+ factura.getTotal()));
+			documento.add(new Paragraph("------------------------------------------------------------------"));
+			documento.close();
+			
+		} catch ( FileNotFoundException e1) {
+			
+			System.out.println(e1);
+		} catch (DocumentException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+    	String ruta = System.getProperty("user.home");
+		File path = new File(ruta +"/Downloads/"+table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
+		System.out.println(path);
+		
+		if (path.exists()) {
+            try {
+                Desktop.getDesktop().open(path);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+		}
+    }
 
 	public FacturaPanel(int panelAncho, int panelAlto) {
 		administrador_id = new Administrador().getId();
 		facturaController = new FacturaController();
 		usuarioController = new UsuarioController();
+		membresiaController = new MembresiaController();
 		
 		setLayout(null);
 		setFocusTraversalPolicyProvider(true);
@@ -249,22 +316,13 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		scrollPane.setViewportView(table);
 		setPreferredSize(new Dimension(1080, 800));
         setBackground(Color.WHITE);
-        
+
         JButton btnNewButton_2 = new JButton("Imprimir");
         btnNewButton_2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		String ruta = System.getProperty("user.home");
-				File path = new File(ruta +"/Downloads/"+table.getValueAt(table.getSelectedRow(), 1) + ".pdf");
-				System.out.println(path);
-				
-				if (path.exists()) {
-		            try {
-		                Desktop.getDesktop().open(path);
-		            } catch (IOException e1) {
-		                e1.printStackTrace();
-		            }
-				}
+        		generarPDF();
         	}
+        	
         });
         btnNewButton_2.setForeground(Color.WHITE);
         btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 11));
