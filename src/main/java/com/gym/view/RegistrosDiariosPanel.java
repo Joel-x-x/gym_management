@@ -168,7 +168,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		
 	    // Crear y ejecutar un nuevo hilo para notificar la membresía en segundo plano.
 	    Thread notificarThread = new Thread(() -> {
-	        membresia.notificarMembresia();
+	    	membresia.notificarMembresia();
 	    });
 
 	    notificarThread.start();
@@ -205,7 +205,13 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		 fisicoController = new FisicoController();
 //		 administrador_id = new Administrador().getId();
 		 
-		 Arduino.initializeSerialPort();
+	    // Crear y ejecutar un nuevo hilo para notificar la membresía en segundo plano.
+	    Thread notificarThread = new Thread(() -> {
+	    	Arduino.initializeSerialPort();
+	        verificarHuella(); 
+	    });
+
+	    notificarThread.start();
 		
     	setPreferredSize(new Dimension(1080, 800));
         setBackground(new Color(244, 244, 244));
@@ -405,7 +411,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
         btn_registrar.setBounds(549, 485, 250, 30);
         add(btn_registrar);
         
-        verificarHuella(); 
+
         
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 

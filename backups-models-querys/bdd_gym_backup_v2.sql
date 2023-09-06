@@ -41,15 +41,15 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 delimiter .. 
-drop procedure if exists insertarAdministrador..
-create procedure insertarAdministrador(
+drop procedure if exists registrarAdministrador..
+create procedure registrarAdministrador(
  in nombreIn varchar(50),
  in emailIn varchar(100),
- in password longblob,
+ in passwordIn longblob,
  in superAdmin int)
 begin
 	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt()(password), 0, superAdmin); 
+    values(nombreIn, emailIn, aes_encrypt(passwordIn, "bdd_gym"), 0, superAdmin); 
 end..
 delimiter ;
 
@@ -57,11 +57,19 @@ delimiter ..
 drop procedure if exists iniciarSesion..
 create procedure iniciarSesion(
  in emailIn varchar(100),
- in password varchar(50)
+ in passwordIn varchar(50))
 begin
-	select * from administrador where email = emailIn and aes_decrypt(password) = password; 
-	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt(password), 0, superAdmin);
+	select * from administrador where email = emailIn and aes_decrypt(password, "bdd_gym") = passwordIn; 
+end..
+delimiter ;
+
+delimiter .. 
+drop procedure if exists cambiarPassword..
+create procedure cambiarPassword(
+ in passwordIn varchar(50),
+ in idIn int)
+begin
+	update administrador set password = aes_encrypt(passwordIn, "bdd_gym") where id = idIn;
 end..
 delimiter ;
 

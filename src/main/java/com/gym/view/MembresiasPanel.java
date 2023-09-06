@@ -142,8 +142,6 @@ public class MembresiasPanel extends JPanel {
 			documento.add(new Paragraph("Fecha: Desde " + fechaInicioSQL + " hasta " + fechaFinSQL));
 			documento.add(new Paragraph("\n"));
 			
-//			documento.add(new Paragraph("Membresía                    Cliente          Cédula          Clase          Entrenador          NoFactura"));
-			
 			PdfPTable tabla = new PdfPTable(6);
 			
             float[] anchosColumnas = {200f, 190f, 200f, 190f, 200f, 200f}; // Ejemplo de anchos de columnas
@@ -188,11 +186,11 @@ public class MembresiasPanel extends JPanel {
 		System.out.println(path);
 
 		if (path.exists()) {
-	    try {
-	        Desktop.getDesktop().open(path);
-	    } catch (IOException e1) {
-	        e1.printStackTrace();
-	    }
+		    try {
+		        Desktop.getDesktop().open(path);
+		    } catch (IOException e1) {
+		        e1.printStackTrace();
+		    }
 		}
 	}
 
