@@ -111,9 +111,13 @@ public class MembresiasPanel extends JPanel {
         List<Membresia> listaMembresias = membresiaController.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
         
         listaMembresias.forEach(x -> System.out.println(x.getFecha_inicio()));
-try {
-			
-			
+        
+        generarPdfReporte(fechaFinSQL, listaMembresias);
+	}
+	
+	public void generarPdfReporte(Date fechaFinSQL, List<Membresia> listaMembresias) {
+		
+		try {
 			String ruta = System.getProperty("user.home");
 			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaFinSQL +".pdf");
 			Document documento = new Document();
@@ -123,10 +127,16 @@ try {
 			Paragraph parrafo = new Paragraph("REPORTE MEMBRESIAS");
 			parrafo.setAlignment(1);
 			documento.add(parrafo);
-			for (int i = 0; i < listaMembresias.size(); i++) {
-	            String elemento = listaMembresias.get(i).getFecha_inicio();
-	            documento.add(new Paragraph(elemento));
-	        }
+			
+			listaMembresias.forEach(x -> {
+				try {
+					documento.add(new Paragraph(x.getFecha_fin()));
+				} catch (DocumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			});
 			
 			documento.close();
 			
@@ -137,19 +147,18 @@ try {
 			
 			e1.printStackTrace();
 		}
+		
 		String ruta = System.getProperty("user.home");
 		File path = new File(ruta +"/Downloads/"+fechaFinSQL+ ".pdf");
 		System.out.println(path);
 
 		if (path.exists()) {
-    try {
-        Desktop.getDesktop().open(path);
-    } catch (IOException e1) {
-        e1.printStackTrace();
-    }
-}
-        
-
+	    try {
+	        Desktop.getDesktop().open(path);
+	    } catch (IOException e1) {
+	        e1.printStackTrace();
+	    }
+		}
 	}
 
 	public MembresiasPanel(int panelAncho, int panelAlto) {

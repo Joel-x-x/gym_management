@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`administrador` (
   `apellido` VARCHAR(50) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL UNIQUE,
   `cedula` VARCHAR(15) NULL DEFAULT NULL UNIQUE,
-  `password` VARCHAR(255) NOT NULL,
-  `password_salt` VARCHAR(255) NOT NULL,
+  `password` LONGBLOB NOT NULL,
+  `password_salt` VARCHAR(255) DEFAULT NULL,
   `sesion_iniciada` TINYINT NOT NULL,
   `super_admin` TINYINT NOT NULL,
   `clave` VARCHAR(255) NULL DEFAULT NULL,
@@ -39,6 +39,31 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+delimiter .. 
+drop procedure if exists insertarAdministrador..
+create procedure insertarAdministrador(
+ in nombreIn varchar(50),
+ in emailIn varchar(100),
+ in password longblob,
+ in superAdmin int)
+begin
+	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
+    values(nombreIn, emailIn, aes_encrypt()(password), 0, superAdmin); 
+end..
+delimiter ;
+
+delimiter .. 
+drop procedure if exists iniciarSesion..
+create procedure iniciarSesion(
+ in emailIn varchar(100),
+ in password varchar(50)
+begin
+	select * from administrador where email = emailIn and aes_decrypt(password) = password; 
+	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
+    values(nombreIn, emailIn, aes_encrypt(password), 0, superAdmin);
+end..
+delimiter ;
 
 -- === Administrador ===
 -- Crear tabla de auditoría para administrador

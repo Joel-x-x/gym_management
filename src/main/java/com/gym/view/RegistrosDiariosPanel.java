@@ -42,13 +42,11 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	RegistroController registroController;
 	MembresiaController membresiaController;
 	FisicoController fisicoController;
-	private int administrador_id; 
+//	private int administrador_id; 
 	private JComboBox<Membresia> comboBoxMembresia = new JComboBox<>();
 	private DefaultComboBoxModel<Membresia> comboBoxModelMembresia = new DefaultComboBoxModel<>();
 
 	private static final long serialVersionUID = 1L;
-    private int idSeleccionadoUsuario = 0;
-    private int idUltimoRegistro;
     public static DefaultTableModel modelo;
     private JButton btn_entrada_1;
     private JLabel lblInicio_1;
@@ -80,6 +78,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 			ArduinoDataListener.setClassVerficar(this);
 		} catch(Exception e) {
 			System.out.println("No se encontro una huella");
+			this.modificarLabel("No tiene lector dactilar");
 		}
 	}
 	
@@ -149,8 +148,6 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		comboBoxMembresia.setSelectedIndex(0);
 		
 		if(membresias.size() == 1) {
-			String finaliza = FechasUtilidades.obtenerTiempoRestante(FechasUtilidades.stringToLocalDateTime(membresias.get(0).getFecha_fin()));
-			textVencimiento.setText("   Vence en " + finaliza);
 			// Registrar
 			registrarUsuario(usuario.getId(), membresias.get(0));
 			// Asignar color en base a en cuanto caduca
@@ -162,6 +159,8 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 	
 	public void registrarUsuario(int usuario_id, Membresia membresia) {
 		if(registroController.registrar(usuario_id, membresia.getId())) {
+			String finaliza = FechasUtilidades.obtenerTiempoRestante(FechasUtilidades.stringToLocalDateTime(membresia.getFecha_fin()));
+			textVencimiento.setText("   Vence en " + finaliza);
 			System.out.println("Registrado");
 		} else {
 			JOptionPane.showMessageDialog(null, "Ocurrio un error intentando registrar");
@@ -204,7 +203,7 @@ public class RegistrosDiariosPanel extends JPanel implements GenerarFrameInterfa
 		 registroController = new RegistroController(); 
 		 membresiaController = new MembresiaController();
 		 fisicoController = new FisicoController();
-		 administrador_id = new Administrador().getId();
+//		 administrador_id = new Administrador().getId();
 		 
 		 Arduino.initializeSerialPort();
 		
