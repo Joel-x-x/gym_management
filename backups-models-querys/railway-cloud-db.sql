@@ -8,26 +8,26 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema bdd_gym
+-- Schema railway
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema bdd_gym
+-- Schema railway
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `bdd_gym` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `bdd_gym` ;
+CREATE SCHEMA IF NOT EXISTS `railway` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `railway` ;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`administrador`
+-- Table `railway`.`administrador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`administrador` (
+CREATE TABLE IF NOT EXISTS `railway`.`administrador` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NULL DEFAULT NULL,
   `email` VARCHAR(100) NOT NULL UNIQUE,
   `cedula` VARCHAR(15) NULL DEFAULT NULL UNIQUE,
-  `password` LONGBLOB NOT NULL,
-  `password_salt` VARCHAR(255) DEFAULT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `password_salt` VARCHAR(255) NOT NULL,
   `sesion_iniciada` TINYINT NOT NULL,
   `super_admin` TINYINT NOT NULL,
   `clave` VARCHAR(255) NULL DEFAULT NULL,
@@ -40,34 +40,9 @@ AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-delimiter .. 
-drop procedure if exists insertarAdministrador..
-create procedure insertarAdministrador(
- in nombreIn varchar(50),
- in emailIn varchar(100),
- in password longblob,
- in superAdmin int)
-begin
-	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt()(password), 0, superAdmin); 
-end..
-delimiter ;
-
-delimiter .. 
-drop procedure if exists iniciarSesion..
-create procedure iniciarSesion(
- in emailIn varchar(100),
- in password varchar(50)
-begin
-	select * from administrador where email = emailIn and aes_decrypt(password) = password; 
-	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt(password), 0, superAdmin);
-end..
-delimiter ;
-
 -- === Administrador ===
 -- Crear tabla de auditoría para administrador
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_administrador` (
+CREATE TABLE IF NOT EXISTS `railway`.`auditoria_administrador` (
   `id` INT NOT NULL,
   `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `user` VARCHAR(30) NOT NULL,
@@ -103,9 +78,9 @@ END;
 DELIMITER ;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`entrenador`
+-- Table `railway`.`entrenador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`entrenador` (
+CREATE TABLE IF NOT EXISTS `railway`.`entrenador` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NOT NULL,
@@ -120,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`entrenador` (
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   CONSTRAINT `fk_entrenador_id_administrador`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`)
+    REFERENCES `railway`.`administrador` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -129,9 +104,9 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`clase`
+-- Table `railway`.`clase`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`clase` (
+CREATE TABLE IF NOT EXISTS `railway`.`clase` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `clase` VARCHAR(100) NOT NULL,
   `descripcion` VARCHAR(300) NULL DEFAULT NULL,
@@ -142,19 +117,19 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`clase` (
   INDEX `fk_administrador_id1_idx` (`administrador_id` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id1`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`),
+    REFERENCES `railway`.`administrador` (`id`),
   CONSTRAINT `fk_clase_entrenador1`
     FOREIGN KEY (`entrenador_id`)
-    REFERENCES `bdd_gym`.`entrenador` (`id`))
+    REFERENCES `railway`.`entrenador` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`cuenta`
+-- Table `railway`.`cuenta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`cuenta` (
+CREATE TABLE IF NOT EXISTS `railway`.`cuenta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre_empresa` VARCHAR(50) NULL DEFAULT NULL,
   `logo_empresa` LONGBLOB NULL DEFAULT NULL,
@@ -164,16 +139,16 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`cuenta` (
   INDEX `fk_cuenta_administrador1_idx` (`administrador_id` ASC) VISIBLE,
   CONSTRAINT `fk_cuenta_administrador1`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`))
+    REFERENCES `railway`.`administrador` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`usuario`
+-- Table `railway`.`usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`usuario` (
+CREATE TABLE IF NOT EXISTS `railway`.`usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
   `apellido` VARCHAR(50) NOT NULL,
@@ -193,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`usuario` (
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`))
+    REFERENCES `railway`.`administrador` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
@@ -210,7 +185,7 @@ delimiter ;
 
 -- === Usuario ===
 -- Modificar tabla de auditoría para usuario
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_usuario` (
+CREATE TABLE IF NOT EXISTS `railway`.`auditoria_usuario` (
   `id` INT NOT NULL,
   `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `user` VARCHAR(30) NOT NULL,
@@ -251,9 +226,9 @@ END;
 DELIMITER ;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`fisico`
+-- Table `railway`.`fisico`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`fisico` (
+CREATE TABLE IF NOT EXISTS `railway`.`fisico` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `altura` DOUBLE NOT NULL CHECK (`altura` > 0),
   `peso` DOUBLE NOT NULL CHECK (`peso` > 0),
@@ -263,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`fisico` (
   INDEX `fk_fisico_usuario1_idx` (`usuario_id` ASC) VISIBLE,
   CONSTRAINT `fk_fisico_usuario1`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `bdd_gym`.`usuario` (`id`))
+    REFERENCES `railway`.`usuario` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
@@ -281,9 +256,9 @@ end..
 delimiter ;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`tipo_membresia`
+-- Table `railway`.`tipo_membresia`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
+CREATE TABLE IF NOT EXISTS `railway`.`tipo_membresia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(30) NOT NULL,
   `descripcion` VARCHAR(300) DEFAULT '',
@@ -297,19 +272,19 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`tipo_membresia` (
   INDEX `fk_administrador_id_tipo_membresia_idx` (`administrador_id` ASC) VISIBLE,
   CONSTRAINT `fk_clase_id`
     FOREIGN KEY (`clase_id`)
-    REFERENCES `bdd_gym`.`clase` (`id`)
+    REFERENCES `railway`.`clase` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_administrador_id_tipo_membresia`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`)
+    REFERENCES `railway`.`administrador` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 -- === Tipo de Membresia ===
 -- Modificar tabla de auditoría para tipo_membresia
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`auditoria_tipo_membresia` (
+CREATE TABLE IF NOT EXISTS `railway`.`auditoria_tipo_membresia` (
   `id` INT NOT NULL,
   `accion` ENUM('INSERT', 'UPDATE', 'DELETE') NOT NULL,
   `user` VARCHAR(30) NOT NULL,
@@ -371,7 +346,7 @@ begin
 end.. 
 delimiter ;
 
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`historial_precio_tipo_membresia` (
+CREATE TABLE IF NOT EXISTS `railway`.`historial_precio_tipo_membresia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `precio` DECIMAL(6,2) NOT NULL CHECK (precio >= 0),
   `tipo_membresia_id` INT NOT NULL,
@@ -380,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`historial_precio_tipo_membresia` (
   INDEX `fk_tipo_membresia_id_idx` (`tipo_membresia_id` ASC) VISIBLE,
   CONSTRAINT `fk_tipo_membresia_id_precio`
 	FOREIGN KEY (`tipo_membresia_id`)
-    REFERENCES `bdd_gym`.`tipo_membresia`(id)
+    REFERENCES `railway`.`tipo_membresia`(id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -389,9 +364,9 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
   
 -- -----------------------------------------------------
--- Table `bdd_gym`.`membresia`
+-- Table `railway`.`membresia`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`membresia` (
+CREATE TABLE IF NOT EXISTS `railway`.`membresia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fecha_inicio` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_fin` DATETIME NULL DEFAULT NULL,
@@ -411,19 +386,19 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`membresia` (
   INDEX `fk_precio_id_idx` (`precio_id` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id_membresia`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`),
+    REFERENCES `railway`.`administrador` (`id`),
   CONSTRAINT `fk_membresia_usuario1`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `bdd_gym`.`usuario` (`id`),
+    REFERENCES `railway`.`usuario` (`id`),
   CONSTRAINT `fk_membresia_factura_id`
     FOREIGN KEY (`factura_id`)
-    REFERENCES `bdd_gym`.`factura` (`id`),
+    REFERENCES `railway`.`factura` (`id`),
   CONSTRAINT `fk_membresia_precio_id`
 	FOREIGN KEY (`precio_id`)
-    REFERENCES `bdd_gym`.`historial_precio_tipo_membresia` (id),
+    REFERENCES `railway`.`historial_precio_tipo_membresia` (id),
   CONSTRAINT `fk_tipo_membresia_id`
     FOREIGN KEY (`tipo_membresia_id`)
-    REFERENCES `bdd_gym`.`tipo_membresia` (`id`)
+    REFERENCES `railway`.`tipo_membresia` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -644,9 +619,9 @@ end..
 delimiter ;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`recuperacion_cuenta`
+-- Table `railway`.`recuperacion_cuenta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`recuperacion_cuenta` (
+CREATE TABLE IF NOT EXISTS `railway`.`recuperacion_cuenta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre_amigo` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL DEFAULT NULL,
   `nombre_mascota` VARCHAR(100) COLLATE 'utf8mb3_unicode_ci' NULL DEFAULT NULL,
@@ -656,14 +631,14 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`recuperacion_cuenta` (
   INDEX `fk_administrador_id_datos_recuperacion_idx` (`administrador_id` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id_datos_recuperacion`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`))
+    REFERENCES `railway`.`administrador` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`registro`
+-- Table `railway`.`registro`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`registro` (
+CREATE TABLE IF NOT EXISTS `railway`.`registro` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fecha_entrada` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_salida` DATETIME NULL DEFAULT NULL,
@@ -674,19 +649,19 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`registro` (
   INDEX `fk_membresia_id_idx` (`membresia_id` ASC) VISIBLE,
   CONSTRAINT `fk_membresia_id`
     FOREIGN KEY (`membresia_id`)
-    REFERENCES `bdd_gym`.`membresia` (`id`),
+    REFERENCES `railway`.`membresia` (`id`),
   CONSTRAINT `fk_registro_usuario1`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `bdd_gym`.`usuario` (`id`))
+    REFERENCES `railway`.`usuario` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
--- Table `bdd_gym`.`factura`
+-- Table `railway`.`factura`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
+CREATE TABLE IF NOT EXISTS `railway`.`factura` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `numero_factura` VARCHAR(10) DEFAULT NULL,
   `descuento_porcentaje` DOUBLE DEFAULT 0.0,
@@ -708,17 +683,17 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`factura` (
   UNIQUE INDEX `numero_factura_UNIQUE` (`numero_factura` ASC) VISIBLE,
   CONSTRAINT `fk_usuario_id_factura`
     FOREIGN KEY (`usuario_id`)
-    REFERENCES `bdd_gym`.`usuario` (`id`)
+    REFERENCES `railway`.`usuario` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_iva_id_factura`
     FOREIGN KEY (`iva_id`)
-    REFERENCES `bdd_gym`.`iva` (`id`)
+    REFERENCES `railway`.`iva` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_administrador_id_factura`
     FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador` (`id`)
+    REFERENCES `railway`.`administrador` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -802,7 +777,7 @@ end;
 delimiter ;
 
 -- IVA
-CREATE TABLE IF NOT EXISTS `bdd_gym`.`iva` (
+CREATE TABLE IF NOT EXISTS `railway`.`iva` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `iva` DECIMAL(6,2) NOT NULL CHECK (iva >= 0),
   `administrador_id` INT NOT NULL,
@@ -811,7 +786,7 @@ CREATE TABLE IF NOT EXISTS `bdd_gym`.`iva` (
   INDEX `fk_administrador_id_idx` (`administrador_id` ASC) VISIBLE,
   CONSTRAINT `fk_administrador_id_iva`
 	FOREIGN KEY (`administrador_id`)
-    REFERENCES `bdd_gym`.`administrador`(id)
+    REFERENCES `railway`.`administrador`(id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -844,7 +819,7 @@ end..
 delimiter ;
 
 -- == Detalles de pago ==
-CREATE TABLE `bdd_gym`.`forma_pago` (
+CREATE TABLE `railway`.`forma_pago` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `forma_pago` ENUM('efectivo', 'transferencia') DEFAULT 'efectivo',
     `monto_pagado` DECIMAL(6, 2) check(monto_pagado > 0),
@@ -859,7 +834,7 @@ CREATE TABLE `bdd_gym`.`forma_pago` (
     CONSTRAINT fk_usuario_id_forma_pago FOREIGN KEY (usuario_id) 
     REFERENCES usuario(id)
 );
-select * from bdd_gym.membresia;
+select * from railway.membresia;
 -- Datos de la Base de Datos
 -- Insertar un administrador
 INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, direccion)

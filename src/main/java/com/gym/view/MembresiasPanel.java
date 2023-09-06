@@ -12,6 +12,9 @@ import com.gym.model.Membresia;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.swing.JLabel;
@@ -111,22 +114,64 @@ public class MembresiasPanel extends JPanel {
         List<Membresia> listaMembresias = membresiaController.consultarFecha(administrador_id, fechaInicioSQL, fechaFinSQL);
         
         listaMembresias.forEach(x -> System.out.println(x.getFecha_inicio()));
-try {
-			
-			
+        
+        generarPdfReporte(fechaInicioSQL, fechaFinSQL, listaMembresias);
+	}
+	
+	public void generarPdfReporte(Date fechaInicioSQL, Date fechaFinSQL, List<Membresia> listaMembresias) {
+		
+		try {
 			String ruta = System.getProperty("user.home");
-			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaFinSQL +".pdf");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/"+ fechaInicioSQL + "-hasta-" + fechaFinSQL +".pdf");
 			Document documento = new Document();
 			PdfWriter.getInstance(documento, archivo);
 			documento.open();
 			
-			Paragraph parrafo = new Paragraph("REPORTE MEMBRESIAS");
+            // Crea un objeto Font con estilo negrita
+            com.itextpdf.text.Font fuenteTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            
+            com.itextpdf.text.Font fuenteEncabezadoTabla = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+            // Crea un Paragraph y aplica el estilo de fuente negrita
+            Paragraph parrafo = new Paragraph("Reporte de membresías", fuenteTitulo);
+            
 			parrafo.setAlignment(1);
 			documento.add(parrafo);
-			for (int i = 0; i < listaMembresias.size(); i++) {
-	            String elemento = listaMembresias.get(i).getFecha_inicio();
-	            documento.add(new Paragraph(elemento));
-	        }
+			
+			documento.add(new Paragraph("\n"));
+			documento.add(new Paragraph("Fecha: Desde " + fechaInicioSQL + " hasta " + fechaFinSQL));
+			documento.add(new Paragraph("\n"));
+			
+//			documento.add(new Paragraph("Membresía                    Cliente          Cédula          Clase          Entrenador          NoFactura"));
+			
+			PdfPTable tabla = new PdfPTable(6);
+			
+            float[] anchosColumnas = {200f, 190f, 200f, 190f, 200f, 200f}; // Ejemplo de anchos de columnas
+            tabla.setTotalWidth(anchosColumnas);
+            tabla.setWidths(anchosColumnas);
+			
+            tabla.addCell(new PdfPCell(new Phrase("Membresía", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Cliente", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Cédula", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Clase", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("Entrenador", fuenteEncabezadoTabla)));
+            tabla.addCell(new PdfPCell(new Phrase("NoFactura", fuenteEncabezadoTabla)));
+            
+            tabla.completeRow();
+			
+			listaMembresias.forEach(x -> {
+				tabla.addCell(new PdfPCell(new Phrase(x.getNombreTipo())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getNombreUsuario())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getCedula())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getClase())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getEntrenador())));
+				tabla.addCell(new PdfPCell(new Phrase(x.getNumeroFactura())));
+				
+				tabla.completeRow();
+				
+			});
+			
+			documento.add(tabla);
 			
 			documento.close();
 			
@@ -137,19 +182,18 @@ try {
 			
 			e1.printStackTrace();
 		}
+		
 		String ruta = System.getProperty("user.home");
-		File path = new File(ruta +"/Downloads/"+fechaFinSQL+ ".pdf");
+		File path = new File(ruta + "/Downloads/"+ fechaInicioSQL + "-hasta-" + fechaFinSQL +".pdf");
 		System.out.println(path);
 
 		if (path.exists()) {
-    try {
-        Desktop.getDesktop().open(path);
-    } catch (IOException e1) {
-        e1.printStackTrace();
-    }
-}
-        
-
+	    try {
+	        Desktop.getDesktop().open(path);
+	    } catch (IOException e1) {
+	        e1.printStackTrace();
+	    }
+		}
 	}
 
 	public MembresiasPanel(int panelAncho, int panelAlto) {
