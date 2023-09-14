@@ -372,8 +372,13 @@ public void generarPdfReporte(Date fechaInicioSQL, Date fechaFinSQL, List<Usuari
 			frameHuella = new AgregarHuellaFrame(idSeleccionadoUsuario);
 			frameHuella.setVisible(true);
 		} catch(Exception e) {
-			frameHuella.setVisible(false);
 			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
+			
+//			try {
+			frameHuella.setVisible(false);
+//			} catch(Exception evt) {
+////				evt.printStackTrace();
+//			}
 		}
 	}
 	

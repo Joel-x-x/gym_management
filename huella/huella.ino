@@ -102,6 +102,11 @@ uint8_t getFingerprintEnroll() {
           break;
         case FINGERPRINT_NOFINGER:
           Serial.println("e"); // Waiting finger
+          leerComando();
+          if(comando == 't') {
+            Serial.println("c"); // pára la ejecución del lector
+            return 1;
+          }
           break;
         case FINGERPRINT_PACKETRECIEVEERR:
           Serial.println("f");
@@ -157,6 +162,11 @@ uint8_t getFingerprintEnroll() {
           break;
         case FINGERPRINT_NOFINGER:
           Serial.print("e");
+          leerComando();
+          if(comando == 't') {
+            Serial.println("c"); // pára la ejecución del lector
+            return 1;
+          }
           break;
         case FINGERPRINT_PACKETRECIEVEERR:
           Serial.println("f");

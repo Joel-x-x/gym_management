@@ -217,13 +217,12 @@ public class FacturaFrame extends JFrame implements GenerarFrameInterfaz{
 	
 	// Eliminar membresias
 	public void eliminarMembresia() {
-		if(membresiaController.eliminar(idSeleccionado)) {
-			JOptionPane.showMessageDialog(null, "Eliminado con exito!");
-			listarMembresias();
-			btnEliminarMembresia.setEnabled(false);
-		} else {
-			JOptionPane.showMessageDialog(null, "No se puedo eliminar");
-		}
+		
+		JOptionPane.showMessageDialog(null, Utilidades.codigoToMensajeEliminar(membresiaController.eliminar(idSeleccionado),
+				"No se pudo eliminar, parece que tienes registros que dependen de esta membresía"));
+		listarMembresias();
+		btnEliminarMembresia.setEnabled(false);
+		
 	}
 	
 	private boolean validarSiExiste(int id) {

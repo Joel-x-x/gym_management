@@ -8,6 +8,8 @@ import com.gym.model.ArduinoDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class AdminFrame extends JFrame implements ActionListener{
 
@@ -18,9 +20,25 @@ public class AdminFrame extends JFrame implements ActionListener{
     private int panelAncho = 1080, panelAlto = 750;
     
     public AdminFrame() {
+    	addWindowListener(new WindowAdapter() {
+    		@Override
+    		public void windowClosing(WindowEvent e) {
+    	    	// Al cambiar de ventana cortar la conexión
+    	    	try {
+    	    		if(Arduino.isActivo()) {
+    	    			Arduino.sendCommand("t"); // Comando que para el arduino
+    	    			Arduino.close(); // Cerrar conexión
+    	    		}
+    	    	} catch(Exception evt) {
+    	    		evt.printStackTrace();
+    	    	}
+    			
+    	    	System.exit(0);
+    		}
+    	});
     	setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
     	setTitle("Gym");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(1280, 800);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -43,9 +61,9 @@ public class AdminFrame extends JFrame implements ActionListener{
         cambiarPanel(new RegistrosDiariosPanel(panelAncho, panelAlto));
         
         // Agregar BarraPanel y panelPrincipal al JFrame
-        add(barraSuperiorPanel, BorderLayout.NORTH);
-        add(barraPanel, BorderLayout.WEST);
-        add(panelPrincipal, BorderLayout.CENTER);
+        getContentPane().add(barraSuperiorPanel, BorderLayout.NORTH);
+        getContentPane().add(barraPanel, BorderLayout.WEST);
+        getContentPane().add(panelPrincipal, BorderLayout.CENTER);
 
         setVisible(true);
     }

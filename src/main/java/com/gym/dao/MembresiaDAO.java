@@ -285,7 +285,7 @@ public class MembresiaDAO {
 		}
 	}
 	
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		
 		try {
 			String sentencia = "delete from membresia where id = ?";
@@ -296,12 +296,11 @@ public class MembresiaDAO {
 				
 				statement.setInt(1, id);
 				
-				return new Utilidades().toBoolean(statement.executeUpdate());
+				return statement.executeUpdate();
 			}
 			
 		} catch(SQLException e) {
-			e.printStackTrace();
-			return false;
+			return e.getErrorCode();
 		}
 	}
 	

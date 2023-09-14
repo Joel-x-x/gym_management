@@ -73,7 +73,8 @@ public class AdministradorDAO {
 
 		try {
 			
-			String sentencia = "select * from administrador where email = ? and password = ? ";
+//			String sentencia = "select * from administrador where email = ? and password = ? ";
+			String sentencia = "call iniciarSesion(?,?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -135,8 +136,9 @@ public class AdministradorDAO {
 		
 		try {
 			
-			String sentencia = "insert into administrador(nombre, email, password, sesion_iniciada, super_admin) "
-					+ "values(?,?,?,?,?);";
+//			String sentencia = "insert into administrador(nombre, email, password, sesion_iniciada, super_admin) "
+//					+ "values(?,?,?,?,?);";
+			String sentencia = "call registrarAdministrador(?,?,?,?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			
@@ -144,8 +146,9 @@ public class AdministradorDAO {
 				statement.setString(1, administrador.getNombre());
 				statement.setString(2, administrador.getEmail());
 				statement.setString(3, administrador.getPassword());
-				statement.setInt(4, administrador.getSesion_iniciada());
-				statement.setInt(5, administrador.isSuper_admin());
+				statement.setInt(4, administrador.isSuper_admin());
+//				statement.setInt(4, administrador.getSesion_iniciada());
+//				statement.setInt(5, administrador.isSuper_admin());
 				
 				int item = statement.executeUpdate();
 				
@@ -375,7 +378,8 @@ public class AdministradorDAO {
 		
 		try {
 			
-			String sentencia = "update administrador set password = ? where id = ?";
+//			String sentencia = "update administrador set password = ? where id = ?";
+			String sentencia = "call cambiarPassword(?,?)";
 			
 			final PreparedStatement statement = con.prepareStatement(sentencia);
 			

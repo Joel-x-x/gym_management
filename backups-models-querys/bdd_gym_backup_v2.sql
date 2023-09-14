@@ -41,15 +41,15 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 delimiter .. 
-drop procedure if exists insertarAdministrador..
-create procedure insertarAdministrador(
+drop procedure if exists registrarAdministrador..
+create procedure registrarAdministrador(
  in nombreIn varchar(50),
  in emailIn varchar(100),
- in password longblob,
+ in passwordIn longblob,
  in superAdmin int)
 begin
 	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt()(password), 0, superAdmin); 
+    values(nombreIn, emailIn, aes_encrypt(passwordIn, "bdd_gym"), 0, superAdmin); 
 end..
 delimiter ;
 
@@ -57,11 +57,19 @@ delimiter ..
 drop procedure if exists iniciarSesion..
 create procedure iniciarSesion(
  in emailIn varchar(100),
- in password varchar(50)
+ in passwordIn varchar(50))
 begin
-	select * from administrador where email = emailIn and aes_decrypt(password) = password; 
-	insert into administrador(nombre, email, password, sesion_iniciada, super_admin)
-    values(nombreIn, emailIn, aes_encrypt(password), 0, superAdmin);
+	select * from administrador where email = emailIn and aes_decrypt(password, "bdd_gym") = passwordIn; 
+end..
+delimiter ;
+
+delimiter .. 
+drop procedure if exists cambiarPassword..
+create procedure cambiarPassword(
+ in passwordIn varchar(50),
+ in idIn int)
+begin
+	update administrador set password = aes_encrypt(passwordIn, "bdd_gym") where id = idIn;
 end..
 delimiter ;
 
@@ -497,6 +505,7 @@ end..
 delimiter ;
 
 -- Trigger cuando se actualice la duracion o el tipo de la membresia
+/*
 delimiter //
 drop trigger if exists cambiarMembresiaDespuesActualizarTipo //
 create trigger cambiarMembresiaDespuesActualizarTipo
@@ -509,11 +518,12 @@ begin
     
     update membresia
     set fecha_fin = fechaFin,
-        activo = if(fechaFin >= NOW(), 1, 0)
+        activo = if(fechaFin >= now(), 1, 0)
     where tipo_membresia_id = new.id;
 end;
 //
 delimiter ;
+*/
 
 -- Obtener duracion
 delimiter ..
@@ -862,8 +872,9 @@ CREATE TABLE `bdd_gym`.`forma_pago` (
 select * from bdd_gym.membresia;
 -- Datos de la Base de Datos
 -- Insertar un administrador
-INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, direccion)
-VALUES ('Admin', 'Admin', 'wacho@gmail.com', '1850043849', '123456789', 'random', 0, 1, 'DirecciónAdmin');
+-- INSERT INTO administrador (nombre, apellido, email, cedula, password, password_salt, sesion_iniciada, super_admin, direccion)
+-- VALUES ('Admin', 'Admin', 'wacho@gmail.com', '1850043849', '123456789', 'random', 0, 1, 'DirecciónAdmin');
+call registrarAdministrador("Wacho", "wacho@gmail.com", "123456789", 1);
 
 -- Insertar un entrenador
 INSERT INTO entrenador (nombre, apellido, sexo, correo, telefono, cedula, administrador_id)

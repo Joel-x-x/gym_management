@@ -250,7 +250,7 @@ public class FacturaPanel extends JPanel implements GenerarFacturaFrameInterfaz{
 		btnModificar.setBounds(150, 98, 100, 30);
 		add(btnModificar);
 		
-		btnEliminar = new JButton("Eliminar");
+		btnEliminar = new JButton("Anular");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eliminarFactura();
