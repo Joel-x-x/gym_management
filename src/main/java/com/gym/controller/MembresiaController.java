@@ -84,7 +84,7 @@ public class MembresiaController {
 		return membresiaDAO.modificarCaducada(id, caducado);
 	}
 
-	public boolean eliminar(int id) {
+	public int eliminar(int id) {
 		return membresiaDAO.eliminar(id);
 	}
 

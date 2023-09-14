@@ -15,6 +15,7 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -38,6 +39,23 @@ public class AgregarHuellaFrame extends JFrame {
 		this.id = id;
 
 		Arduino.initializeSerialPort();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				
+				dispose();
+				
+    	    	try {
+	    			Arduino.sendCommand("t"); // Comando que para el arduino
+	    			Arduino.close(); // Cerrar conexión
+	    			Arduino.setActivo(false); // Poner atributo de arduino activo en falso
+    	    	} catch(Exception evt) {
+    	    		evt.printStackTrace();
+    	    	}
+    			
+			}
+		});
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setResizable(false);

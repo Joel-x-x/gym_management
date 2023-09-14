@@ -375,7 +375,7 @@ public void generarPdfReporte(Date fechaInicioSQL, Date fechaFinSQL, List<Usuari
 			JOptionPane.showMessageDialog(null, "No se encontro un lector dactilar");
 			
 //			try {
-				frameHuella.setVisible(false);
+			frameHuella.setVisible(false);
 //			} catch(Exception evt) {
 ////				evt.printStackTrace();
 //			}
